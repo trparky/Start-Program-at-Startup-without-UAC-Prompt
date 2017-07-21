@@ -7,13 +7,22 @@ Imports System.Xml.Serialization
 Public Class Form1
     Private Const Tabs As String = vbTab
     Private Const strTaskFolderName As String = "Run at User Logon with Administrator Privileges"
-    
+
     Private Sub newFileDeleterThreadSub()
         searchForProcessAndKillIt(Application.ExecutablePath & ".new.exe", False)
         IO.File.Delete(Application.ExecutablePath & ".new.exe")
     End Sub
 
+    Private Function verifyWindowLocation(point As Point) As Point
+        If point.X < 0 Or point.Y < 0 Then
+            Return New Point(0, 0)
+        Else
+            Return point
+        End If
+    End Function
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.Location = verifyWindowLocation(My.Settings.mainWindowPosition)
         chkUseSSL.Checked = My.Settings.boolUseSSL
 
         If chkUseSSL.Checked Then
@@ -536,5 +545,9 @@ Public Class Form1
         stringBuilder.AppendLine("Written by Tom Parkison.")
 
         MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, "About " & programName)
+    End Sub
+
+    Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        My.Settings.mainWindowPosition = Me.Location
     End Sub
 End Class
