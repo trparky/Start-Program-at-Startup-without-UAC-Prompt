@@ -419,18 +419,6 @@ Public Class Form1
         taskService = Nothing
     End Sub
 
-    'Function isTaskRunning(fileName As String) As Boolean
-    '    Dim searcher As New ManagementObjectSearcher("root\CIMV2", "SELECT * FROM Win32_Process")
-
-    '    For Each queryObj As ManagementObject In searcher.Get()
-    '        If queryObj("ExecutablePath") = fileName Then
-    '            Return True
-    '        End If
-    '    Next
-
-    '    Return False
-    'End Function
-
     Private Sub btnGetTaskStatus_Click(sender As Object, e As EventArgs) Handles btnGetTaskStatus.Click
         If boolIsTaskRunning(listTasks.Text) Then
             MsgBox("The task is running.", MsgBoxStyle.Information, Me.Text)
