@@ -14,11 +14,7 @@ Public Class Form1
     End Sub
 
     Private Function verifyWindowLocation(point As Point) As Point
-        If point.X < 0 Or point.Y < 0 Then
-            Return New Point(0, 0)
-        Else
-            Return point
-        End If
+        Return If(point.X < 0 Or point.Y < 0, New Point(0, 0), point)
     End Function
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -31,7 +27,7 @@ Public Class Form1
             imgLock.Image = My.Resources.unlocked
         End If
 
-        If IO.File.Exists(Application.ExecutablePath & ".new.exe") = True Then
+        If IO.File.Exists(Application.ExecutablePath & ".new.exe") Then
             Threading.ThreadPool.QueueUserWorkItem(AddressOf newFileDeleterThreadSub)
         End If
 
@@ -39,13 +35,13 @@ Public Class Form1
         Dim boolDoesOurFolderExist As Boolean = False
 
         For Each folder As TaskFolder In taskService.RootFolder.SubFolders
-            If folder.Name = strTaskFolderName Then
+            If folder.Name.Equals(strTaskFolderName, StringComparison.OrdinalIgnoreCase) Then
                 boolDoesOurFolderExist = True
                 Exit For
             End If
         Next
 
-        If boolDoesOurFolderExist = False Then taskService.RootFolder.CreateFolder(strTaskFolderName)
+        If Not boolDoesOurFolderExist Then taskService.RootFolder.CreateFolder(strTaskFolderName)
 
         taskService.Dispose()
         taskService = Nothing
@@ -63,9 +59,7 @@ Public Class Form1
             With shortCut
                 .TargetPath = pathToExecutable
 
-                If (arguments = Nothing) = False Then
-                    .Arguments = arguments
-                End If
+                If Not String.IsNullOrEmpty(arguments) Then .Arguments = arguments
 
                 .WindowStyle = 1I
                 .Description = Title
@@ -132,15 +126,13 @@ Public Class Form1
     End Sub
 
     Private Sub btnCreateTask_Click(sender As Object, e As EventArgs) Handles btnCreateTask.Click
-        If txtTaskName.Text.Trim = Nothing Then
+        If String.IsNullOrEmpty(txtTaskName.Text.Trim) Then
             MsgBox("You must provide a name for this task.", MsgBoxStyle.Critical, Me.Text)
             Exit Sub
-        End If
-        If txtEXEPath.Text.Trim = Nothing Then
+        ElseIf String.IsNullOrEmpty(txtEXEPath.Text.Trim) Then
             MsgBox("You must provide a path to an executable for this task.", MsgBoxStyle.Critical, Me.Text)
             Exit Sub
-        End If
-        If IO.File.Exists(txtEXEPath.Text) = False Then
+        ElseIf Not IO.File.Exists(txtEXEPath.Text) Then
             MsgBox("Executable Path Not Found.", MsgBoxStyle.Critical, Me.Text)
             Exit Sub
         End If
@@ -149,7 +141,7 @@ Public Class Form1
 
         Dim strPathToAutoShortcut As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Start " & txtTaskName.Text & ".lnk")
 
-        If btnCreateTask.Text = "Save Changes to Task" Then
+        If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then
             If chkEnabled.Checked Then
                 MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
             Else
@@ -162,7 +154,7 @@ Public Class Form1
             End If
 
             btnCreateTask.Text = "Create Task"
-        ElseIf btnCreateTask.Text = "Create Task" Then
+        ElseIf btnCreateTask.Text.Equals("Create Task", StringComparison.OrdinalIgnoreCase) Then
             If chkEnabled.Checked Then
                 MsgBox("New task saved.", MsgBoxStyle.Information, Me.Text)
             Else
@@ -195,7 +187,7 @@ Public Class Form1
         Dim execAction As ExecAction
 
         For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
-            If task.Name = listTasks.Text Then
+            If task.Name.Equals(listTasks.Text, StringComparison.OrdinalIgnoreCase) Then
                 actions = task.Definition.Actions
                 txtTaskName.Text = task.Name
                 txtDescription.Text = task.Definition.RegistrationInfo.Description
@@ -260,7 +252,7 @@ Public Class Form1
         Dim actions As ActionCollection
 
         For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
-            If task.Name = strTaskName Then
+            If task.Name.Equals(strTaskName, StringComparison.OrdinalIgnoreCase) Then
                 actions = task.Definition.Actions
 
                 For Each action As Action In actions
@@ -315,7 +307,7 @@ Public Class Form1
             Dim savedTask As New classTask()
 
             For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
-                If task.Name = listTasks.Text Then
+                If task.Name.Equals(listTasks.Text, StringComparison.OrdinalIgnoreCase) Then
                     actions = task.Definition.Actions
 
                     savedTask.taskName = task.Name
@@ -384,7 +376,7 @@ Public Class Form1
         taskEXEPath = taskEXEPath.Trim
         taskParameters = taskParameters.Trim
 
-        If IO.File.Exists(taskEXEPath) = False Then
+        If Not IO.File.Exists(taskEXEPath) Then
             MsgBox("Executable path not found.", MsgBoxStyle.Critical, Me.Text)
             Exit Sub
         End If
@@ -491,7 +483,7 @@ Public Class Form1
         Dim taskObjectToWorkOn As Task = Nothing
 
         For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
-            If task.Name = strTaskName Then
+            If task.Name.Equals(strTaskName, StringComparison.OrdinalIgnoreCase) Then
                 taskObject = task
 
                 If task.State = TaskState.Running Then
@@ -507,11 +499,11 @@ Public Class Form1
         Return False
     End Function
 
-    Function boolIsTaskRunning(strTask As String) As Boolean
+    Function boolIsTaskRunning(strTaskName As String) As Boolean
         Dim taskService As New TaskService
 
         For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
-            If task.Name = strTask Then
+            If task.Name.Equals(strTaskName, StringComparison.OrdinalIgnoreCase) Then
                 If task.State = TaskState.Running Then
                     taskService.Dispose()
                     task.Dispose()
