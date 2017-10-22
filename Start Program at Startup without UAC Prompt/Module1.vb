@@ -13,7 +13,7 @@ Module Module1
     <Extension()>
     Public Function caseInsensitiveContains(haystack As String, needle As String, Optional boolDoEscaping As Boolean = False) As Boolean
         Try
-            If boolDoEscaping = True Then needle = Regex.Escape(needle)
+            If boolDoEscaping Then needle = Regex.Escape(needle)
             Return Regex.IsMatch(haystack, needle, RegexOptions.IgnoreCase)
         Catch ex As Exception
             Return False
@@ -47,15 +47,13 @@ Module Module1
 
         If doesPIDExist(PID) Then
             killProcess(PID)
-            'Else
-            'debug.writeline(" Process Killed.")
         End If
     End Sub
 
     Public Sub searchForProcessAndKillIt(strFileName As String, boolFullFilePathPassed As Boolean)
         Dim fullFileName As String
 
-        If boolFullFilePathPassed = True Then
+        If boolFullFilePathPassed Then
             fullFileName = strFileName
         Else
             fullFileName = New IO.FileInfo(strFileName).FullName
@@ -68,23 +66,15 @@ Module Module1
             For Each queryObj As Management.ManagementObject In searcher.Get()
                 killProcess(Integer.Parse(queryObj("ProcessId").ToString))
             Next
-
-            'debug.writeline("All processes killed... Update process can continue.")
         Catch ex3 As Runtime.InteropServices.COMException
         Catch err As Management.ManagementException
-            ' Does nothing
         End Try
     End Sub
 
     Public Function areWeAnAdministrator() As Boolean
         Try
             Dim principal As WindowsPrincipal = New WindowsPrincipal(WindowsIdentity.GetCurrent())
-
-            If principal.IsInRole(WindowsBuiltInRole.Administrator) = True Then
-                Return True
-            Else
-                Return False
-            End If
+            Return principal.IsInRole(WindowsBuiltInRole.Administrator)
         Catch ex As Exception
             Return False
         End Try
@@ -100,11 +90,11 @@ Module Module1
             folderPath = folderPath.Substring(0, folderPath.Length - 1)
         End If
 
-        If String.IsNullOrEmpty(folderPath) = True Or IO.Directory.Exists(folderPath) = False Then
+        If String.IsNullOrEmpty(folderPath) Or Not IO.Directory.Exists(folderPath) Then
             Return False
         End If
 
-        If checkByFolderACLs(folderPath) = True Then
+        If checkByFolderACLs(folderPath) Then
             Try
                 IO.File.Create(IO.Path.Combine(folderPath, "test.txt"), 1, IO.FileOptions.DeleteOnClose).Close()
                 If IO.File.Exists(IO.Path.Combine(folderPath, "test.txt")) Then IO.File.Delete(IO.Path.Combine(folderPath, "test.txt"))
