@@ -49,17 +49,17 @@ Module Check_for_Update_Stuff
         Dim checksumFromWeb As String = Nothing
 
         If Not createNewHTTPHelperObject().getWebData(urlOfChecksumFile, checksumFromWeb, False) Then
-            If boolGiveUserAnErrorMessage = True Then
+            If boolGiveUserAnErrorMessage Then
                 MsgBox("There was an error downloading the checksum verification file. Update process aborted.", MsgBoxStyle.Critical, "Add Adobe Flash to Microsoft EMET")
             End If
 
             Return False
         Else
             ' Checks to see if we have a valid SHA1 file.
-            If Text.RegularExpressions.Regex.IsMatch(checksumFromWeb, "([a-zA-Z0-9]{40})") = True Then
+            If Text.RegularExpressions.Regex.IsMatch(checksumFromWeb, "([a-zA-Z0-9]{40})") Then
                 checksumFromWeb = Text.RegularExpressions.Regex.Match(checksumFromWeb, "([a-zA-Z0-9]{40})").Groups(1).Value().ToLower.Trim()
 
-                If SHA160(memoryStream) = checksumFromWeb Then
+                If SHA160(memoryStream).Equals(checksumFromWeb, StringComparison.OrdinalIgnoreCase) Then
                     Return True
                 Else
                     If boolGiveUserAnErrorMessage Then

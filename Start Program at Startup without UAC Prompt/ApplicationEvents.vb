@@ -10,11 +10,11 @@ Namespace My
     ' StartupNextInstance: Raised when launching a single-instance application and the application is already active. 
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
     Partial Friend Class MyApplication
-        Private Sub MyApplication_Startup(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
-            If areWeAnAdministrator() = True And My.Application.CommandLineArgs.Count = 1 Then
+        Private Sub MyApplication_Startup(sender As Object, e As ApplicationServices.StartupEventArgs) Handles Me.Startup
+            If areWeAnAdministrator() And My.Application.CommandLineArgs.Count = 1 Then
                 Dim commandLineArgument As String = My.Application.CommandLineArgs(0).ToLower.Trim
 
-                If commandLineArgument = "-update" Then
+                If commandLineArgument.Trim.Equals("-update", StringComparison.OrdinalIgnoreCase) Then
                     Dim currentProcessFileName As String = New IO.FileInfo(Windows.Forms.Application.ExecutablePath).Name
 
                     If currentProcessFileName.caseInsensitiveContains(".new.exe", True) Then
