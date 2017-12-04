@@ -271,12 +271,11 @@ Public Class Form1
     End Sub
 
     Function isThisAValidExecutableTask(ByVal strTaskName As String, ByRef exePath As String) As Boolean
-        Dim taskService As New TaskService
-        Dim actions As ActionCollection
+        Using taskService As New TaskService
+            Dim task As Task = Nothing
 
-        For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
-            If task.Name.Equals(strTaskName, StringComparison.OrdinalIgnoreCase) Then
-                actions = task.Definition.Actions
+            If getTaskObject(taskService, strTaskName, task) Then
+                Dim actions As ActionCollection = task.Definition.Actions
 
                 For Each action As Action In actions
                     If action.ActionType = TaskActionType.Execute Then
@@ -284,8 +283,10 @@ Public Class Form1
                         Return True
                     End If
                 Next
+            Else
+                Return False
             End If
-        Next
+        End Using
 
         Return False
     End Function
