@@ -139,6 +139,10 @@ Public Class Form1
             Exit Sub
         End If
 
+        If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then
+            deleteTask(txtTaskName.Text)
+        End If
+
         addTask(txtTaskName.Text, txtDescription.Text, txtEXEPath.Text, txtParameters.Text)
 
         Dim strPathToAutoShortcut As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Start " & txtTaskName.Text & ".lnk")
@@ -183,13 +187,33 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub btnEditTask_Click(sender As Object, e As EventArgs) Handles btnEditTask.Click
-        Dim taskService As New TaskService
-        Dim actions As ActionCollection
-        Dim execAction As ExecAction
+    Private Function getTaskObject(ByRef taskServiceObject As TaskService, ByVal nameOfTask As String, ByRef taskObject As Task) As Boolean
+        Try
+            taskObject = taskServiceObject.GetTask(strTaskFolderName & "\" & nameOfTask)
+            Return If(taskObject Is Nothing, False, True)
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
 
-        For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
-            If task.Name.Equals(listTasks.Text, StringComparison.OrdinalIgnoreCase) Then
+    ''' <summary>Deletes a scheduled task.</summary>
+    ''' <param name="taskName">The task name to be deleted.</param>
+    Private Sub deleteTask(taskName As String)
+        Try
+            Using taskServiceObject As TaskService = New TaskService()
+                taskServiceObject.RootFolder.SubFolders(strTaskFolderName).DeleteTask(taskName, False)
+            End Using
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Sub btnEditTask_Click(sender As Object, e As EventArgs) Handles btnEditTask.Click
+        Using taskService As New TaskService
+            Dim actions As ActionCollection
+            Dim execAction As ExecAction
+            Dim task As Task = Nothing
+
+            If getTaskObject(taskService, listTasks.Text, task) Then
                 actions = task.Definition.Actions
                 txtTaskName.Text = task.Name
                 txtDescription.Text = task.Definition.RegistrationInfo.Description
@@ -211,13 +235,15 @@ Public Class Form1
                         Exit For
                     End If
                 Next
-            End If
-        Next
 
-        btnCreateTask.Text = "Save Changes to Task"
-        btnCancelEditTask.Enabled = True
-        txtTaskName.ReadOnly = True
-        ToolTip1.SetToolTip(txtTaskName, "Disabled in Edit Mode")
+                task.Dispose()
+            End If
+
+            btnCreateTask.Text = "Save Changes to Task"
+            btnCancelEditTask.Enabled = True
+            txtTaskName.ReadOnly = True
+            ToolTip1.SetToolTip(txtTaskName, "Disabled in Edit Mode")
+        End Using
     End Sub
 
     Private Sub btnCancelEditTask_Click(sender As Object, e As EventArgs) Handles btnCancelEditTask.Click
@@ -233,13 +259,8 @@ Public Class Form1
     End Sub
 
     Private Sub btnDeleteTasks_Click(sender As Object, e As EventArgs) Handles btnDeleteTasks.Click
-        Dim taskService As New TaskService
-        taskService.RootFolder.SubFolders(strTaskFolderName).DeleteTask(listTasks.Text)
-        taskService.Dispose()
-        taskService = Nothing
-
+        deleteTask(listTasks.Text)
         refreshTasks()
-
         MsgBox("Task Deleted.", MsgBoxStyle.Information, Me.Text)
     End Sub
 
