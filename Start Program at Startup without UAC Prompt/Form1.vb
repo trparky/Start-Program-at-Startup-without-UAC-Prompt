@@ -403,6 +403,7 @@ Public Class Form1
         newTask.Settings.AllowHardTerminate = False
         newTask.Settings.UseUnifiedSchedulingEngine = True
         newTask.Settings.ExecutionTimeLimit = Nothing
+        newTask.Settings.Priority = ProcessPriorityClass.Normal
         newTask.Principal.LogonType = TaskLogonType.InteractiveToken
 
         taskService.RootFolder.SubFolders(strTaskFolderName).RegisterTaskDefinition(taskName, newTask)
