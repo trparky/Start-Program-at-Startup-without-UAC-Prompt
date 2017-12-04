@@ -129,10 +129,12 @@ Public Class Form1
         If String.IsNullOrEmpty(txtTaskName.Text.Trim) Then
             MsgBox("You must provide a name for this task.", MsgBoxStyle.Critical, Me.Text)
             Exit Sub
-        ElseIf String.IsNullOrEmpty(txtEXEPath.Text.Trim) Then
+        End If
+        If String.IsNullOrEmpty(txtEXEPath.Text.Trim) Then
             MsgBox("You must provide a path to an executable for this task.", MsgBoxStyle.Critical, Me.Text)
             Exit Sub
-        ElseIf Not IO.File.Exists(txtEXEPath.Text) Then
+        End If
+        If Not IO.File.Exists(txtEXEPath.Text) Then
             MsgBox("Executable Path Not Found.", MsgBoxStyle.Critical, Me.Text)
             Exit Sub
         End If
