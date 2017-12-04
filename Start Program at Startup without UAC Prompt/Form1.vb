@@ -324,15 +324,13 @@ Public Class Form1
         saveTask.Filter = "Task File|*.task"
 
         If saveTask.ShowDialog() = DialogResult.OK Then
-            Dim taskService As New TaskService
-            Dim actions As ActionCollection
-            Dim execAction As ExecAction
+            Using taskService As New TaskService
+                Dim task As Task = Nothing
 
-            Dim savedTask As New classTask()
-
-            For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
-                If task.Name.Equals(listTasks.Text, StringComparison.OrdinalIgnoreCase) Then
-                    actions = task.Definition.Actions
+                If getTaskObject(taskService, listTasks.Text, task) Then
+                    Dim savedTask As New classTask()
+                    Dim actions As ActionCollection = task.Definition.Actions
+                    Dim execAction As ExecAction
 
                     savedTask.taskName = task.Name
                     savedTask.taskDescription = task.Definition.RegistrationInfo.Description
@@ -356,19 +354,16 @@ Public Class Form1
 
                     actions.Dispose()
                     actions = Nothing
+
+                    Dim streamWriter As New StreamWriter(saveTask.FileName)
+                    Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
+                    xmlSerializerObject.Serialize(streamWriter, savedTask)
+                    streamWriter.Close()
+                    streamWriter.Dispose()
+
+                    MsgBox("Task exported.", MsgBoxStyle.Information, Me.Text)
                 End If
-            Next
-
-            taskService.Dispose()
-            taskService = Nothing
-
-            Dim streamWriter As New StreamWriter(saveTask.FileName)
-            Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
-            xmlSerializerObject.Serialize(streamWriter, savedTask)
-            streamWriter.Close()
-            streamWriter.Dispose()
-
-            MsgBox("Task exported.", MsgBoxStyle.Information, Me.Text)
+            End Using
         End If
     End Sub
 
