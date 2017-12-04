@@ -80,17 +80,18 @@ Module Check_for_Update_Stuff
 
     Private Sub extractFileFromZIPFile(memoryStream As MemoryStream, fileToExtract As String, fileToWriteExtractedFileTo As String)
         memoryStream.Position = 0
-        Dim zipFileObject As New ICSharpCode.SharpZipLib.Zip.ZipFile(memoryStream)
-        Dim zipFileEntry As ICSharpCode.SharpZipLib.Zip.ZipEntry = zipFileObject.GetEntry(fileToExtract)
 
-        If zipFileEntry IsNot Nothing Then
-            Dim fileStream As New FileStream(fileToWriteExtractedFileTo, FileMode.Create)
-            zipFileObject.GetInputStream(zipFileEntry).CopyTo(fileStream)
-            fileStream.Close()
-            fileStream.Dispose()
-        End If
+        Using zipFileObject As New Compression.ZipArchive(memoryStream)
+            Dim zipFileEntry As Compression.ZipArchiveEntry = zipFileObject.GetEntry(fileToExtract)
 
-        zipFileObject.Close()
+            If zipFileEntry IsNot Nothing Then
+                Using zipFileEntryIOStream As Stream = zipFileEntry.Open()
+                    Using fileStream As New FileStream(fileToWriteExtractedFileTo, FileMode.Create)
+                        zipFileEntryIOStream.CopyTo(fileStream)
+                    End Using
+                End Using
+            End If
+        End Using
     End Sub
 
     Private Sub downloadAndPerformUpdate()
