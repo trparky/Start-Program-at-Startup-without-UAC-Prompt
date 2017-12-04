@@ -500,42 +500,23 @@ Public Class Form1
     End Sub
 
     Function boolIsTaskRunning(ByVal strTaskName As String, ByRef taskService As TaskService, ByRef taskObject As Task) As Boolean
-        Dim taskObjectToWorkOn As Task = Nothing
-
-        For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
-            If task.Name.Equals(strTaskName, StringComparison.OrdinalIgnoreCase) Then
-                taskObject = task
-
-                If task.State = TaskState.Running Then
-                    Return True
-                Else
-                    Return False
-                End If
-            End If
-
-            task.Dispose()
-        Next
-
-        Return False
+        If getTaskObject(taskService, strTaskName, taskObject) Then
+            Return If(taskObject.State = TaskState.Running, True, False)
+        Else
+            Return False
+        End If
     End Function
 
     Function boolIsTaskRunning(strTaskName As String) As Boolean
-        Dim taskService As New TaskService
+        Using taskService As New TaskService
+            Dim task As Task = Nothing
 
-        For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
-            If task.Name.Equals(strTaskName, StringComparison.OrdinalIgnoreCase) Then
-                If task.State = TaskState.Running Then
-                    taskService.Dispose()
-                    task.Dispose()
-                    Return True
-                End If
+            If getTaskObject(taskService, strTaskName, task) Then
+                Return If(task.State = TaskState.Running, True, False)
+            Else
+                Return False
             End If
-
-            task.Dispose()
-        Next
-
-        taskService.Dispose()
-        Return False
+        End Using
     End Function
 
     Private Sub btnAbout_Click(sender As Object, e As EventArgs) Handles btnAbout.Click
