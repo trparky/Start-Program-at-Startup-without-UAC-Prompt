@@ -81,25 +81,48 @@ Public Class Form1
 
         taskService.Dispose()
         taskService = Nothing
+        disableButtons()
+    End Sub
+
+    Sub disableButtons()
+        btnDeleteTasks.Enabled = False
+        btnEditTask.Enabled = False
+        btnCreateShortcutOnDesktop.Enabled = False
+        btnExportTask.Enabled = False
+        btnStopStartTask.Enabled = False
+        btnGetTaskStatus.Enabled = False
+
+        DeleteTaskToolStripMenuItem.Enabled = False
+        EditTaskToolStripMenuItem.Enabled = False
+        StopStartTaskToolStripMenuItem.Enabled = False
+        GetStatusOfTaskToolStripMenuItem.Enabled = False
+        CreateShortcutToTaskOnDesktopToolStripMenuItem.Enabled = False
+        StopStartTaskToolStripMenuItem.Enabled = False
+        ExportTaskToolStripMenuItem.Enabled = False
+        ImportTaskToolStripMenuItem.Enabled = False
+    End Sub
+
+    Sub enableButtons()
+        btnDeleteTasks.Enabled = True
+        btnEditTask.Enabled = True
+        btnCreateShortcutOnDesktop.Enabled = True
+        btnExportTask.Enabled = True
+        btnStopStartTask.Enabled = True
+        btnGetTaskStatus.Enabled = True
+
+        DeleteTaskToolStripMenuItem.Enabled = True
+        EditTaskToolStripMenuItem.Enabled = True
+        StopStartTaskToolStripMenuItem.Enabled = True
+        GetStatusOfTaskToolStripMenuItem.Enabled = True
+        CreateShortcutToTaskOnDesktopToolStripMenuItem.Enabled = True
+        StopStartTaskToolStripMenuItem.Enabled = True
+        ExportTaskToolStripMenuItem.Enabled = True
+        ImportTaskToolStripMenuItem.Enabled = True
     End Sub
 
     Private Sub listTasks_Click(sender As Object, e As EventArgs) Handles listTasks.Click
         If listTasks.SelectedItems.Count > 0 Then
-            btnDeleteTasks.Enabled = True
-            btnEditTask.Enabled = True
-            btnCreateShortcutOnDesktop.Enabled = True
-            btnExportTask.Enabled = True
-            btnStopStartTask.Enabled = True
-            btnGetTaskStatus.Enabled = True
-
-            DeleteTaskToolStripMenuItem.Enabled = True
-            EditTaskToolStripMenuItem.Enabled = True
-            StopStartTaskToolStripMenuItem.Enabled = True
-            GetStatusOfTaskToolStripMenuItem.Enabled = True
-            CreateShortcutToTaskOnDesktopToolStripMenuItem.Enabled = True
-            StopStartTaskToolStripMenuItem.Enabled = True
-            ExportTaskToolStripMenuItem.Enabled = True
-            ImportTaskToolStripMenuItem.Enabled = True
+            enableButtons()
 
             If boolIsTaskRunning(listTasks.Text) Then
                 btnStopStartTask.Text = "Stop Task"
@@ -256,6 +279,8 @@ Public Class Form1
         btnCancelEditTask.Enabled = False
         txtTaskName.ReadOnly = False
         ToolTip1.SetToolTip(txtTaskName, "")
+        refreshTasks()
+        disableButtons()
     End Sub
 
     Private Sub btnDeleteTasks_Click(sender As Object, e As EventArgs) Handles btnDeleteTasks.Click
@@ -395,6 +420,8 @@ Public Class Form1
         taskEXEPath = taskEXEPath.Trim
         taskParameters = taskParameters.Trim
 
+        If String.IsNullOrEmpty(taskParameters) Then taskParameters = Nothing
+
         If Not IO.File.Exists(taskEXEPath) Then
             MsgBox("Executable path not found.", MsgBoxStyle.Critical, Me.Text)
             Exit Sub
@@ -406,22 +433,22 @@ Public Class Form1
         newTask.RegistrationInfo.Description = taskDescription
 
         If chkEnabled.Checked Then newTask.Triggers.Add(New LogonTrigger)
-
         Dim exeFileInfo As New FileInfo(taskEXEPath)
 
-        newTask.Actions.Add(New ExecAction(Chr(34) & taskEXEPath & Chr(34), taskParameters, exeFileInfo.DirectoryName))
-
-        newTask.Principal.RunLevel = TaskRunLevel.Highest
-        newTask.Settings.Compatibility = TaskCompatibility.V2_1
-        newTask.Settings.AllowDemandStart = True
-        newTask.Settings.DisallowStartIfOnBatteries = False
-        newTask.Settings.RunOnlyIfIdle = False
-        newTask.Settings.StopIfGoingOnBatteries = False
-        newTask.Settings.AllowHardTerminate = False
-        newTask.Settings.UseUnifiedSchedulingEngine = True
-        newTask.Settings.ExecutionTimeLimit = Nothing
-        newTask.Settings.Priority = ProcessPriorityClass.Normal
-        newTask.Principal.LogonType = TaskLogonType.InteractiveToken
+        With newTask
+            .Actions.Add(New ExecAction(Chr(34) & taskEXEPath & Chr(34), taskParameters, exeFileInfo.DirectoryName))
+            .Principal.RunLevel = TaskRunLevel.Highest
+            .Settings.Compatibility = TaskCompatibility.V2
+            .Settings.AllowDemandStart = True
+            .Settings.DisallowStartIfOnBatteries = False
+            .Settings.RunOnlyIfIdle = False
+            .Settings.StopIfGoingOnBatteries = False
+            .Settings.AllowHardTerminate = False
+            .Settings.UseUnifiedSchedulingEngine = True
+            .Settings.ExecutionTimeLimit = Nothing
+            .Settings.Priority = ProcessPriorityClass.Normal
+            .Principal.LogonType = TaskLogonType.InteractiveToken
+        End With
 
         taskService.RootFolder.SubFolders(strTaskFolderName).RegisterTaskDefinition(taskName, newTask)
 
