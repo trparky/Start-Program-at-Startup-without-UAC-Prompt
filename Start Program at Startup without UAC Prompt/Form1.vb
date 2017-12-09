@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Win32.TaskScheduler
+﻿Option Strict Off
+Imports Microsoft.Win32.TaskScheduler
 Imports System.Text
 Imports IWshRuntimeLibrary
 Imports System.IO
