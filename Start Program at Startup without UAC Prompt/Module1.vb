@@ -1,5 +1,4 @@
-﻿Option Strict Off
-Imports System.Runtime.CompilerServices
+﻿Imports System.Runtime.CompilerServices
 Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports System.Text.RegularExpressions
