@@ -121,97 +121,39 @@ Module Check_for_Update_Stuff
         memoryStream.Close()
         memoryStream.Dispose()
 
-        Dim startInfo As New ProcessStartInfo
-        startInfo.FileName = newExecutableName
-        startInfo.Arguments = "-update"
-        If canIWriteToTheCurrentDirectory() = False Then startInfo.Verb = "runas"
+        Dim startInfo As New ProcessStartInfo With {
+            .FileName = newExecutableName,
+            .Arguments = "-update"
+        }
+        If Not canIWriteToTheCurrentDirectory() Then startInfo.Verb = "runas"
         Process.Start(startInfo)
 
         Process.GetCurrentProcess.Kill()
     End Sub
-
-    Private Function canIWriteToTheCurrentDirectory() As Boolean
-        Return canIWriteThere(New IO.FileInfo(Application.ExecutablePath).DirectoryName)
-    End Function
-
-    Private Function canIWriteThere(folderPath As String) As Boolean
-        ' We make sure we get valid folder path by taking off the leading slash.
-        If folderPath.EndsWith("\") Then
-            folderPath = folderPath.Substring(0, folderPath.Length - 1)
-        End If
-
-        If String.IsNullOrEmpty(folderPath) = True Or Directory.Exists(folderPath) = False Then
-            Return False
-        End If
-
-        If checkByFolderACLs(folderPath) = True Then
-            Try
-                File.Create(Path.Combine(folderPath, "test.txt"), 1, FileOptions.DeleteOnClose).Close()
-                If File.Exists(Path.Combine(folderPath, "test.txt")) Then File.Delete(Path.Combine(folderPath, "test.txt"))
-                Return True
-            Catch ex As Exception
-                Return False
-            End Try
-        Else
-            Return False
-        End If
-    End Function
-
-    Private Function checkByFolderACLs(folderPath As String) As Boolean
-        Try
-            Dim directoryACLs As DirectorySecurity = Directory.GetAccessControl(folderPath)
-            Dim directoryUsers As String = WindowsIdentity.GetCurrent.User.Value
-            Dim directoryAccessRights As FileSystemAccessRule
-            Dim fileSystemRights As FileSystemRights
-
-            For Each rule As AuthorizationRule In directoryACLs.GetAccessRules(True, True, GetType(SecurityIdentifier))
-                If rule.IdentityReference.Value = directoryUsers Then
-                    directoryAccessRights = DirectCast(rule, FileSystemAccessRule)
-
-                    If directoryAccessRights.AccessControlType = Security.AccessControl.AccessControlType.Allow Then
-                        fileSystemRights = directoryAccessRights.FileSystemRights
-
-                        If fileSystemRights = (FileSystemRights.Read Or FileSystemRights.Modify Or FileSystemRights.Write Or FileSystemRights.FullControl) Then
-                            Return True
-                        End If
-                    End If
-                End If
-            Next
-
-            Return False
-        Catch ex As Exception
-            Return False
-        End Try
-    End Function
 
     Private Function createHTTPUserAgentHeaderString() As String
         Return String.Format("{0} version {1} on {2}", programName, strFullVersionString, getFullOSVersionString())
     End Function
 
     Public Function createNewHTTPHelperObject() As httpHelper
-        Dim httpHelper As New httpHelper
-        httpHelper.setUserAgent = createHTTPUserAgentHeaderString()
+        Dim httpHelper As New httpHelper With {
+            .useHTTPCompression = True,
+            .setProxyMode = True,
+            .useSystemProxy = True,
+            .setUserAgent = createHTTPUserAgentHeaderString()
+        }
         httpHelper.addHTTPHeader("PROGRAM_NAME", programName)
         httpHelper.addHTTPHeader("PROGRAM_VERSION", strFullVersionString)
         httpHelper.addHTTPHeader("OPERATING_SYSTEM", getFullOSVersionString())
-        httpHelper.useHTTPCompression = True
-        httpHelper.setProxyMode = True
-        httpHelper.useSystemProxy = True
 
-        If File.Exists("tom") = True Then
-            httpHelper.addPOSTData("dontcount", "True")
-        End If
+        If File.Exists("tom") Then httpHelper.addPOSTData("dontcount", "True")
 
         httpHelper.setURLPreProcessor = Function(ByVal strURLInput As String) As String
                                             Try
                                                 If strURLInput.Trim.StartsWith("http", StringComparison.OrdinalIgnoreCase) Then
                                                     Return strURLInput
                                                 Else
-                                                    If My.Settings.boolUseSSL Then
-                                                        Return "https://" & strURLInput
-                                                    Else
-                                                        Return "http://" & strURLInput
-                                                    End If
+                                                    Return If(My.Settings.boolUseSSL, "https://" & strURLInput, "http://" & strURLInput)
                                                 End If
                                             Catch ex As Exception
                                                 Return strURLInput
@@ -246,11 +188,7 @@ Module Check_for_Update_Stuff
                 strOSName = String.Format("Windows NT {0}.{1}", intOSMajorVersion, intOSMinorVersion)
             End If
 
-            If Environment.Is64BitOperatingSystem Then
-                strOSName &= " 64-bit"
-            Else
-                strOSName &= " 32-bit"
-            End If
+            strOSName &= If(Environment.Is64BitOperatingSystem, " 64-bit", " 32-bit")
         Catch ex As Exception
             Try
                 Return "Unknown Windows Operating System (" & Environment.OSVersion.VersionString & ")"
@@ -263,7 +201,7 @@ Module Check_for_Update_Stuff
     End Function
 
     Public Sub checkForUpdates()
-        If checkForInternetConnection() = False Then
+        If Not checkForInternetConnection() Then
             MsgBox("No Internet connection detected.", MsgBoxStyle.Information, windowObject.Text)
         Else
             'Debug.WriteLine("internet connection detected")

@@ -51,13 +51,7 @@ Module Module1
     End Sub
 
     Public Sub searchForProcessAndKillIt(strFileName As String, boolFullFilePathPassed As Boolean)
-        Dim fullFileName As String
-
-        If boolFullFilePathPassed Then
-            fullFileName = strFileName
-        Else
-            fullFileName = New IO.FileInfo(strFileName).FullName
-        End If
+        Dim fullFileName As String = If(boolFullFilePathPassed, strFileName, New IO.FileInfo(strFileName).FullName)
 
         Dim wmiQuery As String = String.Format("Select ExecutablePath, ProcessId FROM Win32_Process WHERE ExecutablePath = '{0}'", fullFileName.addSlashes())
         Dim searcher As New Management.ManagementObjectSearcher("root\CIMV2", wmiQuery)
@@ -86,18 +80,16 @@ Module Module1
 
     Private Function canIWriteThere(folderPath As String) As Boolean
         ' We make sure we get valid folder path by taking off the leading slash.
-        If folderPath.EndsWith("\") Then
-            folderPath = folderPath.Substring(0, folderPath.Length - 1)
-        End If
-
-        If String.IsNullOrEmpty(folderPath) Or Not IO.Directory.Exists(folderPath) Then
-            Return False
-        End If
+        If folderPath.EndsWith("\") Then folderPath = folderPath.Substring(0, folderPath.Length - 1)
+        If String.IsNullOrEmpty(folderPath) Or Not IO.Directory.Exists(folderPath) Then Return False
 
         If checkByFolderACLs(folderPath) Then
             Try
-                IO.File.Create(IO.Path.Combine(folderPath, "test.txt"), 1, IO.FileOptions.DeleteOnClose).Close()
-                If IO.File.Exists(IO.Path.Combine(folderPath, "test.txt")) Then IO.File.Delete(IO.Path.Combine(folderPath, "test.txt"))
+                Dim strOurTestFileName As String = IO.Path.Combine(folderPath, "test" & randomStringGenerator(10) & ".txt")
+
+                IO.File.Create(strOurTestFileName, 1, IO.FileOptions.DeleteOnClose).Close()
+                If IO.File.Exists(strOurTestFileName) Then IO.File.Delete(strOurTestFileName)
+
                 Return True
             Catch ex As Exception
                 Return False
@@ -134,5 +126,19 @@ Module Module1
         Catch ex As Exception
             Return False
         End Try
+    End Function
+
+    Private Function randomStringGenerator(length As Integer) As String
+        Dim random As Random = New Random()
+        Dim builder As New Text.StringBuilder()
+        Dim ch As Char
+        Dim legalCharacters As String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+
+        For cntr As Integer = 0 To length
+            ch = legalCharacters.Substring(random.Next(0, legalCharacters.Length), 1)
+            builder.Append(ch)
+        Next
+
+        Return builder.ToString()
     End Function
 End Module
