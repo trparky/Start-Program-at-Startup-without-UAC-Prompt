@@ -71,11 +71,23 @@ Public Class Form1
         End Try
     End Sub
 
+    Sub checkTaskPrioritySettings(ByRef task As Task)
+        Try
+            If task.Definition.Settings.Priority <> ProcessPriorityClass.Normal Then
+                task.Definition.Settings.Priority = ProcessPriorityClass.Normal
+                task.RegisterChanges()
+            End If
+        Catch ex As Exception
+            ' We don't care if we crash here but we need to do it silently.
+        End Try
+    End Sub
+
     Sub refreshTasks()
         listTasks.Items.Clear()
         Dim taskService As New TaskService
 
         For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
+            checkTaskPrioritySettings(task)
             listTasks.Items.Add(task.Name)
         Next
 
