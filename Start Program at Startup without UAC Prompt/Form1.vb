@@ -20,31 +20,22 @@ Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Location = verifyWindowLocation(My.Settings.mainWindowPosition)
         chkUseSSL.Checked = My.Settings.boolUseSSL
+        imgLock.Image = If(chkUseSSL.Checked, My.Resources.locked, My.Resources.unlocked)
 
-        If chkUseSSL.Checked Then
-            imgLock.Image = My.Resources.locked
-        Else
-            imgLock.Image = My.Resources.unlocked
-        End If
+        If IO.File.Exists(Application.ExecutablePath & ".new.exe") Then Threading.ThreadPool.QueueUserWorkItem(AddressOf newFileDeleterThreadSub)
 
-        If IO.File.Exists(Application.ExecutablePath & ".new.exe") Then
-            Threading.ThreadPool.QueueUserWorkItem(AddressOf newFileDeleterThreadSub)
-        End If
+        Using taskService As New TaskService
+            Dim boolDoesOurFolderExist As Boolean = False
 
-        Dim taskService As New TaskService
-        Dim boolDoesOurFolderExist As Boolean = False
+            For Each folder As TaskFolder In taskService.RootFolder.SubFolders
+                If folder.Name.Equals(strTaskFolderName, StringComparison.OrdinalIgnoreCase) Then
+                    boolDoesOurFolderExist = True
+                    Exit For
+                End If
+            Next
 
-        For Each folder As TaskFolder In taskService.RootFolder.SubFolders
-            If folder.Name.Equals(strTaskFolderName, StringComparison.OrdinalIgnoreCase) Then
-                boolDoesOurFolderExist = True
-                Exit For
-            End If
-        Next
-
-        If Not boolDoesOurFolderExist Then taskService.RootFolder.CreateFolder(strTaskFolderName)
-
-        taskService.Dispose()
-        taskService = Nothing
+            If Not boolDoesOurFolderExist Then taskService.RootFolder.CreateFolder(strTaskFolderName)
+        End Using
 
         refreshTasks()
     End Sub
@@ -174,30 +165,25 @@ Public Class Form1
             Exit Sub
         End If
 
-        If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then
-            deleteTask(txtTaskName.Text)
-        End If
+        If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then deleteTask(txtTaskName.Text)
 
         addTask(txtTaskName.Text, txtDescription.Text, txtEXEPath.Text, txtParameters.Text)
 
         Dim strPathToAutoShortcut As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Start " & txtTaskName.Text & ".lnk")
 
         If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then
-            If chkEnabled.Checked Then
-                MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
+            If chkEnabled.Checked Then : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
             Else
                 If Not IO.File.Exists(strPathToAutoShortcut) Then
                     autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
                     MsgBox("Task changes saved." & vbCrLf & vbCrLf & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
-                Else
-                    MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
+                Else : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
                 End If
             End If
 
             btnCreateTask.Text = "Create Task"
         ElseIf btnCreateTask.Text.Equals("Create Task", StringComparison.OrdinalIgnoreCase) Then
-            If chkEnabled.Checked Then
-                MsgBox("New task saved.", MsgBoxStyle.Information, Me.Text)
+            If chkEnabled.Checked Then : MsgBox("New task saved.", MsgBoxStyle.Information, Me.Text)
             Else
                 autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
                 MsgBox("New task saved." & vbCrLf & vbCrLf & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
@@ -213,10 +199,7 @@ Public Class Form1
 
     Private Sub autoCreateDesktopShortcut(strTaskName As String, strPathToAutoShortcut As String)
         Dim exePath As String = Nothing
-        If Not isThisAValidExecutableTask(strTaskName, exePath) Then
-            Exit Sub
-        End If
-
+        If Not isThisAValidExecutableTask(strTaskName, exePath) Then Exit Sub
         If Not IO.File.Exists(strPathToAutoShortcut) Then
             createShortCut(strPathToAutoShortcut, "schtasks", exePath, strTaskName, String.Format("/run /TN {0}\{2}\{1}{0}", Chr(34), strTaskName, strTaskFolderName))
         End If
@@ -320,8 +303,7 @@ Public Class Form1
                         Return True
                     End If
                 Next
-            Else
-                Return False
+            Else : Return False
             End If
         End Using
 
@@ -507,12 +489,7 @@ Public Class Form1
     End Sub
 
     Private Sub chkUseSSL_CheckedChanged(sender As Object, e As EventArgs) Handles chkUseSSL.CheckedChanged
-        If chkUseSSL.Checked Then
-            imgLock.Image = My.Resources.locked
-        Else
-            imgLock.Image = My.Resources.unlocked
-        End If
-
+        imgLock.Image = If(chkUseSSL.Checked, My.Resources.locked, My.Resources.unlocked)
         My.Settings.boolUseSSL = chkUseSSL.Checked
     End Sub
 
@@ -539,22 +516,13 @@ Public Class Form1
     End Sub
 
     Function boolIsTaskRunning(ByVal strTaskName As String, ByRef taskService As TaskService, ByRef taskObject As Task) As Boolean
-        If getTaskObject(taskService, strTaskName, taskObject) Then
-            Return If(taskObject.State = TaskState.Running, True, False)
-        Else
-            Return False
-        End If
+        Return If(getTaskObject(taskService, strTaskName, taskObject), If(taskObject.State = TaskState.Running, True, False), False)
     End Function
 
     Function boolIsTaskRunning(strTaskName As String) As Boolean
         Using taskService As New TaskService
             Dim task As Task = Nothing
-
-            If getTaskObject(taskService, strTaskName, task) Then
-                Return If(task.State = TaskState.Running, True, False)
-            Else
-                Return False
-            End If
+            Return If(getTaskObject(taskService, strTaskName, task), If(task.State = TaskState.Running, True, False), False)
         End Using
     End Function
 

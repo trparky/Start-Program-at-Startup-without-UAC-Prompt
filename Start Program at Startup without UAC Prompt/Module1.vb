@@ -22,15 +22,9 @@ Module Module1
 
     Private Function doesPIDExist(PID As Integer) As Boolean
         Try
-            Dim searcher As New Management.ManagementObjectSearcher("root\CIMV2", String.Format("Select * FROM Win32_Process WHERE ProcessId={0}", PID))
-
-            If searcher.Get.Count = 0 Then
-                searcher.Dispose()
-                Return False
-            Else
-                searcher.Dispose()
-                Return True
-            End If
+            Using searcher As New Management.ManagementObjectSearcher("root\CIMV2", String.Format("Select * FROM Win32_Process WHERE ProcessId={0}", PID))
+                Return If(searcher.Get.Count = 0, False, True)
+            End Using
         Catch ex3 As Runtime.InteropServices.COMException
             Return False
         Catch ex As Exception
@@ -39,15 +33,8 @@ Module Module1
     End Function
 
     Private Sub killProcess(PID As Integer)
-        Debug.Write(String.Format("Killing PID {0}...", PID))
-
-        If doesPIDExist(PID) Then
-            Process.GetProcessById(PID).Kill()
-        End If
-
-        If doesPIDExist(PID) Then
-            killProcess(PID)
-        End If
+        If doesPIDExist(PID) Then Process.GetProcessById(PID).Kill()
+        If doesPIDExist(PID) Then killProcess(PID)
     End Sub
 
     Public Sub searchForProcessAndKillIt(strFileName As String, boolFullFilePathPassed As Boolean)

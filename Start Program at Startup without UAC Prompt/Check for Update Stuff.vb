@@ -41,38 +41,27 @@ Module Check_for_Update_Stuff
         Dim Output As Byte() = SHA1Engine.ComputeHash(memoryStream)
         memoryStream.Position = 0
 
-        Dim result As String = BitConverter.ToString(Output).ToLower().Replace("-", "").Trim
-        SHA160 = result
+        Return BitConverter.ToString(Output).ToLower().Replace("-", "").Trim
     End Function
 
     Public Function verifyChecksum(urlOfChecksumFile As String, ByRef memoryStream As MemoryStream, boolGiveUserAnErrorMessage As Boolean) As Boolean
         Dim checksumFromWeb As String = Nothing
 
         If Not createNewHTTPHelperObject().getWebData(urlOfChecksumFile, checksumFromWeb, False) Then
-            If boolGiveUserAnErrorMessage Then
-                MsgBox("There was an error downloading the checksum verification file. Update process aborted.", MsgBoxStyle.Critical, "Add Adobe Flash to Microsoft EMET")
-            End If
-
+            If boolGiveUserAnErrorMessage Then MsgBox("There was an error downloading the checksum verification file. Update process aborted.", MsgBoxStyle.Critical, "Add Adobe Flash to Microsoft EMET")
             Return False
         Else
             ' Checks to see if we have a valid SHA1 file.
             If Text.RegularExpressions.Regex.IsMatch(checksumFromWeb, "([a-zA-Z0-9]{40})") Then
                 checksumFromWeb = Text.RegularExpressions.Regex.Match(checksumFromWeb, "([a-zA-Z0-9]{40})").Groups(1).Value().ToLower.Trim()
 
-                If SHA160(memoryStream).Equals(checksumFromWeb, StringComparison.OrdinalIgnoreCase) Then
-                    Return True
+                If SHA160(memoryStream).Equals(checksumFromWeb, StringComparison.OrdinalIgnoreCase) Then : Return True
                 Else
-                    If boolGiveUserAnErrorMessage Then
-                        MsgBox("There was an error in the download, checksums don't match. Update process aborted.", MsgBoxStyle.Critical, "Add Adobe Flash to Microsoft EMET")
-                    End If
-
+                    If boolGiveUserAnErrorMessage Then MsgBox("There was an error in the download, checksums don't match. Update process aborted.", MsgBoxStyle.Critical, "Add Adobe Flash to Microsoft EMET")
                     Return False
                 End If
             Else
-                If boolGiveUserAnErrorMessage Then
-                    MsgBox("Invalid SHA1 file detected. Update process aborted.", MsgBoxStyle.Critical, "Add Adobe Flash to Microsoft EMET")
-                End If
-
+                If boolGiveUserAnErrorMessage Then MsgBox("Invalid SHA1 file detected. Update process aborted.", MsgBoxStyle.Critical, "Add Adobe Flash to Microsoft EMET")
                 Return False
             End If
         End If
@@ -221,7 +210,6 @@ Module Check_for_Update_Stuff
                 End If
             Catch ex As Exception
                 ' Ok, we crashed but who cares.  We give an error message.
-                'MsgBox("Error while checking for new version.", MsgBoxStyle.Information, Me.Text)
             Finally
                 windowObject = Nothing
             End Try
