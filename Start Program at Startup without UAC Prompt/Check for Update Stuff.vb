@@ -193,7 +193,6 @@ Module Check_for_Update_Stuff
         If Not checkForInternetConnection() Then
             MsgBox("No Internet connection detected.", MsgBoxStyle.Information, windowObject.Text)
         Else
-            'Debug.WriteLine("internet connection detected")
             Try
                 Dim xmlData As String = Nothing
 
