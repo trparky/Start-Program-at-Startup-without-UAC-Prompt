@@ -493,25 +493,24 @@ Public Class Form1
     End Sub
 
     Private Sub btnStopStartTask_Click(sender As Object, e As EventArgs) Handles btnStopStartTask.Click
-        Dim taskService As New TaskService
-        Dim taskObject As Task = Nothing
-        Dim boolIsItRunning As Boolean = False
+        Using taskService As New TaskService
+            Dim taskObject As Task = Nothing
+            Dim boolIsItRunning As Boolean = False
 
-        boolIsItRunning = boolIsTaskRunning(listTasks.Text, taskService, taskObject)
+            boolIsItRunning = boolIsTaskRunning(listTasks.Text, taskService, taskObject)
 
-        If taskObject IsNot Nothing Then
-            If boolIsItRunning Then
-                taskObject.Stop()
-                btnStopStartTask.Image = My.Resources.start
-            Else
-                taskObject.Run()
-                btnStopStartTask.Image = My.Resources.stop_sign
+            If taskObject IsNot Nothing Then
+                If boolIsItRunning Then
+                    taskObject.Stop()
+                    btnStopStartTask.Image = My.Resources.start
+                Else
+                    taskObject.Run()
+                    btnStopStartTask.Image = My.Resources.stop_sign
+                End If
+
+                taskObject.Dispose()
             End If
-
-            taskObject.Dispose()
-        End If
-
-        taskService.Dispose()
+        End Using
     End Sub
 
     Function boolIsTaskRunning(ByVal strTaskName As String, ByRef taskService As TaskService, ByRef taskObject As Task) As Boolean
