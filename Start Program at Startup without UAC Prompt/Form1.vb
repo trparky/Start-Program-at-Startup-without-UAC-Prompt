@@ -421,35 +421,34 @@ Public Class Form1
             Exit Sub
         End If
 
-        Dim taskService As TaskService = New TaskService()
-        Dim newTask As TaskDefinition = taskService.NewTask
+        Using taskService As TaskService = New TaskService()
+            Dim newTask As TaskDefinition = taskService.NewTask
 
-        newTask.RegistrationInfo.Description = taskDescription
+            newTask.RegistrationInfo.Description = taskDescription
 
-        If chkEnabled.Checked Then newTask.Triggers.Add(New LogonTrigger)
-        Dim exeFileInfo As New FileInfo(taskEXEPath)
+            If chkEnabled.Checked Then newTask.Triggers.Add(New LogonTrigger)
+            Dim exeFileInfo As New FileInfo(taskEXEPath)
 
-        With newTask
-            .Actions.Add(New ExecAction(Chr(34) & taskEXEPath & Chr(34), taskParameters, exeFileInfo.DirectoryName))
-            .Principal.RunLevel = TaskRunLevel.Highest
-            .Settings.Compatibility = TaskCompatibility.V2
-            .Settings.AllowDemandStart = True
-            .Settings.DisallowStartIfOnBatteries = False
-            .Settings.RunOnlyIfIdle = False
-            .Settings.StopIfGoingOnBatteries = False
-            .Settings.AllowHardTerminate = False
-            .Settings.UseUnifiedSchedulingEngine = True
-            .Settings.ExecutionTimeLimit = Nothing
-            .Settings.Priority = ProcessPriorityClass.Normal
-            .Principal.LogonType = TaskLogonType.InteractiveToken
-        End With
+            With newTask
+                .Actions.Add(New ExecAction(Chr(34) & taskEXEPath & Chr(34), taskParameters, exeFileInfo.DirectoryName))
+                .Principal.RunLevel = TaskRunLevel.Highest
+                .Settings.Compatibility = TaskCompatibility.V2
+                .Settings.AllowDemandStart = True
+                .Settings.DisallowStartIfOnBatteries = False
+                .Settings.RunOnlyIfIdle = False
+                .Settings.StopIfGoingOnBatteries = False
+                .Settings.AllowHardTerminate = False
+                .Settings.UseUnifiedSchedulingEngine = True
+                .Settings.ExecutionTimeLimit = Nothing
+                .Settings.Priority = ProcessPriorityClass.Normal
+                .Principal.LogonType = TaskLogonType.InteractiveToken
+            End With
 
-        taskService.RootFolder.SubFolders(strTaskFolderName).RegisterTaskDefinition(taskName, newTask)
+            taskService.RootFolder.SubFolders(strTaskFolderName).RegisterTaskDefinition(taskName, newTask)
 
-        newTask.Dispose()
-        taskService.Dispose()
-        newTask = Nothing
-        taskService = Nothing
+            newTask.Dispose()
+            newTask = Nothing
+        End Using
     End Sub
 
     Private Sub btnGetTaskStatus_Click(sender As Object, e As EventArgs) Handles btnGetTaskStatus.Click
