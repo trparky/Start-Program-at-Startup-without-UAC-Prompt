@@ -412,9 +412,8 @@ Public Class Form1
         taskName = taskName.Trim
         taskDescription = taskDescription.Trim
         taskEXEPath = taskEXEPath.Trim
-        taskParameters = taskParameters.Trim
 
-        If String.IsNullOrEmpty(taskParameters) Then taskParameters = Nothing
+        If Not String.IsNullOrEmpty(taskParameters) Then taskParameters = taskParameters.Trim
 
         If Not IO.File.Exists(taskEXEPath) Then
             MsgBox("Executable path not found.", MsgBoxStyle.Critical, Me.Text)
@@ -430,7 +429,12 @@ Public Class Form1
             Dim exeFileInfo As New FileInfo(taskEXEPath)
 
             With newTask
-                .Actions.Add(New ExecAction(Chr(34) & taskEXEPath & Chr(34), taskParameters, exeFileInfo.DirectoryName))
+                If taskParameters Is Nothing Then
+                    .Actions.Add(New ExecAction(Chr(34) & taskEXEPath & Chr(34), Nothing, exeFileInfo.DirectoryName))
+                Else
+                    .Actions.Add(New ExecAction(Chr(34) & taskEXEPath & Chr(34), taskParameters, exeFileInfo.DirectoryName))
+                End If
+
                 .Principal.RunLevel = TaskRunLevel.Highest
                 .Settings.Compatibility = TaskCompatibility.V2
                 .Settings.AllowDemandStart = True
