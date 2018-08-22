@@ -392,12 +392,12 @@ Public Class Form1
         importTask.Filter = "Task File|*.task"
 
         If importTask.ShowDialog() = DialogResult.OK Then
-            Dim streamReader As New StreamReader(importTask.FileName)
             Dim savedTask As New classTask()
-            Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
-            savedTask = xmlSerializerObject.Deserialize(streamReader)
-            streamReader.Close()
-            streamReader.Dispose()
+
+            Using streamReader As New StreamReader(importTask.FileName)
+                Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
+                savedTask = xmlSerializerObject.Deserialize(streamReader)
+            End Using
 
             addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters)
 
