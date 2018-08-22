@@ -374,11 +374,10 @@ Public Class Form1
                     actions.Dispose()
                     actions = Nothing
 
-                    Dim streamWriter As New StreamWriter(saveTask.FileName)
-                    Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
-                    xmlSerializerObject.Serialize(streamWriter, savedTask)
-                    streamWriter.Close()
-                    streamWriter.Dispose()
+                    Using streamWriter As New StreamWriter(saveTask.FileName)
+                        Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
+                        xmlSerializerObject.Serialize(streamWriter, savedTask)
+                    End Using
 
                     MsgBox("Task exported.", MsgBoxStyle.Information, Me.Text)
                 End If
