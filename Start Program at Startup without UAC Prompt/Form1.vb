@@ -428,7 +428,7 @@ Public Class Form1
             Dim exeFileInfo As New FileInfo(taskEXEPath)
 
             With newTask
-                If taskParameters Is Nothing Then
+                If String.IsNullOrEmpty(taskParameters) Then 
                     .Actions.Add(New ExecAction(Chr(34) & taskEXEPath & Chr(34), Nothing, exeFileInfo.DirectoryName))
                 Else
                     .Actions.Add(New ExecAction(Chr(34) & taskEXEPath & Chr(34), taskParameters, exeFileInfo.DirectoryName))
