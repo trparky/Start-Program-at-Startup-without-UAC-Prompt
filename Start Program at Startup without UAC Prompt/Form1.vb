@@ -24,18 +24,14 @@ Public Class Form1
 
         If IO.File.Exists(Application.ExecutablePath & ".new.exe") Then Threading.ThreadPool.QueueUserWorkItem(AddressOf newFileDeleterThreadSub)
 
-        Using taskService As New TaskService
-            Dim boolDoesOurFolderExist As Boolean = False
-
-            For Each folder As TaskFolder In taskService.RootFolder.SubFolders
-                If folder.Name.Equals(strTaskFolderName, StringComparison.OrdinalIgnoreCase) Then
-                    boolDoesOurFolderExist = True
-                    Exit For
+        Try
+            Using taskService As New TaskService
+                If Not taskService.RootFolder.SubFolders.Exists(strTaskFolderName) Then
+                    taskService.RootFolder.CreateFolder(strTaskFolderName)
                 End If
-            Next
-
-            If Not boolDoesOurFolderExist Then taskService.RootFolder.CreateFolder(strTaskFolderName)
-        End Using
+            End Using
+        Catch ex As Exception
+        End Try
 
         refreshTasks()
     End Sub
