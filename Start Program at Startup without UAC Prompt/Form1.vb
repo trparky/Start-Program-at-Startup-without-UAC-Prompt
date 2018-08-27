@@ -407,14 +407,14 @@ Public Class Form1
         End If
     End Sub
 
-    Sub addTask(taskName As String, taskDescription As String, taskEXEPath As String, taskParameters As String)
-        taskName = taskName.Trim
-        taskDescription = taskDescription.Trim
-        taskEXEPath = taskEXEPath.Trim
+    Sub addTask(strTaskName As String, strTaskDescription As String, strExecutablePath As String, strCommandLineParameters As String)
+        strTaskName = strTaskName.Trim
+        strTaskDescription = strTaskDescription.Trim
+        strExecutablePath = strExecutablePath.Trim
 
-        If Not String.IsNullOrEmpty(taskParameters) Then taskParameters = taskParameters.Trim
+        If Not String.IsNullOrEmpty(strCommandLineParameters) Then strCommandLineParameters = strCommandLineParameters.Trim
 
-        If Not IO.File.Exists(taskEXEPath) Then
+        If Not IO.File.Exists(strExecutablePath) Then
             MsgBox("Executable path not found.", MsgBoxStyle.Critical, Me.Text)
             Exit Sub
         End If
@@ -422,16 +422,16 @@ Public Class Form1
         Using taskService As TaskService = New TaskService()
             Dim newTask As TaskDefinition = taskService.NewTask
 
-            newTask.RegistrationInfo.Description = taskDescription
+            newTask.RegistrationInfo.Description = strTaskDescription
 
             If chkEnabled.Checked Then newTask.Triggers.Add(New LogonTrigger)
-            Dim exeFileInfo As New FileInfo(taskEXEPath)
+            Dim exeFileInfo As New FileInfo(strExecutablePath)
 
             With newTask
-                If String.IsNullOrEmpty(taskParameters) Then 
-                    .Actions.Add(New ExecAction(Chr(34) & taskEXEPath & Chr(34), Nothing, exeFileInfo.DirectoryName))
+                If String.IsNullOrEmpty(strCommandLineParameters) Then
+                    .Actions.Add(New ExecAction(Chr(34) & strExecutablePath & Chr(34), Nothing, exeFileInfo.DirectoryName))
                 Else
-                    .Actions.Add(New ExecAction(Chr(34) & taskEXEPath & Chr(34), taskParameters, exeFileInfo.DirectoryName))
+                    .Actions.Add(New ExecAction(Chr(34) & strExecutablePath & Chr(34), strCommandLineParameters, exeFileInfo.DirectoryName))
                 End If
 
                 .Principal.RunLevel = TaskRunLevel.Highest
@@ -447,7 +447,7 @@ Public Class Form1
                 .Principal.LogonType = TaskLogonType.InteractiveToken
             End With
 
-            taskService.RootFolder.SubFolders(strTaskFolderName).RegisterTaskDefinition(taskName, newTask)
+            taskService.RootFolder.SubFolders(strTaskFolderName).RegisterTaskDefinition(strTaskName, newTask)
 
             newTask.Dispose()
             newTask = Nothing
