@@ -408,10 +408,13 @@ Public Class Form1
     End Sub
 
     Sub addTask(strTaskName As String, strTaskDescription As String, strExecutablePath As String, strCommandLineParameters As String)
+        ' We trim the variable values here.
         strTaskName = strTaskName.Trim
         strTaskDescription = strTaskDescription.Trim
         strExecutablePath = strExecutablePath.Trim
 
+        ' Not all tasks are going to have command line parameters so we need to check if the strCommandLineParameters variable isn't Null
+        ' before attempting to trim the value of it. If we don't check first we're going to have a NullReferenceException and that's bad.
         If Not String.IsNullOrEmpty(strCommandLineParameters) Then strCommandLineParameters = strCommandLineParameters.Trim
 
         If Not IO.File.Exists(strExecutablePath) Then
@@ -429,8 +432,10 @@ Public Class Form1
 
             With newTask
                 If String.IsNullOrEmpty(strCommandLineParameters) Then
+                    ' If strCommandLineParameters is Null then we make sure we pass a Null value to the following function call. 
                     .Actions.Add(New ExecAction(Chr(34) & strExecutablePath & Chr(34), Nothing, exeFileInfo.DirectoryName))
                 Else
+                    ' In this case, strCommandLineParameters isn't Null so we pass it to the following function call.
                     .Actions.Add(New ExecAction(Chr(34) & strExecutablePath & Chr(34), strCommandLineParameters, exeFileInfo.DirectoryName))
                 End If
 
