@@ -71,15 +71,14 @@ Public Class Form1
 
     Sub refreshTasks()
         listTasks.Items.Clear()
-        Dim taskService As New TaskService
 
-        For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
-            checkTaskPrioritySettings(task)
-            listTasks.Items.Add(task.Name)
-        Next
+        Using taskService As New TaskService
+            For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
+                checkTaskPrioritySettings(task)
+                listTasks.Items.Add(task.Name)
+            Next
+        End Using
 
-        taskService.Dispose()
-        taskService = Nothing
         disableButtons()
     End Sub
 
