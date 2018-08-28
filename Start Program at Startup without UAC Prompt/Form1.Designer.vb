@@ -249,6 +249,7 @@ Partial Class Form1
         Me.chkEnabled.Size = New System.Drawing.Size(136, 17)
         Me.chkEnabled.TabIndex = 59
         Me.chkEnabled.Text = "At User Logon Enabled"
+        Me.ToolTip1.SetToolTip(Me.chkEnabled, "Makes it so that this task starts at user logon.")
         Me.chkEnabled.UseVisualStyleBackColor = True
         '
         'TableLayoutPanel1
