@@ -233,9 +233,7 @@ Public Class Form1
                 chkEnabled.Checked = False
 
                 For Each trigger As Trigger In task.Definition.Triggers
-                    If trigger.Enabled And trigger.TriggerType = TaskTriggerType.Logon Then
-                        chkEnabled.Checked = True
-                    End If
+                    If trigger.Enabled And trigger.TriggerType = TaskTriggerType.Logon Then chkEnabled.Checked = True
                 Next
 
                 For Each action As Action In actions
