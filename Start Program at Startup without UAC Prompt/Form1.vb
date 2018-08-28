@@ -36,7 +36,7 @@ Public Class Form1
         refreshTasks()
     End Sub
 
-    Private Sub createShortCut(ByVal locationOfShortcut As String, pathToExecutable As String, iconPath As String, ByVal Title As String, Optional arguments As String = Nothing)
+    Private Sub createShortcut(ByVal locationOfShortcut As String, pathToExecutable As String, iconPath As String, ByVal Title As String, Optional arguments As String = Nothing)
         Try
             Dim WshShell As New WshShell
             ' short cut files have a .lnk extension
@@ -196,7 +196,7 @@ Public Class Form1
         Dim exePath As String = Nothing
         If Not isThisAValidExecutableTask(strTaskName, exePath) Then Exit Sub
         If Not IO.File.Exists(strPathToAutoShortcut) Then
-            createShortCut(strPathToAutoShortcut, "schtasks", exePath, strTaskName, String.Format("/run /TN {0}\{2}\{1}{0}", Chr(34), strTaskName, strTaskFolderName))
+            createShortcut(strPathToAutoShortcut, "schtasks", exePath, strTaskName, String.Format("/run /TN {0}\{2}\{1}{0}", Chr(34), strTaskName, strTaskFolderName))
         End If
     End Sub
 
@@ -325,7 +325,7 @@ Public Class Form1
             Dim locationOfShortcut As String = Path.Combine(fileInfo.DirectoryName, listTasks.Text & ".lnk")
             fileInfo = Nothing
 
-            createShortCut(locationOfShortcut, "schtasks", exePath, listTasks.Text, String.Format("/run /TN {0}\{2}\{1}{0}", Chr(34), listTasks.Text, strTaskFolderName))
+            createShortcut(locationOfShortcut, "schtasks", exePath, listTasks.Text, String.Format("/run /TN {0}\{2}\{1}{0}", Chr(34), listTasks.Text, strTaskFolderName))
             locationOfShortcut = Nothing
             exePath = Nothing
 
