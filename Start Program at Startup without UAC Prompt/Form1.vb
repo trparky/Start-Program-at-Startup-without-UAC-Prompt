@@ -521,7 +521,12 @@ Public Class Form1
     Function boolIsTaskRunning(strTaskName As String) As Boolean
         Using taskService As New TaskService
             Dim task As Task = Nothing
-            Return If(getTaskObject(taskService, strTaskName, task), If(task.State = TaskState.Running, True, False), False)
+
+            If getTaskObject(taskService, strTaskName, task) Then
+                Return If(task.State = TaskState.Running, True, False)
+            Else
+                Return False
+            End If
         End Using
     End Function
 
