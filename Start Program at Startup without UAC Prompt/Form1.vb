@@ -537,4 +537,13 @@ Public Class Form1
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         My.Settings.mainWindowPosition = Me.Location
     End Sub
+
+    Private Sub linkWhatIsAParameter_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkWhatIsAParameter.LinkClicked
+        Dim stringBuilder As New StringBuilder()
+        stringBuilder.AppendLine("This is a set of parameters that are used by the program you're setting up for this task or program to run. This field isn't for this program.")
+        stringBuilder.AppendLine()
+        stringBuilder.AppendLine("For instance, some programs may accept ""/minimize"" or ""-hide"". You'll have to consult the documentation for the program you're working with.")
+
+        MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, Me.Text)
+    End Sub
 End Class

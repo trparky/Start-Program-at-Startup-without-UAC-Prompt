@@ -67,6 +67,7 @@ Partial Class Form1
         Me.btnCancelEditTask = New System.Windows.Forms.Button()
         Me.btnCreateTask = New System.Windows.Forms.Button()
         Me.btnBrowseForExecutable = New System.Windows.Forms.Button()
+        Me.linkWhatIsAParameter = New System.Windows.Forms.LinkLabel()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.imgLock, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -117,7 +118,7 @@ Partial Class Form1
         '
         Me.txtParameters.Location = New System.Drawing.Point(168, 123)
         Me.txtParameters.Name = "txtParameters"
-        Me.txtParameters.Size = New System.Drawing.Size(495, 20)
+        Me.txtParameters.Size = New System.Drawing.Size(428, 20)
         Me.txtParameters.TabIndex = 43
         '
         'Label3
@@ -391,9 +392,6 @@ Partial Class Form1
         Me.btnAbout.Text = "About"
         Me.btnAbout.UseVisualStyleBackColor = True
         '
-        'SaveFileDialog1
-        '
-        '
         'chkUseSSL
         '
         Me.chkUseSSL.AutoSize = True
@@ -448,11 +446,22 @@ Partial Class Form1
         Me.btnBrowseForExecutable.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.btnBrowseForExecutable.UseVisualStyleBackColor = True
         '
+        'linkWhatIsAParameter
+        '
+        Me.linkWhatIsAParameter.AutoSize = True
+        Me.linkWhatIsAParameter.Location = New System.Drawing.Point(602, 126)
+        Me.linkWhatIsAParameter.Name = "linkWhatIsAParameter"
+        Me.linkWhatIsAParameter.Size = New System.Drawing.Size(68, 13)
+        Me.linkWhatIsAParameter.TabIndex = 65
+        Me.linkWhatIsAParameter.TabStop = True
+        Me.linkWhatIsAParameter.Text = "What is this?"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(675, 581)
+        Me.Controls.Add(Me.linkWhatIsAParameter)
         Me.Controls.Add(Me.imgLock)
         Me.Controls.Add(Me.chkUseSSL)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -523,4 +532,5 @@ Partial Class Form1
     Friend WithEvents btnAbout As Button
     Friend WithEvents imgLock As PictureBox
     Friend WithEvents btnStopStartTask As Button
+    Friend WithEvents linkWhatIsAParameter As LinkLabel
 End Class
