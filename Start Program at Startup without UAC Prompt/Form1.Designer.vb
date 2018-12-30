@@ -48,9 +48,9 @@ Partial Class Form1
         Me.ImportTaskToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.chkEnabled = New System.Windows.Forms.CheckBox()
         Me.saveTask = New System.Windows.Forms.SaveFileDialog()
         Me.importTask = New System.Windows.Forms.OpenFileDialog()
-        Me.chkEnabled = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.btnStopStartTask = New System.Windows.Forms.Button()
         Me.btnDeleteTasks = New System.Windows.Forms.Button()
@@ -68,6 +68,8 @@ Partial Class Form1
         Me.btnCreateTask = New System.Windows.Forms.Button()
         Me.btnBrowseForExecutable = New System.Windows.Forms.Button()
         Me.linkWhatIsAParameter = New System.Windows.Forms.LinkLabel()
+        Me.btnImportCollectionOfTasks = New System.Windows.Forms.Button()
+        Me.btnExportAllTasks = New System.Windows.Forms.Button()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.imgLock, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -238,10 +240,6 @@ Partial Class Form1
         '
         Me.OpenFileDialog1.FileName = "OpenFileDialog1"
         '
-        'importTask
-        '
-        Me.importTask.FileName = "OpenFileDialog2"
-        '
         'chkEnabled
         '
         Me.chkEnabled.AutoSize = True
@@ -252,6 +250,10 @@ Partial Class Form1
         Me.chkEnabled.Text = "At User Logon Enabled"
         Me.ToolTip1.SetToolTip(Me.chkEnabled, "Makes it so that this task starts at user logon.")
         Me.chkEnabled.UseVisualStyleBackColor = True
+        '
+        'importTask
+        '
+        Me.importTask.FileName = "OpenFileDialog2"
         '
         'TableLayoutPanel1
         '
@@ -265,11 +267,13 @@ Partial Class Form1
         Me.TableLayoutPanel1.Controls.Add(Me.btnImportTask, 1, 3)
         Me.TableLayoutPanel1.Controls.Add(Me.btnExportTask, 0, 3)
         Me.TableLayoutPanel1.Controls.Add(Me.btnCreateShortcutOnDesktop, 0, 4)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnCheckForUpdates, 0, 6)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnAbout, 1, 6)
+        Me.TableLayoutPanel1.Controls.Add(Me.btnAbout, 1, 7)
+        Me.TableLayoutPanel1.Controls.Add(Me.btnCheckForUpdates, 0, 7)
+        Me.TableLayoutPanel1.Controls.Add(Me.btnImportCollectionOfTasks, 1, 6)
+        Me.TableLayoutPanel1.Controls.Add(Me.btnExportAllTasks, 0, 6)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(13, 391)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 7
+        Me.TableLayoutPanel1.RowCount = 8
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
@@ -278,7 +282,8 @@ Partial Class Form1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(652, 164)
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(652, 192)
         Me.TableLayoutPanel1.TabIndex = 62
         '
         'btnStopStartTask
@@ -369,9 +374,12 @@ Partial Class Form1
         '
         'btnCheckForUpdates
         '
+        Me.btnCheckForUpdates.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnCheckForUpdates.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.refresh
         Me.btnCheckForUpdates.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCheckForUpdates.Location = New System.Drawing.Point(3, 139)
+        Me.btnCheckForUpdates.Location = New System.Drawing.Point(3, 167)
         Me.btnCheckForUpdates.Name = "btnCheckForUpdates"
         Me.btnCheckForUpdates.Size = New System.Drawing.Size(320, 22)
         Me.btnCheckForUpdates.TabIndex = 53
@@ -385,7 +393,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnAbout.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.info_blue
         Me.btnAbout.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnAbout.Location = New System.Drawing.Point(329, 139)
+        Me.btnAbout.Location = New System.Drawing.Point(329, 167)
         Me.btnAbout.Name = "btnAbout"
         Me.btnAbout.Size = New System.Drawing.Size(320, 22)
         Me.btnAbout.TabIndex = 59
@@ -395,7 +403,7 @@ Partial Class Form1
         'chkUseSSL
         '
         Me.chkUseSSL.AutoSize = True
-        Me.chkUseSSL.Location = New System.Drawing.Point(12, 558)
+        Me.chkUseSSL.Location = New System.Drawing.Point(12, 589)
         Me.chkUseSSL.Name = "chkUseSSL"
         Me.chkUseSSL.Size = New System.Drawing.Size(68, 17)
         Me.chkUseSSL.TabIndex = 63
@@ -405,7 +413,7 @@ Partial Class Form1
         'imgLock
         '
         Me.imgLock.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.locked
-        Me.imgLock.Location = New System.Drawing.Point(79, 558)
+        Me.imgLock.Location = New System.Drawing.Point(79, 589)
         Me.imgLock.Name = "imgLock"
         Me.imgLock.Size = New System.Drawing.Size(15, 20)
         Me.imgLock.TabIndex = 64
@@ -456,11 +464,39 @@ Partial Class Form1
         Me.linkWhatIsAParameter.TabStop = True
         Me.linkWhatIsAParameter.Text = "What is this?"
         '
+        'btnImportCollectionOfTasks
+        '
+        Me.btnImportCollectionOfTasks.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnImportCollectionOfTasks.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.import1
+        Me.btnImportCollectionOfTasks.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnImportCollectionOfTasks.Location = New System.Drawing.Point(329, 139)
+        Me.btnImportCollectionOfTasks.Name = "btnImportCollectionOfTasks"
+        Me.btnImportCollectionOfTasks.Size = New System.Drawing.Size(320, 22)
+        Me.btnImportCollectionOfTasks.TabIndex = 66
+        Me.btnImportCollectionOfTasks.Text = "Import Task Collection File"
+        Me.btnImportCollectionOfTasks.UseVisualStyleBackColor = True
+        '
+        'btnExportAllTasks
+        '
+        Me.btnExportAllTasks.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnExportAllTasks.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
+        Me.btnExportAllTasks.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnExportAllTasks.Location = New System.Drawing.Point(3, 139)
+        Me.btnExportAllTasks.Name = "btnExportAllTasks"
+        Me.btnExportAllTasks.Size = New System.Drawing.Size(320, 22)
+        Me.btnExportAllTasks.TabIndex = 67
+        Me.btnExportAllTasks.Text = "Export All Tasks to Task Collection File"
+        Me.btnExportAllTasks.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(675, 581)
+        Me.ClientSize = New System.Drawing.Size(675, 613)
         Me.Controls.Add(Me.linkWhatIsAParameter)
         Me.Controls.Add(Me.imgLock)
         Me.Controls.Add(Me.chkUseSSL)
@@ -480,6 +516,7 @@ Partial Class Form1
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.listTasks)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "Form1"
         Me.Text = "Start Program at Startup with Admin Privileges without UAC Prompt"
         Me.ContextMenuStrip1.ResumeLayout(False)
@@ -533,4 +570,6 @@ Partial Class Form1
     Friend WithEvents imgLock As PictureBox
     Friend WithEvents btnStopStartTask As Button
     Friend WithEvents linkWhatIsAParameter As LinkLabel
+    Friend WithEvents btnImportCollectionOfTasks As Button
+    Friend WithEvents btnExportAllTasks As Button
 End Class

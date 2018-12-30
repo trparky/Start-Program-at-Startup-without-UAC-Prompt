@@ -551,4 +551,85 @@ Public Class Form1
 
         MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, Me.Text)
     End Sub
+
+    Private Sub btnExportAllTasks_Click(sender As Object, e As EventArgs) Handles btnExportAllTasks.Click
+        saveTask.Title = "Save as Task Collection File"
+        saveTask.Filter = "Task Collection File|*.ctask"
+
+        If saveTask.ShowDialog() = DialogResult.OK Then
+            Dim collectionOfTasks As New List(Of classTask)
+            Dim savedTask As classTask
+            Dim actions As ActionCollection
+            Dim execAction As ExecAction
+
+            Using taskService As New TaskService
+                For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
+                    savedTask = New classTask
+                    actions = task.Definition.Actions
+
+                    savedTask.taskName = task.Name
+                    savedTask.taskDescription = task.Definition.RegistrationInfo.Description
+
+                    For Each action As Action In actions
+                        If action.ActionType = TaskActionType.Execute Then
+                            execAction = DirectCast(action, ExecAction)
+
+                            savedTask.taskEXE = execAction.Path.Replace("""", "")
+                            savedTask.taskParameters = execAction.Arguments
+
+                            action.Dispose()
+                            execAction.Dispose()
+
+                            execAction = Nothing
+                            action = Nothing
+
+                            Exit For
+                        End If
+                    Next
+
+                    actions.Dispose()
+                    actions = Nothing
+
+                    collectionOfTasks.Add(savedTask)
+                Next
+            End Using
+
+            Using streamWriter As New StreamWriter(saveTask.FileName)
+                Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
+                xmlSerializerObject.Serialize(streamWriter, collectionOfTasks)
+            End Using
+
+            MsgBox("Tasks exported.", MsgBoxStyle.Information, Me.Text)
+        End If
+    End Sub
+
+    Private Sub btnImportCollectionOfTasks_Click(sender As Object, e As EventArgs) Handles btnImportCollectionOfTasks.Click
+        importTask.Title = "Import Tasks from Task Collection File"
+        importTask.FileName = Nothing
+        importTask.Filter = "Task Collection File|*.ctask"
+
+        If importTask.ShowDialog() = DialogResult.OK Then
+            Dim collectionOfTasks As New List(Of classTask)
+
+            Try
+                Using streamReader As New StreamReader(importTask.FileName)
+                    Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
+                    collectionOfTasks = xmlSerializerObject.Deserialize(streamReader)
+                End Using
+            Catch ex As Exception
+                MsgBox("There was an error attempting to import the chosen task collection file, task import has been halted.", MsgBoxStyle.Critical, Me.Text)
+                Exit Sub
+            End Try
+
+            For Each savedTask As classTask In collectionOfTasks
+                addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters)
+                savedTask = Nothing
+            Next
+
+            collectionOfTasks.Clear()
+            refreshTasks()
+
+            MsgBox("Tasks imported successfully.", MsgBoxStyle.Information, Me.Text)
+        End If
+    End Sub
 End Class
