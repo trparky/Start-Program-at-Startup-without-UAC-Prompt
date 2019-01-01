@@ -79,6 +79,7 @@ Public Class Form1
             Next
         End Using
 
+        btnExportAllTasks.Enabled = If(listTasks.Items.Count = 0, False, True)
         disableButtons()
     End Sub
 
