@@ -73,6 +73,7 @@ Partial Class Form1
         Me.chkDelayExecution = New System.Windows.Forms.CheckBox()
         Me.lblHowManyMinutes = New System.Windows.Forms.Label()
         Me.txtDelayMinutes = New System.Windows.Forms.TextBox()
+        Me.lblLastRanOn = New System.Windows.Forms.Label()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.imgLock, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -509,7 +510,7 @@ Partial Class Form1
         'lblHowManyMinutes
         '
         Me.lblHowManyMinutes.AutoSize = True
-        Me.lblHowManyMinutes.Location = New System.Drawing.Point(191, 209)
+        Me.lblHowManyMinutes.Location = New System.Drawing.Point(165, 210)
         Me.lblHowManyMinutes.Name = "lblHowManyMinutes"
         Me.lblHowManyMinutes.Size = New System.Drawing.Size(115, 13)
         Me.lblHowManyMinutes.TabIndex = 67
@@ -518,17 +519,27 @@ Partial Class Form1
         '
         'txtDelayMinutes
         '
-        Me.txtDelayMinutes.Location = New System.Drawing.Point(312, 206)
+        Me.txtDelayMinutes.Location = New System.Drawing.Point(286, 207)
         Me.txtDelayMinutes.Name = "txtDelayMinutes"
         Me.txtDelayMinutes.Size = New System.Drawing.Size(37, 20)
         Me.txtDelayMinutes.TabIndex = 68
         Me.txtDelayMinutes.Visible = False
+        '
+        'lblLastRanOn
+        '
+        Me.lblLastRanOn.AutoSize = True
+        Me.lblLastRanOn.Location = New System.Drawing.Point(329, 210)
+        Me.lblLastRanOn.Name = "lblLastRanOn"
+        Me.lblLastRanOn.Size = New System.Drawing.Size(66, 13)
+        Me.lblLastRanOn.TabIndex = 70
+        Me.lblLastRanOn.Text = "Last Ran At:"
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(675, 641)
+        Me.Controls.Add(Me.lblLastRanOn)
         Me.Controls.Add(Me.txtDelayMinutes)
         Me.Controls.Add(Me.lblHowManyMinutes)
         Me.Controls.Add(Me.chkDelayExecution)
@@ -610,4 +621,5 @@ Partial Class Form1
     Friend WithEvents chkDelayExecution As CheckBox
     Friend WithEvents lblHowManyMinutes As Label
     Friend WithEvents txtDelayMinutes As TextBox
+    Friend WithEvents lblLastRanOn As Label
 End Class

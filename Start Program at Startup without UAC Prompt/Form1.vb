@@ -18,6 +18,7 @@ Public Class Form1
     End Function
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        lblLastRanOn.Text = Nothing
         Me.Location = verifyWindowLocation(My.Settings.mainWindowPosition)
         chkUseSSL.Checked = My.Settings.boolUseSSL
         imgLock.Image = If(chkUseSSL.Checked, My.Resources.locked, My.Resources.unlocked)
@@ -123,17 +124,26 @@ Public Class Form1
         If listTasks.SelectedItems.Count > 0 Then
             enableButtons()
 
-            If boolIsTaskRunning(listTasks.Text) Then
-                btnStopStartTask.Text = "Stop Task"
-                StopStartTaskToolStripMenuItem.Text = "&Stop Task"
-                btnStopStartTask.Image = My.Resources.stop_sign
-                StopStartTaskToolStripMenuItem.Image = My.Resources.stop_sign
-            Else
-                btnStopStartTask.Text = "Start Task"
-                StopStartTaskToolStripMenuItem.Text = "&Start Task"
-                btnStopStartTask.Image = My.Resources.start
-                StopStartTaskToolStripMenuItem.Image = My.Resources.start
-            End If
+            Dim taskObject As Task = Nothing
+            Using taskService As New TaskService
+                If getTaskObject(taskService, listTasks.Text, taskObject) Then
+                    Dim lastRunTime As Date = taskObject.LastRunTime.ToLocalTime()
+                    lblLastRanOn.Text = String.Format("Task Last Ran At: {0} on {1}", lastRunTime.ToLongTimeString, lastRunTime.ToLongDateString)
+                    lastRunTime = Nothing
+
+                    If taskObject.State = TaskState.Running Then
+                        btnStopStartTask.Text = "Stop Task"
+                        StopStartTaskToolStripMenuItem.Text = "&Stop Task"
+                        btnStopStartTask.Image = My.Resources.stop_sign
+                        StopStartTaskToolStripMenuItem.Image = My.Resources.stop_sign
+                    Else
+                        btnStopStartTask.Text = "Start Task"
+                        StopStartTaskToolStripMenuItem.Text = "&Start Task"
+                        btnStopStartTask.Image = My.Resources.start
+                        StopStartTaskToolStripMenuItem.Image = My.Resources.start
+                    End If
+                End If
+            End Using
         End If
     End Sub
 
