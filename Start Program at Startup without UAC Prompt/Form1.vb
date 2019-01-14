@@ -127,7 +127,7 @@ Public Class Form1
             Dim taskObject As Task = Nothing
             Using taskService As New TaskService
                 If getTaskObject(taskService, listTasks.Text, taskObject) Then
-                    Dim lastRunTime As Date = taskObject.LastRunTime.ToLocalTime()
+                    Dim lastRunTime As Date = taskObject.LastRunTime.ToUniversalTime.ToLocalTime
                     lblLastRanOn.Text = String.Format("Task Last Ran At: {0} on {1}", lastRunTime.ToLongTimeString, lastRunTime.ToLongDateString)
                     lastRunTime = Nothing
 
