@@ -300,6 +300,8 @@ Public Class Form1
         txtDelayMinutes.Text = Nothing
         txtDelayMinutes.Visible = False
         lblHowManyMinutes.Visible = False
+        lblLastRanOn.Text = Nothing
+        chkEnabled.Checked = False
         chkDelayExecution.Enabled = False
         chkDelayExecution.Checked = False
 
