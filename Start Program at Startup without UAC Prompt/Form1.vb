@@ -210,6 +210,9 @@ Public Class Form1
         lblHowManyMinutes.Visible = False
         chkDelayExecution.Enabled = False
         chkDelayExecution.Checked = False
+        chkEnabled.Checked = False
+        lblLastRanOn.Text = Nothing
+        btnCancelEditTask.Enabled = False
         refreshTasks()
     End Sub
 
