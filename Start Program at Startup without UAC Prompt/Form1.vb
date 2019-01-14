@@ -163,7 +163,12 @@ Public Class Form1
 
         If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then deleteTask(txtTaskName.Text)
 
-        addTask(txtTaskName.Text, txtDescription.Text, txtEXEPath.Text, txtParameters.Text)
+        Dim intDelayedMinutes As Integer = 0
+        If chkDelayExecution.Checked Then
+            If Not Integer.TryParse(txtDelayMinutes.Text, intDelayedMinutes) Then intDelayedMinutes = 0
+        End If
+
+        addTask(txtTaskName.Text, txtDescription.Text, txtEXEPath.Text, txtParameters.Text, chkEnabled.Checked, intDelayedMinutes)
 
         Dim strPathToAutoShortcut As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Start " & txtTaskName.Text & ".lnk")
 
@@ -190,6 +195,11 @@ Public Class Form1
         txtEXEPath.Text = Nothing
         txtParameters.Text = Nothing
         txtDescription.Text = Nothing
+        txtDelayMinutes.Text = Nothing
+        txtDelayMinutes.Visible = False
+        lblHowManyMinutes.Visible = False
+        chkDelayExecution.Enabled = False
+        chkDelayExecution.Checked = False
         refreshTasks()
     End Sub
 
@@ -232,9 +242,23 @@ Public Class Form1
                 txtTaskName.Text = task.Name
                 txtDescription.Text = task.Definition.RegistrationInfo.Description
                 chkEnabled.Checked = False
+                chkDelayExecution.Enabled = False
+                lblHowManyMinutes.Visible = False
+                txtDelayMinutes.Visible = False
+                txtDelayMinutes.Text = Nothing
 
                 For Each trigger As Trigger In task.Definition.Triggers
-                    If trigger.Enabled And trigger.TriggerType = TaskTriggerType.Logon Then chkEnabled.Checked = True
+                    If trigger.Enabled And trigger.TriggerType = TaskTriggerType.Logon Then
+                        chkEnabled.Checked = True
+                        chkDelayExecution.Enabled = True
+
+                        If DirectCast(trigger, LogonTrigger).Delay.Minutes <> 0 Then
+                            chkDelayExecution.Checked = True
+                            lblHowManyMinutes.Visible = True
+                            txtDelayMinutes.Visible = True
+                            txtDelayMinutes.Text = DirectCast(trigger, LogonTrigger).Delay.Minutes
+                        End If
+                    End If
                 Next
 
                 For Each action As Action In actions
@@ -263,6 +287,11 @@ Public Class Form1
         txtEXEPath.Text = Nothing
         txtParameters.Text = Nothing
         txtTaskName.Text = Nothing
+        txtDelayMinutes.Text = Nothing
+        txtDelayMinutes.Visible = False
+        lblHowManyMinutes.Visible = False
+        chkDelayExecution.Enabled = False
+        chkDelayExecution.Checked = False
 
         btnCreateTask.Text = "Create Task"
         btnCancelEditTask.Enabled = False
@@ -341,9 +370,16 @@ Public Class Form1
                 Dim task As Task = Nothing
 
                 If getTaskObject(taskService, listTasks.Text, task) Then
-                    Dim savedTask As New classTask()
+                    Dim savedTask As New classTask() With {.startup = False, .delayedMinutes = 0}
                     Dim actions As ActionCollection = task.Definition.Actions
                     Dim execAction As ExecAction
+
+                    If task.Definition.Triggers.Count <> 0 Then
+                        If task.Definition.Triggers(0).TriggerType = TaskTriggerType.Logon Then
+                            savedTask.delayedMinutes = DirectCast(task.Definition.Triggers(0), LogonTrigger).Delay.Minutes
+                            savedTask.startup = True
+                        End If
+                    End If
 
                     savedTask.taskName = task.Name
                     savedTask.taskDescription = task.Definition.RegistrationInfo.Description
@@ -392,7 +428,7 @@ Public Class Form1
                 savedTask = xmlSerializerObject.Deserialize(streamReader)
             End Using
 
-            addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters)
+            addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes)
 
             savedTask = Nothing
             refreshTasks()
@@ -401,7 +437,7 @@ Public Class Form1
         End If
     End Sub
 
-    Sub addTask(strTaskName As String, strTaskDescription As String, strExecutablePath As String, strCommandLineParameters As String)
+    Sub addTask(strTaskName As String, strTaskDescription As String, strExecutablePath As String, strCommandLineParameters As String, boolStartup As Boolean, intDelayedMinutes As Integer)
         ' We trim the variable values here.
         strTaskName = strTaskName.Trim
         strTaskDescription = strTaskDescription.Trim
@@ -421,7 +457,14 @@ Public Class Form1
 
             newTask.RegistrationInfo.Description = strTaskDescription
 
-            If chkEnabled.Checked Then newTask.Triggers.Add(New LogonTrigger)
+            If boolStartup Then
+                If intDelayedMinutes = 0 Then
+                    newTask.Triggers.Add(New LogonTrigger)
+                Else
+                    newTask.Triggers.Add(New LogonTrigger With {.Delay = New TimeSpan(0, intDelayedMinutes, 0)})
+                End If
+            End If
+
             Dim exeFileInfo As New FileInfo(strExecutablePath)
 
             With newTask
@@ -565,8 +608,15 @@ Public Class Form1
 
             Using taskService As New TaskService
                 For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
-                    savedTask = New classTask
+                    savedTask = New classTask With {.startup = False, .delayedMinutes = 0}
                     actions = task.Definition.Actions
+
+                    If task.Definition.Triggers.Count <> 0 Then
+                        If task.Definition.Triggers(0).TriggerType = TaskTriggerType.Logon Then
+                            savedTask.delayedMinutes = DirectCast(task.Definition.Triggers(0), LogonTrigger).Delay.Minutes
+                            savedTask.startup = True
+                        End If
+                    End If
 
                     savedTask.taskName = task.Name
                     savedTask.taskDescription = task.Definition.RegistrationInfo.Description
@@ -623,7 +673,7 @@ Public Class Form1
             End Try
 
             For Each savedTask As classTask In collectionOfTasks
-                addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters)
+                addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes)
                 savedTask = Nothing
             Next
 
@@ -631,6 +681,22 @@ Public Class Form1
             refreshTasks()
 
             MsgBox("Tasks imported successfully.", MsgBoxStyle.Information, Me.Text)
+        End If
+    End Sub
+
+    Private Sub chkDelayExecution_Click(sender As Object, e As EventArgs) Handles chkDelayExecution.Click
+        lblHowManyMinutes.Visible = chkDelayExecution.Checked
+        txtDelayMinutes.Visible = chkDelayExecution.Checked
+    End Sub
+
+    Private Sub chkEnabled_Click(sender As Object, e As EventArgs) Handles chkEnabled.Click
+        chkDelayExecution.Enabled = chkEnabled.Checked
+
+        If Not chkEnabled.Checked Then
+            chkDelayExecution.Checked = False
+            lblHowManyMinutes.Visible = False
+            txtDelayMinutes.Visible = False
+            txtDelayMinutes.Text = Nothing
         End If
     End Sub
 End Class

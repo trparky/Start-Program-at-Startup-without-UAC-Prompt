@@ -59,8 +59,10 @@ Partial Class Form1
         Me.btnImportTask = New System.Windows.Forms.Button()
         Me.btnExportTask = New System.Windows.Forms.Button()
         Me.btnCreateShortcutOnDesktop = New System.Windows.Forms.Button()
-        Me.btnCheckForUpdates = New System.Windows.Forms.Button()
         Me.btnAbout = New System.Windows.Forms.Button()
+        Me.btnCheckForUpdates = New System.Windows.Forms.Button()
+        Me.btnImportCollectionOfTasks = New System.Windows.Forms.Button()
+        Me.btnExportAllTasks = New System.Windows.Forms.Button()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.chkUseSSL = New System.Windows.Forms.CheckBox()
         Me.imgLock = New System.Windows.Forms.PictureBox()
@@ -68,8 +70,9 @@ Partial Class Form1
         Me.btnCreateTask = New System.Windows.Forms.Button()
         Me.btnBrowseForExecutable = New System.Windows.Forms.Button()
         Me.linkWhatIsAParameter = New System.Windows.Forms.LinkLabel()
-        Me.btnImportCollectionOfTasks = New System.Windows.Forms.Button()
-        Me.btnExportAllTasks = New System.Windows.Forms.Button()
+        Me.chkDelayExecution = New System.Windows.Forms.CheckBox()
+        Me.lblHowManyMinutes = New System.Windows.Forms.Label()
+        Me.txtDelayMinutes = New System.Windows.Forms.TextBox()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.imgLock, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -152,7 +155,7 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(13, 261)
+        Me.Label1.Location = New System.Drawing.Point(11, 284)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(122, 13)
         Me.Label1.TabIndex = 38
@@ -162,7 +165,7 @@ Partial Class Form1
         '
         Me.listTasks.ContextMenuStrip = Me.ContextMenuStrip1
         Me.listTasks.FormattingEnabled = True
-        Me.listTasks.Location = New System.Drawing.Point(13, 277)
+        Me.listTasks.Location = New System.Drawing.Point(11, 300)
         Me.listTasks.Name = "listTasks"
         Me.listTasks.Size = New System.Drawing.Size(650, 108)
         Me.listTasks.TabIndex = 37
@@ -271,7 +274,7 @@ Partial Class Form1
         Me.TableLayoutPanel1.Controls.Add(Me.btnCheckForUpdates, 0, 7)
         Me.TableLayoutPanel1.Controls.Add(Me.btnImportCollectionOfTasks, 1, 6)
         Me.TableLayoutPanel1.Controls.Add(Me.btnExportAllTasks, 0, 6)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(13, 391)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(11, 414)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 8
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
@@ -372,20 +375,6 @@ Partial Class Form1
         Me.btnCreateShortcutOnDesktop.Text = "Create Shortcut to Task"
         Me.btnCreateShortcutOnDesktop.UseVisualStyleBackColor = True
         '
-        'btnCheckForUpdates
-        '
-        Me.btnCheckForUpdates.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnCheckForUpdates.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.refresh
-        Me.btnCheckForUpdates.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCheckForUpdates.Location = New System.Drawing.Point(3, 167)
-        Me.btnCheckForUpdates.Name = "btnCheckForUpdates"
-        Me.btnCheckForUpdates.Size = New System.Drawing.Size(320, 22)
-        Me.btnCheckForUpdates.TabIndex = 53
-        Me.btnCheckForUpdates.Text = "Check for Updates"
-        Me.btnCheckForUpdates.UseVisualStyleBackColor = True
-        '
         'btnAbout
         '
         Me.btnAbout.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -400,69 +389,19 @@ Partial Class Form1
         Me.btnAbout.Text = "About"
         Me.btnAbout.UseVisualStyleBackColor = True
         '
-        'chkUseSSL
+        'btnCheckForUpdates
         '
-        Me.chkUseSSL.AutoSize = True
-        Me.chkUseSSL.Location = New System.Drawing.Point(12, 589)
-        Me.chkUseSSL.Name = "chkUseSSL"
-        Me.chkUseSSL.Size = New System.Drawing.Size(68, 17)
-        Me.chkUseSSL.TabIndex = 63
-        Me.chkUseSSL.Text = "Use SSL"
-        Me.chkUseSSL.UseVisualStyleBackColor = True
-        '
-        'imgLock
-        '
-        Me.imgLock.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.locked
-        Me.imgLock.Location = New System.Drawing.Point(79, 589)
-        Me.imgLock.Name = "imgLock"
-        Me.imgLock.Size = New System.Drawing.Size(15, 20)
-        Me.imgLock.TabIndex = 64
-        Me.imgLock.TabStop = False
-        '
-        'btnCancelEditTask
-        '
-        Me.btnCancelEditTask.Enabled = False
-        Me.btnCancelEditTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.removeSmall
-        Me.btnCancelEditTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCancelEditTask.Location = New System.Drawing.Point(340, 205)
-        Me.btnCancelEditTask.Name = "btnCancelEditTask"
-        Me.btnCancelEditTask.Size = New System.Drawing.Size(324, 23)
-        Me.btnCancelEditTask.TabIndex = 52
-        Me.btnCancelEditTask.Text = "Cancel Edit"
-        Me.btnCancelEditTask.UseVisualStyleBackColor = True
-        '
-        'btnCreateTask
-        '
-        Me.btnCreateTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
-        Me.btnCreateTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCreateTask.Location = New System.Drawing.Point(13, 205)
-        Me.btnCreateTask.Name = "btnCreateTask"
-        Me.btnCreateTask.Size = New System.Drawing.Size(321, 23)
-        Me.btnCreateTask.TabIndex = 49
-        Me.btnCreateTask.Text = "Create Task"
-        Me.btnCreateTask.UseVisualStyleBackColor = True
-        '
-        'btnBrowseForExecutable
-        '
-        Me.btnBrowseForExecutable.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.folder_explore
-        Me.btnBrowseForExecutable.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnBrowseForExecutable.Location = New System.Drawing.Point(522, 82)
-        Me.btnBrowseForExecutable.Name = "btnBrowseForExecutable"
-        Me.btnBrowseForExecutable.Size = New System.Drawing.Size(140, 23)
-        Me.btnBrowseForExecutable.TabIndex = 41
-        Me.btnBrowseForExecutable.Text = "Browse for Executable"
-        Me.btnBrowseForExecutable.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnBrowseForExecutable.UseVisualStyleBackColor = True
-        '
-        'linkWhatIsAParameter
-        '
-        Me.linkWhatIsAParameter.AutoSize = True
-        Me.linkWhatIsAParameter.Location = New System.Drawing.Point(602, 126)
-        Me.linkWhatIsAParameter.Name = "linkWhatIsAParameter"
-        Me.linkWhatIsAParameter.Size = New System.Drawing.Size(68, 13)
-        Me.linkWhatIsAParameter.TabIndex = 65
-        Me.linkWhatIsAParameter.TabStop = True
-        Me.linkWhatIsAParameter.Text = "What is this?"
+        Me.btnCheckForUpdates.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnCheckForUpdates.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.refresh
+        Me.btnCheckForUpdates.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnCheckForUpdates.Location = New System.Drawing.Point(3, 167)
+        Me.btnCheckForUpdates.Name = "btnCheckForUpdates"
+        Me.btnCheckForUpdates.Size = New System.Drawing.Size(320, 22)
+        Me.btnCheckForUpdates.TabIndex = 53
+        Me.btnCheckForUpdates.Text = "Check for Updates"
+        Me.btnCheckForUpdates.UseVisualStyleBackColor = True
         '
         'btnImportCollectionOfTasks
         '
@@ -492,11 +431,107 @@ Partial Class Form1
         Me.btnExportAllTasks.Text = "Export All Tasks to Task Collection File"
         Me.btnExportAllTasks.UseVisualStyleBackColor = True
         '
+        'chkUseSSL
+        '
+        Me.chkUseSSL.AutoSize = True
+        Me.chkUseSSL.Location = New System.Drawing.Point(10, 612)
+        Me.chkUseSSL.Name = "chkUseSSL"
+        Me.chkUseSSL.Size = New System.Drawing.Size(68, 17)
+        Me.chkUseSSL.TabIndex = 63
+        Me.chkUseSSL.Text = "Use SSL"
+        Me.chkUseSSL.UseVisualStyleBackColor = True
+        '
+        'imgLock
+        '
+        Me.imgLock.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.locked
+        Me.imgLock.Location = New System.Drawing.Point(77, 612)
+        Me.imgLock.Name = "imgLock"
+        Me.imgLock.Size = New System.Drawing.Size(15, 20)
+        Me.imgLock.TabIndex = 64
+        Me.imgLock.TabStop = False
+        '
+        'btnCancelEditTask
+        '
+        Me.btnCancelEditTask.Enabled = False
+        Me.btnCancelEditTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.removeSmall
+        Me.btnCancelEditTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnCancelEditTask.Location = New System.Drawing.Point(336, 232)
+        Me.btnCancelEditTask.Name = "btnCancelEditTask"
+        Me.btnCancelEditTask.Size = New System.Drawing.Size(324, 23)
+        Me.btnCancelEditTask.TabIndex = 52
+        Me.btnCancelEditTask.Text = "Cancel Edit"
+        Me.btnCancelEditTask.UseVisualStyleBackColor = True
+        '
+        'btnCreateTask
+        '
+        Me.btnCreateTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
+        Me.btnCreateTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnCreateTask.Location = New System.Drawing.Point(9, 232)
+        Me.btnCreateTask.Name = "btnCreateTask"
+        Me.btnCreateTask.Size = New System.Drawing.Size(321, 23)
+        Me.btnCreateTask.TabIndex = 49
+        Me.btnCreateTask.Text = "Create Task"
+        Me.btnCreateTask.UseVisualStyleBackColor = True
+        '
+        'btnBrowseForExecutable
+        '
+        Me.btnBrowseForExecutable.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.folder_explore
+        Me.btnBrowseForExecutable.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnBrowseForExecutable.Location = New System.Drawing.Point(522, 82)
+        Me.btnBrowseForExecutable.Name = "btnBrowseForExecutable"
+        Me.btnBrowseForExecutable.Size = New System.Drawing.Size(140, 23)
+        Me.btnBrowseForExecutable.TabIndex = 41
+        Me.btnBrowseForExecutable.Text = "Browse for Executable"
+        Me.btnBrowseForExecutable.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnBrowseForExecutable.UseVisualStyleBackColor = True
+        '
+        'linkWhatIsAParameter
+        '
+        Me.linkWhatIsAParameter.AutoSize = True
+        Me.linkWhatIsAParameter.Location = New System.Drawing.Point(602, 126)
+        Me.linkWhatIsAParameter.Name = "linkWhatIsAParameter"
+        Me.linkWhatIsAParameter.Size = New System.Drawing.Size(68, 13)
+        Me.linkWhatIsAParameter.TabIndex = 65
+        Me.linkWhatIsAParameter.TabStop = True
+        Me.linkWhatIsAParameter.Text = "What is this?"
+        '
+        'chkDelayExecution
+        '
+        Me.chkDelayExecution.AutoSize = True
+        Me.chkDelayExecution.Enabled = False
+        Me.chkDelayExecution.Location = New System.Drawing.Point(11, 209)
+        Me.chkDelayExecution.Name = "chkDelayExecution"
+        Me.chkDelayExecution.Size = New System.Drawing.Size(146, 17)
+        Me.chkDelayExecution.TabIndex = 66
+        Me.chkDelayExecution.Text = "Delay Startup Execution?"
+        Me.chkDelayExecution.UseVisualStyleBackColor = True
+        '
+        'lblHowManyMinutes
+        '
+        Me.lblHowManyMinutes.AutoSize = True
+        Me.lblHowManyMinutes.Location = New System.Drawing.Point(191, 209)
+        Me.lblHowManyMinutes.Name = "lblHowManyMinutes"
+        Me.lblHowManyMinutes.Size = New System.Drawing.Size(115, 13)
+        Me.lblHowManyMinutes.TabIndex = 67
+        Me.lblHowManyMinutes.Text = "By how many minutes?"
+        Me.lblHowManyMinutes.Visible = False
+        '
+        'txtDelayMinutes
+        '
+        Me.txtDelayMinutes.Location = New System.Drawing.Point(312, 206)
+        Me.txtDelayMinutes.Name = "txtDelayMinutes"
+        Me.txtDelayMinutes.Size = New System.Drawing.Size(37, 20)
+        Me.txtDelayMinutes.TabIndex = 68
+        Me.txtDelayMinutes.Visible = False
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(675, 613)
+        Me.ClientSize = New System.Drawing.Size(675, 641)
+        Me.Controls.Add(Me.txtDelayMinutes)
+        Me.Controls.Add(Me.lblHowManyMinutes)
+        Me.Controls.Add(Me.chkDelayExecution)
         Me.Controls.Add(Me.linkWhatIsAParameter)
         Me.Controls.Add(Me.imgLock)
         Me.Controls.Add(Me.chkUseSSL)
@@ -572,4 +607,7 @@ Partial Class Form1
     Friend WithEvents linkWhatIsAParameter As LinkLabel
     Friend WithEvents btnImportCollectionOfTasks As Button
     Friend WithEvents btnExportAllTasks As Button
+    Friend WithEvents chkDelayExecution As CheckBox
+    Friend WithEvents lblHowManyMinutes As Label
+    Friend WithEvents txtDelayMinutes As TextBox
 End Class

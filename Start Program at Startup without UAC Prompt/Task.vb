@@ -1,5 +1,25 @@
 ﻿Public Class classTask
     Private strTaskName, strTaskDescription, strTaskEXE, strTaskParameters As String
+    Private intDelayedMinutes As Integer = 0
+    Private boolStartup As Boolean = False
+
+    Public Property startup() As Boolean
+        Get
+            startup = boolStartup
+        End Get
+        Set(ByVal Value As Boolean)
+            boolStartup = Value
+        End Set
+    End Property
+
+    Public Property delayedMinutes() As Integer
+        Get
+            delayedMinutes = intDelayedMinutes
+        End Get
+        Set(ByVal Value As Integer)
+            intDelayedMinutes = Value
+        End Set
+    End Property
 
     Public Property taskName() As String
         Get
