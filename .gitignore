@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 /Compile, package, and upload this thing!.bat
 /start_program_at_startup_without_uac_prompt.xml - Shortcut.lnk
+/start_program_at_startup_without_uac_prompt.xml.lnk
