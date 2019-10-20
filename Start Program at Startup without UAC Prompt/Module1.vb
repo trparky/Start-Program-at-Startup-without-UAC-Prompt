@@ -47,8 +47,7 @@ Module Module1
                     killProcess(Integer.Parse(queryObj("ProcessId").ToString))
                 Next
             End Using
-        Catch ex3 As Runtime.InteropServices.COMException
-        Catch err As Management.ManagementException
+        Catch err As Exception
         End Try
     End Sub
 
