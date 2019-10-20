@@ -5,7 +5,6 @@ Imports System.IO
 Imports System.Xml.Serialization
 
 Public Class Form1
-    Private Const Tabs As String = vbTab
     Private Const strTaskFolderName As String = "Run at User Logon with Administrator Privileges"
 
     Private Sub newFileDeleterThreadSub()

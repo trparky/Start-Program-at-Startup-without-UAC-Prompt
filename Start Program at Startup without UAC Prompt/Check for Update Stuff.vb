@@ -14,17 +14,12 @@ Module Check_for_Update_Stuff
     Private Const programZipFileURL = "www.toms-world.org/download/Start Program at Startup without UAC Prompt.zip"
     Private Const programZipFileSHA1URL = "www.toms-world.org/download/Start Program at Startup without UAC Prompt.zip.sha1"
 
-    Private Const zipFileName As String = "Start Program at Startup without UAC Prompt.zip"
     Private Const programFileNameInZIP As String = "Start Program at Startup without UAC Prompt.exe"
-
-    Private Const webSiteURL As String = "www.toms-world.org/blog/start-program-at-startup-without-uac-prompt"
 
     Public Const programUpdateCheckerXMLPath As String = "www.toms-world.org/updates/start_program_at_startup_without_uac_prompt.xml"
     Public Const programName As String = "Start Program at Startup with Admin Privileges without UAC Prompt"
 
     Private versionInfo As String() = Application.ProductVersion.Split(".")
-    Private shortMajor As Short = Short.Parse(versionInfo(versionPieces.major).Trim)
-    Private shortMinor As Short = Short.Parse(versionInfo(versionPieces.minor).Trim)
     Private shortBuild As Short = Short.Parse(versionInfo(versionPieces.build).Trim)
 
     Private versionStringWithoutBuild As String = String.Format("{0}.{1}", versionInfo(versionPieces.major), versionInfo(versionPieces.minor))
