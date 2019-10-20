@@ -99,8 +99,6 @@ Module Check_for_Update_Stuff
             Exit Sub
         End If
 
-        fileInfo = Nothing
-
         extractFileFromZIPFile(memoryStream, programFileNameInZIP, newExecutableName)
         memoryStream.Close()
         memoryStream.Dispose()

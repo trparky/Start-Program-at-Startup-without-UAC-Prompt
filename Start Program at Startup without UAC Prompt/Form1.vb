@@ -365,11 +365,8 @@ Public Class Form1
         If SaveFileDialog1.ShowDialog() = DialogResult.OK Then
             Dim fileInfo As New FileInfo(SaveFileDialog1.FileName)
             Dim locationOfShortcut As String = Path.Combine(fileInfo.DirectoryName, listTasks.Text & ".lnk")
-            fileInfo = Nothing
 
             createShortcut(locationOfShortcut, "schtasks", exePath, listTasks.Text, String.Format("/run /TN {0}\{2}\{1}{0}", Chr(34), listTasks.Text, strTaskFolderName))
-            locationOfShortcut = Nothing
-            exePath = Nothing
 
             MsgBox("Shortcut Created Successfully.", MsgBoxStyle.Information, "Create Shortcut to Task")
         End If
@@ -444,7 +441,6 @@ Public Class Form1
 
             addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes)
 
-            savedTask = Nothing
             refreshTasks()
 
             MsgBox("Task imported successfully.", MsgBoxStyle.Information, Me.Text)
