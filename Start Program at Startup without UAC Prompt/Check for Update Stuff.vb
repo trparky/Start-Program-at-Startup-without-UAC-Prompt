@@ -30,13 +30,12 @@ Module Check_for_Update_Stuff
     Public boolWinXP As Boolean = False
 
     Private Function SHA160(ByRef memoryStream As MemoryStream) As String
-        Dim SHA1Engine As New Security.Cryptography.SHA1CryptoServiceProvider
-
-        memoryStream.Position = 0
-        Dim Output As Byte() = SHA1Engine.ComputeHash(memoryStream)
-        memoryStream.Position = 0
-
-        Return BitConverter.ToString(Output).ToLower().Replace("-", "").Trim
+        Using SHA1Engine As New Security.Cryptography.SHA1CryptoServiceProvider
+            memoryStream.Position = 0
+            Dim Output As Byte() = SHA1Engine.ComputeHash(memoryStream)
+            memoryStream.Position = 0
+            Return BitConverter.ToString(Output).ToLower().Replace("-", "").Trim
+        End Using
     End Function
 
     Public Function verifyChecksum(urlOfChecksumFile As String, ByRef memoryStream As MemoryStream, boolGiveUserAnErrorMessage As Boolean) As Boolean
