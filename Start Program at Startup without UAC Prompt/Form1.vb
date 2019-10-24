@@ -769,7 +769,7 @@ Public Class Form1
     Private Sub btnChooseUser_Click(sender As Object, e As EventArgs) Handles btnChooseUser.Click
         Using Choose_User As New Choose_User With {.StartPosition = FormStartPosition.CenterParent}
             Choose_User.ShowDialog()
-            txtRunAsUser.Text = Choose_User.strSelectedUser
+            If Not String.IsNullOrEmpty(Choose_User.strSelectedUser) Then txtRunAsUser.Text = Choose_User.strSelectedUser
         End Using
     End Sub
 End Class
