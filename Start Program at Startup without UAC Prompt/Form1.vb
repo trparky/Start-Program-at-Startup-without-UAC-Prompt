@@ -496,7 +496,11 @@ Public Class Form1
         If Not String.IsNullOrEmpty(strCommandLineParameters) Then strCommandLineParameters = strCommandLineParameters.Trim
 
         If Not IO.File.Exists(strExecutablePath) Then
-            MsgBox("Executable path not found.", MsgBoxStyle.Critical, Me.Text)
+            If strExecutablePath.EndsWith(".bat", StringComparison.OrdinalIgnoreCase) Then
+                MsgBox("Task batch file path not found.", MsgBoxStyle.Critical, Me.Text)
+            Else
+                MsgBox("Executable path not found.", MsgBoxStyle.Critical, Me.Text)
+            End If
             Exit Sub
         End If
 
