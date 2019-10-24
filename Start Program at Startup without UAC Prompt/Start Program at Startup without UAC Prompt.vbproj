@@ -104,6 +104,12 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Check for Update Stuff.vb" />
+    <Compile Include="Choose User.Designer.vb">
+      <DependentUpon>Choose User.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Choose User.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -132,6 +138,9 @@
     <Compile Include="Task.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Choose User.resx">
+      <DependentUpon>Choose User.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
     </EmbeddedResource>

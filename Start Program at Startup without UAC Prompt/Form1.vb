@@ -169,6 +169,10 @@ Public Class Form1
             MsgBox("Executable Path Not Found.", MsgBoxStyle.Critical, Me.Text)
             Exit Sub
         End If
+        If chkRunAsSpecificUser.Checked And String.IsNullOrWhiteSpace(txtRunAsUser.Text) Then
+            MsgBox("You have your task setup to run as a specific user but you didn't select one yet, please do so now.", MsgBoxStyle.Critical, Me.Text)
+            Exit Sub
+        End If
 
         If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then deleteTask(txtTaskName.Text)
 
@@ -177,7 +181,10 @@ Public Class Form1
             If Not Integer.TryParse(txtDelayMinutes.Text, intDelayedMinutes) Then intDelayedMinutes = 0
         End If
 
-        addTask(txtTaskName.Text, txtDescription.Text, txtEXEPath.Text, txtParameters.Text, chkEnabled.Checked, intDelayedMinutes)
+        Dim strUserName As String = Nothing
+        If chkRunAsSpecificUser.Checked Then strUserName = txtRunAsUser.Text
+
+        addTask(txtTaskName.Text, txtDescription.Text, txtEXEPath.Text, txtParameters.Text, chkEnabled.Checked, intDelayedMinutes, strUserName)
 
         Dim strPathToAutoShortcut As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Start " & txtTaskName.Text & ".lnk")
 
@@ -212,6 +219,10 @@ Public Class Form1
         chkEnabled.Checked = False
         lblLastRanOn.Text = Nothing
         btnCancelEditTask.Enabled = False
+        btnChooseUser.Enabled = False
+        txtRunAsUser.Enabled = False
+        txtRunAsUser.Text = Nothing
+        chkRunAsSpecificUser.Checked = False
         refreshTasks()
     End Sub
 
@@ -264,11 +275,20 @@ Public Class Form1
                         chkEnabled.Checked = True
                         chkDelayExecution.Enabled = True
 
-                        If DirectCast(trigger, LogonTrigger).Delay.Minutes <> 0 Then
+                        Dim logonTriggerObject As LogonTrigger = DirectCast(trigger, LogonTrigger)
+
+                        If logonTriggerObject.Delay.Minutes <> 0 Then
                             chkDelayExecution.Checked = True
                             lblHowManyMinutes.Visible = True
                             txtDelayMinutes.Visible = True
                             txtDelayMinutes.Text = DirectCast(trigger, LogonTrigger).Delay.Minutes
+                        End If
+
+                        If Not String.IsNullOrEmpty(logonTriggerObject.UserId) Then
+                            chkRunAsSpecificUser.Checked = True
+                            btnChooseUser.Enabled = True
+                            txtRunAsUser.Enabled = True
+                            txtRunAsUser.Text = logonTriggerObject.UserId
                         End If
                     End If
                 Next
@@ -306,6 +326,10 @@ Public Class Form1
         chkEnabled.Checked = False
         chkDelayExecution.Enabled = False
         chkDelayExecution.Checked = False
+        chkRunAsSpecificUser.Checked = False
+        btnChooseUser.Enabled = False
+        txtRunAsUser.Enabled = False
+        txtRunAsUser.Text = Nothing
 
         btnCreateTask.Text = "Create Task"
         btnCancelEditTask.Enabled = False
@@ -387,7 +411,10 @@ Public Class Form1
 
                     If task.Definition.Triggers.Count <> 0 Then
                         If task.Definition.Triggers(0).TriggerType = TaskTriggerType.Logon Then
-                            savedTask.delayedMinutes = DirectCast(task.Definition.Triggers(0), LogonTrigger).Delay.Minutes
+                            Dim logonTriggerObject As LogonTrigger = DirectCast(task.Definition.Triggers(0), LogonTrigger)
+
+                            savedTask.userName = If(String.IsNullOrEmpty(logonTriggerObject.UserId), Nothing, logonTriggerObject.UserId)
+                            savedTask.delayedMinutes = logonTriggerObject.Delay.Minutes
                             savedTask.startup = True
                         End If
                     End If
@@ -426,6 +453,16 @@ Public Class Form1
         End If
     End Sub
 
+    Private Function doesUserExistOnThisSystem(strUserName As String) As Boolean
+        Using usersSearcher As New Management.ManagementObjectSearcher("SELECT Caption FROM Win32_UserAccount")
+            For Each user As Management.ManagementObject In usersSearcher.Get()
+                If strUserName.Equals(user("Caption").ToString) Then Return True
+            Next
+        End Using
+
+        Return False
+    End Function
+
     Private Sub btnImportTask_Click(sender As Object, e As EventArgs) Handles btnImportTask.Click
         importTask.Title = "Import Task from Task File"
         importTask.FileName = Nothing
@@ -439,7 +476,8 @@ Public Class Form1
                 savedTask = xmlSerializerObject.Deserialize(streamReader)
             End Using
 
-            addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes)
+            If Not doesUserExistOnThisSystem(savedTask.userName) Then savedTask.userName = Nothing
+            addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes, savedTask.userName)
 
             refreshTasks()
 
@@ -447,7 +485,7 @@ Public Class Form1
         End If
     End Sub
 
-    Sub addTask(strTaskName As String, strTaskDescription As String, strExecutablePath As String, strCommandLineParameters As String, boolStartup As Boolean, intDelayedMinutes As Integer)
+    Sub addTask(strTaskName As String, strTaskDescription As String, strExecutablePath As String, strCommandLineParameters As String, boolStartup As Boolean, intDelayedMinutes As Integer, strUserName As String)
         ' We trim the variable values here.
         strTaskName = strTaskName.Trim
         strTaskDescription = strTaskDescription.Trim
@@ -468,11 +506,10 @@ Public Class Form1
             newTask.RegistrationInfo.Description = strTaskDescription
 
             If boolStartup Then
-                If intDelayedMinutes = 0 Then
-                    newTask.Triggers.Add(New LogonTrigger)
-                Else
-                    newTask.Triggers.Add(New LogonTrigger With {.Delay = New TimeSpan(0, intDelayedMinutes, 0)})
-                End If
+                Dim logonTriggerObject As New LogonTrigger()
+                If intDelayedMinutes <> 0 Then logonTriggerObject.Delay = New TimeSpan(0, intDelayedMinutes, 0)
+                If Not String.IsNullOrWhiteSpace(strUserName) Then logonTriggerObject.UserId = strUserName
+                newTask.Triggers.Add(logonTriggerObject)
             End If
 
             Dim exeFileInfo As New FileInfo(strExecutablePath)
@@ -615,6 +652,7 @@ Public Class Form1
             Dim savedTask As classTask
             Dim actions As ActionCollection
             Dim execAction As ExecAction
+            Dim logonTriggerObject As LogonTrigger
 
             Using taskService As New TaskService
                 For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
@@ -623,7 +661,10 @@ Public Class Form1
 
                     If task.Definition.Triggers.Count <> 0 Then
                         If task.Definition.Triggers(0).TriggerType = TaskTriggerType.Logon Then
-                            savedTask.delayedMinutes = DirectCast(task.Definition.Triggers(0), LogonTrigger).Delay.Minutes
+                            logonTriggerObject = DirectCast(task.Definition.Triggers(0), LogonTrigger)
+
+                            savedTask.userName = If(String.IsNullOrEmpty(logonTriggerObject.UserId), Nothing, logonTriggerObject.UserId)
+                            savedTask.delayedMinutes = logonTriggerObject.Delay.Minutes
                             savedTask.startup = True
                         End If
                     End If
@@ -683,8 +724,8 @@ Public Class Form1
             End Try
 
             For Each savedTask As classTask In collectionOfTasks
-                addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes)
-                savedTask = Nothing
+                If Not doesUserExistOnThisSystem(savedTask.userName) Then savedTask.userName = Nothing
+                addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes, savedTask.userName)
             Next
 
             collectionOfTasks.Clear()
@@ -708,5 +749,23 @@ Public Class Form1
             txtDelayMinutes.Visible = False
             txtDelayMinutes.Text = Nothing
         End If
+    End Sub
+
+    Private Sub chkRunAsSpecificUser_Click(sender As Object, e As EventArgs) Handles chkRunAsSpecificUser.Click
+        If chkRunAsSpecificUser.Checked Then
+            btnChooseUser.Enabled = True
+            txtRunAsUser.Enabled = True
+        Else
+            btnChooseUser.Enabled = False
+            txtRunAsUser.Enabled = False
+            txtRunAsUser.Text = Nothing
+        End If
+    End Sub
+
+    Private Sub btnChooseUser_Click(sender As Object, e As EventArgs) Handles btnChooseUser.Click
+        Using Choose_User As New Choose_User With {.StartPosition = FormStartPosition.CenterParent}
+            Choose_User.ShowDialog()
+            txtRunAsUser.Text = Choose_User.strSelectedUser
+        End Using
     End Sub
 End Class

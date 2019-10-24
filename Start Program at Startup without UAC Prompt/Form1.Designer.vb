@@ -74,6 +74,9 @@ Partial Class Form1
         Me.lblHowManyMinutes = New System.Windows.Forms.Label()
         Me.txtDelayMinutes = New System.Windows.Forms.TextBox()
         Me.lblLastRanOn = New System.Windows.Forms.Label()
+        Me.chkRunAsSpecificUser = New System.Windows.Forms.CheckBox()
+        Me.btnChooseUser = New System.Windows.Forms.Button()
+        Me.txtRunAsUser = New System.Windows.Forms.TextBox()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.imgLock, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -158,7 +161,7 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 333)
+        Me.Label1.Location = New System.Drawing.Point(15, 360)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(122, 13)
         Me.Label1.TabIndex = 38
@@ -168,7 +171,7 @@ Partial Class Form1
         '
         Me.listTasks.ContextMenuStrip = Me.ContextMenuStrip1
         Me.listTasks.FormattingEnabled = True
-        Me.listTasks.Location = New System.Drawing.Point(12, 349)
+        Me.listTasks.Location = New System.Drawing.Point(15, 376)
         Me.listTasks.Name = "listTasks"
         Me.listTasks.Size = New System.Drawing.Size(650, 108)
         Me.listTasks.TabIndex = 37
@@ -277,7 +280,7 @@ Partial Class Form1
         Me.TableLayoutPanel1.Controls.Add(Me.btnCheckForUpdates, 0, 7)
         Me.TableLayoutPanel1.Controls.Add(Me.btnImportCollectionOfTasks, 1, 6)
         Me.TableLayoutPanel1.Controls.Add(Me.btnExportAllTasks, 0, 6)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(12, 463)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(15, 490)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 8
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
@@ -437,7 +440,7 @@ Partial Class Form1
         'chkUseSSL
         '
         Me.chkUseSSL.AutoSize = True
-        Me.chkUseSSL.Location = New System.Drawing.Point(11, 661)
+        Me.chkUseSSL.Location = New System.Drawing.Point(14, 688)
         Me.chkUseSSL.Name = "chkUseSSL"
         Me.chkUseSSL.Size = New System.Drawing.Size(68, 17)
         Me.chkUseSSL.TabIndex = 63
@@ -447,7 +450,7 @@ Partial Class Form1
         'imgLock
         '
         Me.imgLock.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.locked
-        Me.imgLock.Location = New System.Drawing.Point(78, 661)
+        Me.imgLock.Location = New System.Drawing.Point(81, 688)
         Me.imgLock.Name = "imgLock"
         Me.imgLock.Size = New System.Drawing.Size(15, 20)
         Me.imgLock.TabIndex = 64
@@ -458,7 +461,7 @@ Partial Class Form1
         Me.btnCancelEditTask.Enabled = False
         Me.btnCancelEditTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.removeSmall
         Me.btnCancelEditTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCancelEditTask.Location = New System.Drawing.Point(337, 281)
+        Me.btnCancelEditTask.Location = New System.Drawing.Point(340, 308)
         Me.btnCancelEditTask.Name = "btnCancelEditTask"
         Me.btnCancelEditTask.Size = New System.Drawing.Size(324, 23)
         Me.btnCancelEditTask.TabIndex = 52
@@ -469,7 +472,7 @@ Partial Class Form1
         '
         Me.btnCreateTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
         Me.btnCreateTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCreateTask.Location = New System.Drawing.Point(10, 281)
+        Me.btnCreateTask.Location = New System.Drawing.Point(13, 308)
         Me.btnCreateTask.Name = "btnCreateTask"
         Me.btnCreateTask.Size = New System.Drawing.Size(321, 23)
         Me.btnCreateTask.TabIndex = 49
@@ -502,7 +505,7 @@ Partial Class Form1
         '
         Me.chkDelayExecution.AutoSize = True
         Me.chkDelayExecution.Enabled = False
-        Me.chkDelayExecution.Location = New System.Drawing.Point(12, 258)
+        Me.chkDelayExecution.Location = New System.Drawing.Point(15, 285)
         Me.chkDelayExecution.Name = "chkDelayExecution"
         Me.chkDelayExecution.Size = New System.Drawing.Size(146, 17)
         Me.chkDelayExecution.TabIndex = 66
@@ -512,7 +515,7 @@ Partial Class Form1
         'lblHowManyMinutes
         '
         Me.lblHowManyMinutes.AutoSize = True
-        Me.lblHowManyMinutes.Location = New System.Drawing.Point(166, 259)
+        Me.lblHowManyMinutes.Location = New System.Drawing.Point(169, 286)
         Me.lblHowManyMinutes.Name = "lblHowManyMinutes"
         Me.lblHowManyMinutes.Size = New System.Drawing.Size(115, 13)
         Me.lblHowManyMinutes.TabIndex = 67
@@ -521,7 +524,7 @@ Partial Class Form1
         '
         'txtDelayMinutes
         '
-        Me.txtDelayMinutes.Location = New System.Drawing.Point(287, 256)
+        Me.txtDelayMinutes.Location = New System.Drawing.Point(290, 283)
         Me.txtDelayMinutes.Name = "txtDelayMinutes"
         Me.txtDelayMinutes.Size = New System.Drawing.Size(37, 20)
         Me.txtDelayMinutes.TabIndex = 68
@@ -530,17 +533,46 @@ Partial Class Form1
         'lblLastRanOn
         '
         Me.lblLastRanOn.AutoSize = True
-        Me.lblLastRanOn.Location = New System.Drawing.Point(330, 259)
+        Me.lblLastRanOn.Location = New System.Drawing.Point(333, 286)
         Me.lblLastRanOn.Name = "lblLastRanOn"
         Me.lblLastRanOn.Size = New System.Drawing.Size(66, 13)
         Me.lblLastRanOn.TabIndex = 70
         Me.lblLastRanOn.Text = "Last Ran At:"
         '
+        'chkRunAsSpecificUser
+        '
+        Me.chkRunAsSpecificUser.AutoSize = True
+        Me.chkRunAsSpecificUser.Location = New System.Drawing.Point(15, 256)
+        Me.chkRunAsSpecificUser.Name = "chkRunAsSpecificUser"
+        Me.chkRunAsSpecificUser.Size = New System.Drawing.Size(126, 17)
+        Me.chkRunAsSpecificUser.TabIndex = 71
+        Me.chkRunAsSpecificUser.Text = "Run as Specific User"
+        Me.chkRunAsSpecificUser.UseVisualStyleBackColor = True
+        '
+        'btnChooseUser
+        '
+        Me.btnChooseUser.Enabled = False
+        Me.btnChooseUser.Location = New System.Drawing.Point(147, 252)
+        Me.btnChooseUser.Name = "btnChooseUser"
+        Me.btnChooseUser.Size = New System.Drawing.Size(100, 23)
+        Me.btnChooseUser.TabIndex = 72
+        Me.btnChooseUser.Text = "Choose User..."
+        Me.btnChooseUser.UseVisualStyleBackColor = True
+        '
+        'txtRunAsUser
+        '
+        Me.txtRunAsUser.Enabled = False
+        Me.txtRunAsUser.Location = New System.Drawing.Point(253, 253)
+        Me.txtRunAsUser.Name = "txtRunAsUser"
+        Me.txtRunAsUser.ReadOnly = True
+        Me.txtRunAsUser.Size = New System.Drawing.Size(177, 20)
+        Me.txtRunAsUser.TabIndex = 73
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(675, 691)
+        Me.ClientSize = New System.Drawing.Size(675, 715)
         Me.Controls.Add(Me.lblLastRanOn)
         Me.Controls.Add(Me.txtDelayMinutes)
         Me.Controls.Add(Me.lblHowManyMinutes)
@@ -564,6 +596,9 @@ Partial Class Form1
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.listTasks)
+        Me.Controls.Add(Me.txtRunAsUser)
+        Me.Controls.Add(Me.btnChooseUser)
+        Me.Controls.Add(Me.chkRunAsSpecificUser)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "Form1"
         Me.Text = "Start Program at Startup with Admin Privileges without UAC Prompt"
@@ -624,4 +659,7 @@ Partial Class Form1
     Friend WithEvents lblHowManyMinutes As Label
     Friend WithEvents txtDelayMinutes As TextBox
     Friend WithEvents lblLastRanOn As Label
+    Friend WithEvents chkRunAsSpecificUser As CheckBox
+    Friend WithEvents btnChooseUser As Button
+    Friend WithEvents txtRunAsUser As TextBox
 End Class
