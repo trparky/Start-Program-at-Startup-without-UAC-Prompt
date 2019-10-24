@@ -399,6 +399,7 @@ Public Class Form1
     Private Sub btnExportTask_Click(sender As Object, e As EventArgs) Handles btnExportTask.Click
         saveTask.Title = "Save as Task File"
         saveTask.Filter = "Task File|*.task"
+        saveTask.FileName = listTasks.Text & ".task"
 
         If saveTask.ShowDialog() = DialogResult.OK Then
             Using taskService As New TaskService
