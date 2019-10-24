@@ -98,7 +98,6 @@ Public Class Form1
         CreateShortcutToTaskOnDesktopToolStripMenuItem.Enabled = False
         StopStartTaskToolStripMenuItem.Enabled = False
         ExportTaskToolStripMenuItem.Enabled = False
-        ImportTaskToolStripMenuItem.Enabled = False
     End Sub
 
     Sub enableButtons()
@@ -116,7 +115,6 @@ Public Class Form1
         CreateShortcutToTaskOnDesktopToolStripMenuItem.Enabled = True
         StopStartTaskToolStripMenuItem.Enabled = True
         ExportTaskToolStripMenuItem.Enabled = True
-        ImportTaskToolStripMenuItem.Enabled = True
     End Sub
 
     Private Sub listTasks_Click(sender As Object, e As EventArgs) Handles listTasks.Click
