@@ -24,4 +24,8 @@
         strSelectedUser = listUsers.SelectedItems(0).Text
         Me.Close()
     End Sub
+
+    Private Sub listUsers_KeyUp(sender As Object, e As KeyEventArgs) Handles listUsers.KeyUp
+        If listUsers.SelectedItems.Count = 1 AndAlso e.KeyCode = Keys.Enter Then btnChooseUser.PerformClick()
+    End Sub
 End Class

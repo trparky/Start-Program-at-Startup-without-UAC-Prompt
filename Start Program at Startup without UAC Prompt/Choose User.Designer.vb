@@ -64,6 +64,7 @@ Partial Class Choose_User
         Me.ClientSize = New System.Drawing.Size(456, 251)
         Me.Controls.Add(Me.btnChooseUser)
         Me.Controls.Add(Me.listUsers)
+        Me.KeyPreview = True
         Me.Name = "Choose_User"
         Me.Text = "Choose User..."
         Me.ResumeLayout(False)
