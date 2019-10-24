@@ -82,8 +82,10 @@ Partial Class Form1
         'txtDescription
         '
         Me.txtDescription.Location = New System.Drawing.Point(79, 179)
+        Me.txtDescription.Multiline = True
         Me.txtDescription.Name = "txtDescription"
-        Me.txtDescription.Size = New System.Drawing.Size(437, 20)
+        Me.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtDescription.Size = New System.Drawing.Size(437, 71)
         Me.txtDescription.TabIndex = 48
         '
         'Label6
@@ -156,7 +158,7 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(11, 284)
+        Me.Label1.Location = New System.Drawing.Point(12, 333)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(122, 13)
         Me.Label1.TabIndex = 38
@@ -166,7 +168,7 @@ Partial Class Form1
         '
         Me.listTasks.ContextMenuStrip = Me.ContextMenuStrip1
         Me.listTasks.FormattingEnabled = True
-        Me.listTasks.Location = New System.Drawing.Point(11, 300)
+        Me.listTasks.Location = New System.Drawing.Point(12, 349)
         Me.listTasks.Name = "listTasks"
         Me.listTasks.Size = New System.Drawing.Size(650, 108)
         Me.listTasks.TabIndex = 37
@@ -175,69 +177,69 @@ Partial Class Form1
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeleteTaskToolStripMenuItem, Me.EditTaskToolStripMenuItem, Me.ToolStripMenuItem1, Me.GetStatusOfTaskToolStripMenuItem, Me.StopStartTaskToolStripMenuItem, Me.ToolStripMenuItem2, Me.CreateShortcutToTaskOnDesktopToolStripMenuItem, Me.ToolStripMenuItem3, Me.ExportTaskToolStripMenuItem, Me.ImportTaskToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(197, 176)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(196, 176)
         '
         'DeleteTaskToolStripMenuItem
         '
         Me.DeleteTaskToolStripMenuItem.Enabled = False
         Me.DeleteTaskToolStripMenuItem.Name = "DeleteTaskToolStripMenuItem"
-        Me.DeleteTaskToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.DeleteTaskToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
         Me.DeleteTaskToolStripMenuItem.Text = "&Delete Task"
         '
         'EditTaskToolStripMenuItem
         '
         Me.EditTaskToolStripMenuItem.Enabled = False
         Me.EditTaskToolStripMenuItem.Name = "EditTaskToolStripMenuItem"
-        Me.EditTaskToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.EditTaskToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
         Me.EditTaskToolStripMenuItem.Text = "&Edit Task"
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(193, 6)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(192, 6)
         '
         'GetStatusOfTaskToolStripMenuItem
         '
         Me.GetStatusOfTaskToolStripMenuItem.Enabled = False
         Me.GetStatusOfTaskToolStripMenuItem.Name = "GetStatusOfTaskToolStripMenuItem"
-        Me.GetStatusOfTaskToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.GetStatusOfTaskToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
         Me.GetStatusOfTaskToolStripMenuItem.Text = "&Get Status of Task"
         '
         'StopStartTaskToolStripMenuItem
         '
         Me.StopStartTaskToolStripMenuItem.Enabled = False
         Me.StopStartTaskToolStripMenuItem.Name = "StopStartTaskToolStripMenuItem"
-        Me.StopStartTaskToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.StopStartTaskToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
         Me.StopStartTaskToolStripMenuItem.Text = "Stop/Start Task"
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(193, 6)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(192, 6)
         '
         'CreateShortcutToTaskOnDesktopToolStripMenuItem
         '
         Me.CreateShortcutToTaskOnDesktopToolStripMenuItem.Enabled = False
         Me.CreateShortcutToTaskOnDesktopToolStripMenuItem.Name = "CreateShortcutToTaskOnDesktopToolStripMenuItem"
-        Me.CreateShortcutToTaskOnDesktopToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.CreateShortcutToTaskOnDesktopToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
         Me.CreateShortcutToTaskOnDesktopToolStripMenuItem.Text = "&Create Shortcut to Task"
         '
         'ToolStripMenuItem3
         '
         Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(193, 6)
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(192, 6)
         '
         'ExportTaskToolStripMenuItem
         '
         Me.ExportTaskToolStripMenuItem.Enabled = False
         Me.ExportTaskToolStripMenuItem.Name = "ExportTaskToolStripMenuItem"
-        Me.ExportTaskToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.ExportTaskToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
         Me.ExportTaskToolStripMenuItem.Text = "&Export Task"
         '
         'ImportTaskToolStripMenuItem
         '
         Me.ImportTaskToolStripMenuItem.Name = "ImportTaskToolStripMenuItem"
-        Me.ImportTaskToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.ImportTaskToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
         Me.ImportTaskToolStripMenuItem.Text = "&Import Task"
         '
         'OpenFileDialog1
@@ -275,7 +277,7 @@ Partial Class Form1
         Me.TableLayoutPanel1.Controls.Add(Me.btnCheckForUpdates, 0, 7)
         Me.TableLayoutPanel1.Controls.Add(Me.btnImportCollectionOfTasks, 1, 6)
         Me.TableLayoutPanel1.Controls.Add(Me.btnExportAllTasks, 0, 6)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(11, 414)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(12, 463)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 8
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
@@ -435,7 +437,7 @@ Partial Class Form1
         'chkUseSSL
         '
         Me.chkUseSSL.AutoSize = True
-        Me.chkUseSSL.Location = New System.Drawing.Point(10, 612)
+        Me.chkUseSSL.Location = New System.Drawing.Point(11, 661)
         Me.chkUseSSL.Name = "chkUseSSL"
         Me.chkUseSSL.Size = New System.Drawing.Size(68, 17)
         Me.chkUseSSL.TabIndex = 63
@@ -445,7 +447,7 @@ Partial Class Form1
         'imgLock
         '
         Me.imgLock.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.locked
-        Me.imgLock.Location = New System.Drawing.Point(77, 612)
+        Me.imgLock.Location = New System.Drawing.Point(78, 661)
         Me.imgLock.Name = "imgLock"
         Me.imgLock.Size = New System.Drawing.Size(15, 20)
         Me.imgLock.TabIndex = 64
@@ -456,7 +458,7 @@ Partial Class Form1
         Me.btnCancelEditTask.Enabled = False
         Me.btnCancelEditTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.removeSmall
         Me.btnCancelEditTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCancelEditTask.Location = New System.Drawing.Point(336, 232)
+        Me.btnCancelEditTask.Location = New System.Drawing.Point(337, 281)
         Me.btnCancelEditTask.Name = "btnCancelEditTask"
         Me.btnCancelEditTask.Size = New System.Drawing.Size(324, 23)
         Me.btnCancelEditTask.TabIndex = 52
@@ -467,7 +469,7 @@ Partial Class Form1
         '
         Me.btnCreateTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
         Me.btnCreateTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCreateTask.Location = New System.Drawing.Point(9, 232)
+        Me.btnCreateTask.Location = New System.Drawing.Point(10, 281)
         Me.btnCreateTask.Name = "btnCreateTask"
         Me.btnCreateTask.Size = New System.Drawing.Size(321, 23)
         Me.btnCreateTask.TabIndex = 49
@@ -500,7 +502,7 @@ Partial Class Form1
         '
         Me.chkDelayExecution.AutoSize = True
         Me.chkDelayExecution.Enabled = False
-        Me.chkDelayExecution.Location = New System.Drawing.Point(11, 209)
+        Me.chkDelayExecution.Location = New System.Drawing.Point(12, 258)
         Me.chkDelayExecution.Name = "chkDelayExecution"
         Me.chkDelayExecution.Size = New System.Drawing.Size(146, 17)
         Me.chkDelayExecution.TabIndex = 66
@@ -510,7 +512,7 @@ Partial Class Form1
         'lblHowManyMinutes
         '
         Me.lblHowManyMinutes.AutoSize = True
-        Me.lblHowManyMinutes.Location = New System.Drawing.Point(165, 210)
+        Me.lblHowManyMinutes.Location = New System.Drawing.Point(166, 259)
         Me.lblHowManyMinutes.Name = "lblHowManyMinutes"
         Me.lblHowManyMinutes.Size = New System.Drawing.Size(115, 13)
         Me.lblHowManyMinutes.TabIndex = 67
@@ -519,7 +521,7 @@ Partial Class Form1
         '
         'txtDelayMinutes
         '
-        Me.txtDelayMinutes.Location = New System.Drawing.Point(286, 207)
+        Me.txtDelayMinutes.Location = New System.Drawing.Point(287, 256)
         Me.txtDelayMinutes.Name = "txtDelayMinutes"
         Me.txtDelayMinutes.Size = New System.Drawing.Size(37, 20)
         Me.txtDelayMinutes.TabIndex = 68
@@ -528,7 +530,7 @@ Partial Class Form1
         'lblLastRanOn
         '
         Me.lblLastRanOn.AutoSize = True
-        Me.lblLastRanOn.Location = New System.Drawing.Point(329, 210)
+        Me.lblLastRanOn.Location = New System.Drawing.Point(330, 259)
         Me.lblLastRanOn.Name = "lblLastRanOn"
         Me.lblLastRanOn.Size = New System.Drawing.Size(66, 13)
         Me.lblLastRanOn.TabIndex = 70
@@ -538,7 +540,7 @@ Partial Class Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(675, 641)
+        Me.ClientSize = New System.Drawing.Size(675, 691)
         Me.Controls.Add(Me.lblLastRanOn)
         Me.Controls.Add(Me.txtDelayMinutes)
         Me.Controls.Add(Me.lblHowManyMinutes)
