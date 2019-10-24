@@ -2,9 +2,11 @@
     Public Property strSelectedUser As String
 
     Private Sub Choose_User_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Using usersSearcher As New Management.ManagementObjectSearcher("SELECT Caption FROM Win32_UserAccount")
+        Using usersSearcher As New Management.ManagementObjectSearcher("SELECT LocalAccount, Disabled, Lockout, SIDType, Name, Caption FROM Win32_UserAccount")
             For Each user As Management.ManagementObject In usersSearcher.Get()
-                listUsers.Items.Add(user("Caption").ToString)
+                If CBool(user("LocalAccount")) AndAlso Not CBool(user("Disabled")) AndAlso Not CBool(user("Lockout")) AndAlso Integer.Parse(user("SIDType").ToString()) = 1 AndAlso Not user("Name").ToString.Equals("HomeGroupUser$", StringComparison.OrdinalIgnoreCase) Then
+                    listUsers.Items.Add(user("Caption").ToString)
+                End If
             Next
         End Using
     End Sub
