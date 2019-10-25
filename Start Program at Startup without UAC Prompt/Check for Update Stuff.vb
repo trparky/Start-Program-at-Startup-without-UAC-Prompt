@@ -80,27 +80,20 @@ Module Check_for_Update_Stuff
     Private Sub downloadAndPerformUpdate()
         Dim fileInfo As New FileInfo(Application.ExecutablePath)
         Dim newExecutableName As String = fileInfo.Name & ".new.exe"
-        Dim memoryStream As New MemoryStream
 
-        If Not createNewHTTPHelperObject().downloadFile(programZipFileURL, memoryStream, False) Then
-            MsgBox("There was an error while downloading required files.", MsgBoxStyle.Critical, programName)
+        Using memoryStream As New MemoryStream
+            If Not createNewHTTPHelperObject().downloadFile(programZipFileURL, memoryStream, False) Then
+                MsgBox("There was an error while downloading required files.", MsgBoxStyle.Critical, programName)
+                Exit Sub
+            End If
 
-            memoryStream.Close()
-            memoryStream.Dispose()
-            Exit Sub
-        End If
+            If Not verifyChecksum(programZipFileSHA1URL, memoryStream, True) Then
+                MsgBox("There was an error while downloading required files.", MsgBoxStyle.Critical, programName)
+                Exit Sub
+            End If
 
-        If Not verifyChecksum(programZipFileSHA1URL, memoryStream, True) Then
-            MsgBox("There was an error while downloading required files.", MsgBoxStyle.Critical, programName)
-
-            memoryStream.Close()
-            memoryStream.Dispose()
-            Exit Sub
-        End If
-
-        extractFileFromZIPFile(memoryStream, programFileNameInZIP, newExecutableName)
-        memoryStream.Close()
-        memoryStream.Dispose()
+            extractFileFromZIPFile(memoryStream, programFileNameInZIP, newExecutableName)
+        End Using
 
         Dim startInfo As New ProcessStartInfo With {
             .FileName = newExecutableName,
