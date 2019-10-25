@@ -146,12 +146,9 @@ Public Class Form1
 
     Private Sub btnBrowseForExecutable_Click(sender As Object, e As EventArgs) Handles btnBrowseForExecutable.Click
         OpenFileDialog1.Title = "Select a program to run with Windows Scheduler"
-        OpenFileDialog1.Filter = "Program|*.exe"
-        OpenFileDialog1.ShowDialog()
-    End Sub
-
-    Private Sub OpenFileDialog1_FileOk(sender As Object, e As ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
-        txtEXEPath.Text = OpenFileDialog1.FileName
+        OpenFileDialog1.Filter = "All Supported Types|*.exe;*.bat|Program Executable File|*.exe|Batch File|*.bat"
+        OpenFileDialog1.FileName = Nothing
+        If OpenFileDialog1.ShowDialog() = DialogResult.OK Then txtEXEPath.Text = OpenFileDialog1.FileName
     End Sub
 
     Private Sub btnCreateTask_Click(sender As Object, e As EventArgs) Handles btnCreateTask.Click
