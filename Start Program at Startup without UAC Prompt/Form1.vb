@@ -768,4 +768,20 @@ Public Class Form1
             If Not String.IsNullOrEmpty(Choose_User.strSelectedUser) Then txtRunAsUser.Text = Choose_User.strSelectedUser
         End Using
     End Sub
+
+    Private Sub activateOrDeactivateCreateTaskButton()
+        btnCreateTask.Enabled = If(Not String.IsNullOrEmpty(txtEXEPath.Text.Trim) AndAlso IO.File.Exists(txtEXEPath.Text) AndAlso Not String.IsNullOrEmpty(txtTaskName.Text.Trim) AndAlso Not String.IsNullOrEmpty(txtDescription.Text), True, False)
+    End Sub
+
+    Private Sub txtEXEPath_TextChanged(sender As Object, e As EventArgs) Handles txtEXEPath.TextChanged
+        activateOrDeactivateCreateTaskButton()
+    End Sub
+
+    Private Sub txtTaskName_TextChanged(sender As Object, e As EventArgs) Handles txtTaskName.TextChanged
+        activateOrDeactivateCreateTaskButton()
+    End Sub
+
+    Private Sub txtDescription_TextChanged(sender As Object, e As EventArgs) Handles txtDescription.TextChanged
+        activateOrDeactivateCreateTaskButton()
+    End Sub
 End Class

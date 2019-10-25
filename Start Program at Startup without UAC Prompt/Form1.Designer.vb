@@ -470,6 +470,7 @@ Partial Class Form1
         '
         'btnCreateTask
         '
+        Me.btnCreateTask.Enabled = False
         Me.btnCreateTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
         Me.btnCreateTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.btnCreateTask.Location = New System.Drawing.Point(13, 308)
