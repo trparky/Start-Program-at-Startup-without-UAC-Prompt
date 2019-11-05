@@ -77,6 +77,7 @@ Partial Class Form1
         Me.chkRunAsSpecificUser = New System.Windows.Forms.CheckBox()
         Me.btnChooseUser = New System.Windows.Forms.Button()
         Me.txtRunAsUser = New System.Windows.Forms.TextBox()
+        Me.btnPopout = New System.Windows.Forms.Button()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.imgLock, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -569,6 +570,16 @@ Partial Class Form1
         Me.txtRunAsUser.Size = New System.Drawing.Size(177, 20)
         Me.txtRunAsUser.TabIndex = 73
         '
+        'btnPopout
+        '
+        Me.btnPopout.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.popout
+        Me.btnPopout.Location = New System.Drawing.Point(522, 227)
+        Me.btnPopout.Name = "btnPopout"
+        Me.btnPopout.Size = New System.Drawing.Size(26, 23)
+        Me.btnPopout.TabIndex = 74
+        Me.ToolTip1.SetToolTip(Me.btnPopout, "Pops the Description textbox out to a bigger and separate window.")
+        Me.btnPopout.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -600,6 +611,7 @@ Partial Class Form1
         Me.Controls.Add(Me.txtRunAsUser)
         Me.Controls.Add(Me.btnChooseUser)
         Me.Controls.Add(Me.chkRunAsSpecificUser)
+        Me.Controls.Add(Me.btnPopout)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "Form1"
         Me.Text = "Start Program at Startup with Admin Privileges without UAC Prompt"
@@ -663,4 +675,5 @@ Partial Class Form1
     Friend WithEvents chkRunAsSpecificUser As CheckBox
     Friend WithEvents btnChooseUser As Button
     Friend WithEvents txtRunAsUser As TextBox
+    Friend WithEvents btnPopout As Button
 End Class

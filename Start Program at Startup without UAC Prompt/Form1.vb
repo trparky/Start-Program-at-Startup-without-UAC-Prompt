@@ -784,4 +784,12 @@ Public Class Form1
     Private Sub txtDescription_TextChanged(sender As Object, e As EventArgs) Handles txtDescription.TextChanged
         activateOrDeactivateCreateTaskButton()
     End Sub
+
+    Private Sub btnPopout_Click(sender As Object, e As EventArgs) Handles btnPopout.Click
+        Using Popout_Description As New Popout_Description() With {.StartPosition = FormStartPosition.CenterParent, .Size = My.Settings.popoutDescriptionSize}
+            Popout_Description.txtPopoutDescription.Text = txtDescription.Text
+            Popout_Description.ShowDialog()
+            txtDescription.Text = Popout_Description.txtPopoutDescription.Text
+        End Using
+    End Sub
 End Class
