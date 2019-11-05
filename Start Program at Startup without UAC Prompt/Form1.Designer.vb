@@ -47,7 +47,7 @@ Partial Class Form1
         Me.ExportTaskToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImportTaskToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.chkEnabled = New System.Windows.Forms.CheckBox()
         Me.saveTask = New System.Windows.Forms.SaveFileDialog()
         Me.importTask = New System.Windows.Forms.OpenFileDialog()
@@ -258,7 +258,7 @@ Partial Class Form1
         Me.chkEnabled.Size = New System.Drawing.Size(136, 17)
         Me.chkEnabled.TabIndex = 59
         Me.chkEnabled.Text = "At User Logon Enabled"
-        Me.ToolTip1.SetToolTip(Me.chkEnabled, "Makes it so that this task starts at user logon.")
+        Me.ToolTip.SetToolTip(Me.chkEnabled, "Makes it so that this task starts at user logon.")
         Me.chkEnabled.UseVisualStyleBackColor = True
         '
         'importTask
@@ -577,7 +577,7 @@ Partial Class Form1
         Me.btnPopout.Name = "btnPopout"
         Me.btnPopout.Size = New System.Drawing.Size(26, 23)
         Me.btnPopout.TabIndex = 74
-        Me.ToolTip1.SetToolTip(Me.btnPopout, "Pops the Description textbox out to a bigger and separate window.")
+        Me.ToolTip.SetToolTip(Me.btnPopout, "Pops the Description textbox out to a bigger and separate window.")
         Me.btnPopout.UseVisualStyleBackColor = True
         '
         'Form1
@@ -641,7 +641,7 @@ Partial Class Form1
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents listTasks As System.Windows.Forms.ListBox
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
+    Friend WithEvents ToolTip As System.Windows.Forms.ToolTip
     Friend WithEvents btnExportTask As System.Windows.Forms.Button
     Friend WithEvents saveTask As System.Windows.Forms.SaveFileDialog
     Friend WithEvents btnImportTask As System.Windows.Forms.Button

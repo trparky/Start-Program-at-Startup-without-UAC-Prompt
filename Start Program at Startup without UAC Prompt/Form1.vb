@@ -305,7 +305,7 @@ Public Class Form1
             btnCreateTask.Text = "Save Changes to Task"
             btnCancelEditTask.Enabled = True
             txtTaskName.ReadOnly = True
-            ToolTip1.SetToolTip(txtTaskName, "Disabled in Edit Mode")
+            ToolTip.SetToolTip(txtTaskName, "Disabled in Edit Mode")
         End Using
     End Sub
 
@@ -329,7 +329,7 @@ Public Class Form1
         btnCreateTask.Text = "Create Task"
         btnCancelEditTask.Enabled = False
         txtTaskName.ReadOnly = False
-        ToolTip1.SetToolTip(txtTaskName, "")
+        ToolTip.SetToolTip(txtTaskName, "")
         refreshTasks()
         disableButtons()
     End Sub
