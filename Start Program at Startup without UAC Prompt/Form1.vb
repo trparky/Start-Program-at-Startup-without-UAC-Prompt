@@ -789,7 +789,7 @@ Public Class Form1
         Using Popout_Description As New Popout_Description() With {.StartPosition = FormStartPosition.CenterParent, .Size = My.Settings.popoutDescriptionSize}
             Popout_Description.txtPopoutDescription.Text = txtDescription.Text
             Popout_Description.ShowDialog()
-            txtDescription.Text = Popout_Description.txtPopoutDescription.Text
+            If Popout_Description.userResponse = Popout_Description.userResponseEnum.save Then txtDescription.Text = Popout_Description.txtPopoutDescription.Text
         End Using
     End Sub
 End Class

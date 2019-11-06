@@ -23,7 +23,8 @@ Partial Class Popout_Description
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.txtPopoutDescription = New System.Windows.Forms.TextBox()
-        Me.btnOK = New System.Windows.Forms.Button()
+        Me.btnSave = New System.Windows.Forms.Button()
+        Me.btnCancel = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'txtPopoutDescription
@@ -37,25 +38,39 @@ Partial Class Popout_Description
         Me.txtPopoutDescription.Size = New System.Drawing.Size(523, 82)
         Me.txtPopoutDescription.TabIndex = 0
         '
-        'btnOK
+        'btnSave
         '
-        Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnOK.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
-        Me.btnOK.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnOK.Location = New System.Drawing.Point(478, 100)
-        Me.btnOK.Name = "btnOK"
-        Me.btnOK.Size = New System.Drawing.Size(57, 23)
-        Me.btnOK.TabIndex = 1
-        Me.btnOK.Text = "Save"
-        Me.btnOK.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnOK.UseVisualStyleBackColor = True
+        Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSave.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
+        Me.btnSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnSave.Location = New System.Drawing.Point(478, 100)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(57, 23)
+        Me.btnSave.TabIndex = 1
+        Me.btnSave.Text = "Save"
+        Me.btnSave.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnSave.UseVisualStyleBackColor = True
+        '
+        'btnCancel
+        '
+        Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnCancel.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.delete
+        Me.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnCancel.Location = New System.Drawing.Point(410, 100)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(62, 23)
+        Me.btnCancel.TabIndex = 2
+        Me.btnCancel.Text = "Cancel"
+        Me.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnCancel.UseVisualStyleBackColor = True
         '
         'Popout_Description
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(547, 127)
-        Me.Controls.Add(Me.btnOK)
+        Me.Controls.Add(Me.btnSave)
+        Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.txtPopoutDescription)
         Me.MinimumSize = New System.Drawing.Size(563, 166)
         Me.Name = "Popout_Description"
@@ -67,5 +82,6 @@ Partial Class Popout_Description
     End Sub
 
     Friend WithEvents txtPopoutDescription As TextBox
-    Friend WithEvents btnOK As Button
+    Friend WithEvents btnSave As Button
+    Friend WithEvents btnCancel As Button
 End Class
