@@ -42,7 +42,7 @@ Module Check_for_Update_Stuff
         Dim checksumFromWeb As String = Nothing
 
         If Not createNewHTTPHelperObject().getWebData(urlOfChecksumFile, checksumFromWeb, False) Then
-            If boolGiveUserAnErrorMessage Then MsgBox("There was an error downloading the checksum verification file. Update process aborted.", MsgBoxStyle.Critical, "Add Adobe Flash to Microsoft EMET")
+            If boolGiveUserAnErrorMessage Then MsgBox("There was an error downloading the checksum verification file. Update process aborted.", MsgBoxStyle.Critical, programName)
             Return False
         Else
             ' Checks to see if we have a valid SHA1 file.
@@ -51,11 +51,11 @@ Module Check_for_Update_Stuff
 
                 If SHA160(memoryStream).Equals(checksumFromWeb, StringComparison.OrdinalIgnoreCase) Then : Return True
                 Else
-                    If boolGiveUserAnErrorMessage Then MsgBox("There was an error in the download, checksums don't match. Update process aborted.", MsgBoxStyle.Critical, "Add Adobe Flash to Microsoft EMET")
+                    If boolGiveUserAnErrorMessage Then MsgBox("There was an error in the download, checksums don't match. Update process aborted.", MsgBoxStyle.Critical, programName)
                     Return False
                 End If
             Else
-                If boolGiveUserAnErrorMessage Then MsgBox("Invalid SHA1 file detected. Update process aborted.", MsgBoxStyle.Critical, "Add Adobe Flash to Microsoft EMET")
+                If boolGiveUserAnErrorMessage Then MsgBox("Invalid SHA1 file detected. Update process aborted.", MsgBoxStyle.Critical, programName)
                 Return False
             End If
         End If
@@ -176,7 +176,7 @@ Module Check_for_Update_Stuff
 
     Public Sub checkForUpdates()
         If Not checkForInternetConnection() Then
-            MsgBox("No Internet connection detected.", MsgBoxStyle.Information, windowObject.Text)
+            MsgBox("No Internet connection detected.", MsgBoxStyle.Information, programName)
         Else
             Try
                 Dim xmlData As String = Nothing
@@ -187,21 +187,21 @@ Module Check_for_Update_Stuff
                     Dim response As processUpdateXMLResponse = processUpdateXMLData(xmlData, remoteVersion, remoteBuild)
 
                     If response = processUpdateXMLResponse.newVersion Then
-                        If MsgBox(String.Format("An update to {2} (version {0} Build {1}) is available to be downloaded, do you want to download and update to this new version?", remoteVersion, remoteBuild, windowObject.Text), MsgBoxStyle.Question + MsgBoxStyle.YesNo, windowObject.Text) = MsgBoxResult.Yes Then
+                        If MsgBox(String.Format("An update to {2} (version {0} Build {1}) is available to be downloaded, do you want to download and update to this new version?", remoteVersion, remoteBuild, programName), MsgBoxStyle.Question + MsgBoxStyle.YesNo, programName) = MsgBoxResult.Yes Then
                             downloadAndPerformUpdate()
                         Else
-                            MsgBox("The update will not be downloaded.", MsgBoxStyle.Information, windowObject.Text)
+                            MsgBox("The update will not be downloaded.", MsgBoxStyle.Information, programName)
                         End If
                     ElseIf response = processUpdateXMLResponse.noUpdateNeeded Then
-                        MsgBox("You already have the latest version, there is no need to update this program.", MsgBoxStyle.Information, windowObject.Text)
+                        MsgBox("You already have the latest version, there is no need to update this program.", MsgBoxStyle.Information, programName)
                     ElseIf response = processUpdateXMLResponse.parseError Or response = processUpdateXMLResponse.exceptionError Then
-                        MsgBox("There was an error when trying to parse response from server.", MsgBoxStyle.Critical, windowObject.Text)
+                        MsgBox("There was an error when trying to parse response from server.", MsgBoxStyle.Critical, programName)
                     ElseIf response = processUpdateXMLResponse.newerVersionThanWebSite Then
-                        MsgBox("This is weird, you have a version that's newer than what's listed on the web site.", MsgBoxStyle.Information, windowObject.Text)
+                        MsgBox("This is weird, you have a version that's newer than what's listed on the web site.", MsgBoxStyle.Information, programName)
                     End If
                 Else
                     windowObject.btnCheckForUpdates.Invoke(Sub() windowObject.btnCheckForUpdates.Enabled = True)
-                    MsgBox("There was an error checking for updates.", MsgBoxStyle.Information, "Add Adobe Flash to Microsoft EMET")
+                    MsgBox("There was an error checking for updates.", MsgBoxStyle.Information, programName)
                 End If
             Catch ex As Exception
                 ' Ok, we crashed but who cares.  We give an error message.
