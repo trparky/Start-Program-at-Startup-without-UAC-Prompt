@@ -10,6 +10,18 @@ Module Module1
         Return Regex.Replace(unsafeString, "([\000\010\011\012\015\032\042\047\134\140])", "\$1")
     End Function
 
+    ''' <summary>This function operates a lot like Replace() but is case-InSeNsItIvE.</summary>
+    ''' <param name="source">The source String, aka the String where the data will be replaced in.</param>
+    ''' <param name="replace">What you want to replace in the String.</param>
+    ''' <param name="replaceWith">What you want to replace with in the String.</param>
+    ''' <param name="boolEscape">This is an optional parameter, the default is True. This parameter gives you far more control over how the function works. With this parameter set to True the function automatically properly escapes the "replace" parameter for use in the RegEx replace function that operates inside this function. If this parameter is set to False it is up to you, the programmer, to properly escape the value of the "replace" parameter or this function will throw an exception.</param>
+    ''' <return>Returns a String value.</return>
+    <Extension()>
+    Public Function caseInsensitiveReplace(source As String, replace As String, replaceWith As String, Optional boolEscape As Boolean = True) As String
+        If boolEscape Then replace = Regex.Escape(replace)
+        Return Regex.Replace(source, replace, replaceWith, RegexOptions.IgnoreCase)
+    End Function
+
     <Extension()>
     Public Function caseInsensitiveContains(haystack As String, needle As String, Optional boolDoEscaping As Boolean = False) As Boolean
         Try
@@ -58,73 +70,5 @@ Module Module1
         Catch ex As Exception
             Return False
         End Try
-    End Function
-
-    Public Function canIWriteToTheCurrentDirectory() As Boolean
-        Return canIWriteThere(New IO.FileInfo(Application.ExecutablePath).DirectoryName)
-    End Function
-
-    Private Function canIWriteThere(folderPath As String) As Boolean
-        ' We make sure we get valid folder path by taking off the leading slash.
-        If folderPath.EndsWith("\") Then folderPath = folderPath.Substring(0, folderPath.Length - 1)
-        If String.IsNullOrEmpty(folderPath) Or Not IO.Directory.Exists(folderPath) Then Return False
-
-        If checkByFolderACLs(folderPath) Then
-            Try
-                Dim strOurTestFileName As String = IO.Path.Combine(folderPath, "test" & randomStringGenerator(10) & ".txt")
-
-                IO.File.Create(strOurTestFileName, 1, IO.FileOptions.DeleteOnClose).Close()
-                If IO.File.Exists(strOurTestFileName) Then IO.File.Delete(strOurTestFileName)
-
-                Return True
-            Catch ex As Exception
-                Return False
-            End Try
-        Else
-            Return False
-        End If
-    End Function
-
-    Private Function checkByFolderACLs(folderPath As String) As Boolean
-        If WindowsIdentity.GetCurrent().IsSystem Then Return True
-
-        Try
-            Dim dsDirectoryACLs As DirectorySecurity = IO.Directory.GetAccessControl(folderPath)
-            Dim strCurrentUserSDDL As String = WindowsIdentity.GetCurrent.User.Value
-            Dim ircCurrentUserGroups As IdentityReferenceCollection = WindowsIdentity.GetCurrent.Groups
-
-            Dim arcAuthorizationRules As AuthorizationRuleCollection = dsDirectoryACLs.GetAccessRules(True, True, GetType(SecurityIdentifier))
-            Dim fsarDirectoryAccessRights As FileSystemAccessRule
-
-            For Each arAccessRule As AuthorizationRule In arcAuthorizationRules
-                If arAccessRule.IdentityReference.Value.Equals(strCurrentUserSDDL, StringComparison.OrdinalIgnoreCase) Or ircCurrentUserGroups.Contains(arAccessRule.IdentityReference) Then
-                    fsarDirectoryAccessRights = DirectCast(arAccessRule, FileSystemAccessRule)
-
-                    If fsarDirectoryAccessRights.AccessControlType = AccessControlType.Allow Then
-                        If fsarDirectoryAccessRights.FileSystemRights = FileSystemRights.Modify Or fsarDirectoryAccessRights.FileSystemRights = FileSystemRights.WriteData Or fsarDirectoryAccessRights.FileSystemRights = FileSystemRights.FullControl Then
-                            Return True
-                        End If
-                    End If
-                End If
-            Next
-
-            Return False
-        Catch ex As Exception
-            Return False
-        End Try
-    End Function
-
-    Private Function randomStringGenerator(length As Integer) As String
-        Dim random As Random = New Random()
-        Dim builder As New Text.StringBuilder()
-        Dim ch As Char
-        Dim legalCharacters As String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
-
-        For cntr As Integer = 0 To length
-            ch = legalCharacters.Substring(random.Next(0, legalCharacters.Length), 1)
-            builder.Append(ch)
-        Next
-
-        Return builder.ToString()
     End Function
 End Module

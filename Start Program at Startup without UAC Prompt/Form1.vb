@@ -341,8 +341,10 @@ Public Class Form1
     End Sub
 
     Private Sub btnCheckForUpdates_Click(sender As Object, e As EventArgs) Handles btnCheckForUpdates.Click
-        windowObject = Me
-        Threading.ThreadPool.QueueUserWorkItem(AddressOf checkForUpdates)
+        Threading.ThreadPool.QueueUserWorkItem(Sub()
+                                                   Dim checkForUpdatesObject As New Check_for_Update_Stuff(Me)
+                                                   checkForUpdatesObject.checkForUpdates(True)
+                                               End Sub)
         btnCheckForUpdates.Enabled = False
     End Sub
 
@@ -623,11 +625,11 @@ Public Class Form1
 
     Private Sub btnAbout_Click(sender As Object, e As EventArgs) Handles btnAbout.Click
         Dim stringBuilder As New StringBuilder
-        stringBuilder.AppendLine(programName)
+        stringBuilder.AppendLine(strProgramName)
         stringBuilder.AppendLine("Version " & strFullVersionString)
         stringBuilder.AppendLine("Written by Tom Parkison.")
 
-        MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, "About " & programName)
+        MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, "About " & strProgramName)
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing

@@ -135,6 +135,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="NativeMethod.vb" />
     <Compile Include="Popout Description.Designer.vb">
       <DependentUpon>Popout Description.vb</DependentUpon>
     </Compile>
