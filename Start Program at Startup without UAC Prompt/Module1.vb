@@ -22,6 +22,19 @@ Module Module1
         Return Regex.Replace(source, replace, replaceWith, RegexOptions.IgnoreCase)
     End Function
 
+    ''' <summary>This function uses an IndexOf call to do a case-insensitive search. This function operates a lot like Contains().</summary>
+    ''' <param name="needle">The String containing what you want to search for.</param>
+    ''' <return>Returns a Boolean value.</return>
+    <Extension()>
+    Public Function caseInsensitiveContains(haystack As String, needle As String) As Boolean
+        Dim index As Integer = haystack.IndexOf(needle, StringComparison.OrdinalIgnoreCase)
+        Return If(index = -1, False, True)
+    End Function
+
+    ''' <summary>This function uses a RegEx search to do a case-insensitive search but with more power and more responsibilities. This function operates a lot like Contains().</summary>
+    ''' <param name="needle">The String containing what you want to search for.</param>
+    ''' <param name="boolDoEscaping">This tells the function if it should add slashes where appropriate to the "needle" String.</param>
+    ''' <return>Returns a Boolean value.</return>
     <Extension()>
     Public Function caseInsensitiveContains(haystack As String, needle As String, Optional boolDoEscaping As Boolean = False) As Boolean
         Try
