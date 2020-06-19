@@ -646,6 +646,7 @@ Public Class Form1
     End Sub
 
     Private Sub btnExportAllTasks_Click(sender As Object, e As EventArgs) Handles btnExportAllTasks.Click
+        saveTask.FileName = Nothing
         saveTask.Title = "Save as Task Collection File"
         saveTask.Filter = "Task Collection File|*.ctask"
 
