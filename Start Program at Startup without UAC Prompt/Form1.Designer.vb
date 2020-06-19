@@ -52,13 +52,6 @@ Partial Class Form1
         Me.saveTask = New System.Windows.Forms.SaveFileDialog()
         Me.importTask = New System.Windows.Forms.OpenFileDialog()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.btnStopStartTask = New System.Windows.Forms.Button()
-        Me.btnDeleteTasks = New System.Windows.Forms.Button()
-        Me.btnEditTask = New System.Windows.Forms.Button()
-        Me.btnGetTaskStatus = New System.Windows.Forms.Button()
-        Me.btnImportTask = New System.Windows.Forms.Button()
-        Me.btnExportTask = New System.Windows.Forms.Button()
-        Me.btnCreateShortcutOnDesktop = New System.Windows.Forms.Button()
         Me.btnAbout = New System.Windows.Forms.Button()
         Me.btnCheckForUpdates = New System.Windows.Forms.Button()
         Me.btnImportCollectionOfTasks = New System.Windows.Forms.Button()
@@ -261,6 +254,16 @@ Partial Class Form1
         Me.ToolTip.SetToolTip(Me.chkEnabled, "Makes it so that this task starts at user logon.")
         Me.chkEnabled.UseVisualStyleBackColor = True
         '
+        'btnPopout
+        '
+        Me.btnPopout.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.popout
+        Me.btnPopout.Location = New System.Drawing.Point(522, 227)
+        Me.btnPopout.Name = "btnPopout"
+        Me.btnPopout.Size = New System.Drawing.Size(26, 23)
+        Me.btnPopout.TabIndex = 74
+        Me.ToolTip.SetToolTip(Me.btnPopout, "Pops the Description textbox out to a bigger and separate window.")
+        Me.btnPopout.UseVisualStyleBackColor = True
+        '
         'importTask
         '
         Me.importTask.FileName = "OpenFileDialog2"
@@ -270,117 +273,17 @@ Partial Class Form1
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.btnStopStartTask, 1, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnDeleteTasks, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnEditTask, 1, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnGetTaskStatus, 0, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnImportTask, 1, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnExportTask, 0, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnCreateShortcutOnDesktop, 0, 4)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnAbout, 1, 7)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnCheckForUpdates, 0, 7)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnImportCollectionOfTasks, 1, 6)
-        Me.TableLayoutPanel1.Controls.Add(Me.btnExportAllTasks, 0, 6)
+        Me.TableLayoutPanel1.Controls.Add(Me.btnAbout, 1, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.btnCheckForUpdates, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.btnImportCollectionOfTasks, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.btnExportAllTasks, 0, 0)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(15, 490)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 8
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(652, 192)
+        Me.TableLayoutPanel1.RowCount = 2
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(652, 56)
         Me.TableLayoutPanel1.TabIndex = 62
-        '
-        'btnStopStartTask
-        '
-        Me.btnStopStartTask.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnStopStartTask.Enabled = False
-        Me.btnStopStartTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnStopStartTask.Location = New System.Drawing.Point(329, 43)
-        Me.btnStopStartTask.Name = "btnStopStartTask"
-        Me.btnStopStartTask.Size = New System.Drawing.Size(320, 22)
-        Me.btnStopStartTask.TabIndex = 65
-        Me.btnStopStartTask.Text = "Start/Stop Task"
-        Me.btnStopStartTask.UseVisualStyleBackColor = True
-        '
-        'btnDeleteTasks
-        '
-        Me.btnDeleteTasks.Enabled = False
-        Me.btnDeleteTasks.Image = CType(resources.GetObject("btnDeleteTasks.Image"), System.Drawing.Image)
-        Me.btnDeleteTasks.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnDeleteTasks.Location = New System.Drawing.Point(3, 3)
-        Me.btnDeleteTasks.Name = "btnDeleteTasks"
-        Me.btnDeleteTasks.Size = New System.Drawing.Size(320, 22)
-        Me.btnDeleteTasks.TabIndex = 50
-        Me.btnDeleteTasks.Text = "Delete Task"
-        Me.btnDeleteTasks.UseVisualStyleBackColor = True
-        '
-        'btnEditTask
-        '
-        Me.btnEditTask.Enabled = False
-        Me.btnEditTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.edit
-        Me.btnEditTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnEditTask.Location = New System.Drawing.Point(329, 3)
-        Me.btnEditTask.Name = "btnEditTask"
-        Me.btnEditTask.Size = New System.Drawing.Size(320, 22)
-        Me.btnEditTask.TabIndex = 51
-        Me.btnEditTask.Text = "Edit Task"
-        Me.btnEditTask.UseVisualStyleBackColor = True
-        '
-        'btnGetTaskStatus
-        '
-        Me.btnGetTaskStatus.Enabled = False
-        Me.btnGetTaskStatus.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.status
-        Me.btnGetTaskStatus.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnGetTaskStatus.Location = New System.Drawing.Point(3, 43)
-        Me.btnGetTaskStatus.Name = "btnGetTaskStatus"
-        Me.btnGetTaskStatus.Size = New System.Drawing.Size(320, 22)
-        Me.btnGetTaskStatus.TabIndex = 58
-        Me.btnGetTaskStatus.Text = "Get Status of Task"
-        Me.btnGetTaskStatus.UseVisualStyleBackColor = True
-        '
-        'btnImportTask
-        '
-        Me.btnImportTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.import1
-        Me.btnImportTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnImportTask.Location = New System.Drawing.Point(329, 71)
-        Me.btnImportTask.Name = "btnImportTask"
-        Me.btnImportTask.Size = New System.Drawing.Size(320, 22)
-        Me.btnImportTask.TabIndex = 56
-        Me.btnImportTask.Text = "Import Task"
-        Me.btnImportTask.UseVisualStyleBackColor = True
-        '
-        'btnExportTask
-        '
-        Me.btnExportTask.Enabled = False
-        Me.btnExportTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
-        Me.btnExportTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnExportTask.Location = New System.Drawing.Point(3, 71)
-        Me.btnExportTask.Name = "btnExportTask"
-        Me.btnExportTask.Size = New System.Drawing.Size(320, 22)
-        Me.btnExportTask.TabIndex = 55
-        Me.btnExportTask.Text = "Export Task"
-        Me.btnExportTask.UseVisualStyleBackColor = True
-        '
-        'btnCreateShortcutOnDesktop
-        '
-        Me.TableLayoutPanel1.SetColumnSpan(Me.btnCreateShortcutOnDesktop, 2)
-        Me.btnCreateShortcutOnDesktop.Enabled = False
-        Me.btnCreateShortcutOnDesktop.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.shortcut
-        Me.btnCreateShortcutOnDesktop.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCreateShortcutOnDesktop.Location = New System.Drawing.Point(3, 99)
-        Me.btnCreateShortcutOnDesktop.Name = "btnCreateShortcutOnDesktop"
-        Me.btnCreateShortcutOnDesktop.Size = New System.Drawing.Size(646, 22)
-        Me.btnCreateShortcutOnDesktop.TabIndex = 54
-        Me.btnCreateShortcutOnDesktop.Text = "Create Shortcut to Task"
-        Me.btnCreateShortcutOnDesktop.UseVisualStyleBackColor = True
         '
         'btnAbout
         '
@@ -389,7 +292,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnAbout.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.info_blue
         Me.btnAbout.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnAbout.Location = New System.Drawing.Point(329, 167)
+        Me.btnAbout.Location = New System.Drawing.Point(329, 31)
         Me.btnAbout.Name = "btnAbout"
         Me.btnAbout.Size = New System.Drawing.Size(320, 22)
         Me.btnAbout.TabIndex = 59
@@ -403,7 +306,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnCheckForUpdates.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.refresh
         Me.btnCheckForUpdates.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCheckForUpdates.Location = New System.Drawing.Point(3, 167)
+        Me.btnCheckForUpdates.Location = New System.Drawing.Point(3, 31)
         Me.btnCheckForUpdates.Name = "btnCheckForUpdates"
         Me.btnCheckForUpdates.Size = New System.Drawing.Size(320, 22)
         Me.btnCheckForUpdates.TabIndex = 53
@@ -417,7 +320,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnImportCollectionOfTasks.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.import1
         Me.btnImportCollectionOfTasks.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnImportCollectionOfTasks.Location = New System.Drawing.Point(329, 139)
+        Me.btnImportCollectionOfTasks.Location = New System.Drawing.Point(329, 3)
         Me.btnImportCollectionOfTasks.Name = "btnImportCollectionOfTasks"
         Me.btnImportCollectionOfTasks.Size = New System.Drawing.Size(320, 22)
         Me.btnImportCollectionOfTasks.TabIndex = 66
@@ -431,7 +334,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnExportAllTasks.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
         Me.btnExportAllTasks.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnExportAllTasks.Location = New System.Drawing.Point(3, 139)
+        Me.btnExportAllTasks.Location = New System.Drawing.Point(3, 3)
         Me.btnExportAllTasks.Name = "btnExportAllTasks"
         Me.btnExportAllTasks.Size = New System.Drawing.Size(320, 22)
         Me.btnExportAllTasks.TabIndex = 67
@@ -441,7 +344,7 @@ Partial Class Form1
         'chkUseSSL
         '
         Me.chkUseSSL.AutoSize = True
-        Me.chkUseSSL.Location = New System.Drawing.Point(14, 688)
+        Me.chkUseSSL.Location = New System.Drawing.Point(15, 552)
         Me.chkUseSSL.Name = "chkUseSSL"
         Me.chkUseSSL.Size = New System.Drawing.Size(68, 17)
         Me.chkUseSSL.TabIndex = 63
@@ -451,7 +354,7 @@ Partial Class Form1
         'imgLock
         '
         Me.imgLock.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.locked
-        Me.imgLock.Location = New System.Drawing.Point(81, 688)
+        Me.imgLock.Location = New System.Drawing.Point(82, 552)
         Me.imgLock.Name = "imgLock"
         Me.imgLock.Size = New System.Drawing.Size(15, 20)
         Me.imgLock.TabIndex = 64
@@ -570,21 +473,11 @@ Partial Class Form1
         Me.txtRunAsUser.Size = New System.Drawing.Size(177, 20)
         Me.txtRunAsUser.TabIndex = 73
         '
-        'btnPopout
-        '
-        Me.btnPopout.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.popout
-        Me.btnPopout.Location = New System.Drawing.Point(522, 227)
-        Me.btnPopout.Name = "btnPopout"
-        Me.btnPopout.Size = New System.Drawing.Size(26, 23)
-        Me.btnPopout.TabIndex = 74
-        Me.ToolTip.SetToolTip(Me.btnPopout, "Pops the Description textbox out to a bigger and separate window.")
-        Me.btnPopout.UseVisualStyleBackColor = True
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(675, 715)
+        Me.ClientSize = New System.Drawing.Size(675, 576)
         Me.Controls.Add(Me.lblLastRanOn)
         Me.Controls.Add(Me.txtDelayMinutes)
         Me.Controls.Add(Me.lblHowManyMinutes)
@@ -622,11 +515,8 @@ Partial Class Form1
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents btnCreateShortcutOnDesktop As System.Windows.Forms.Button
     Friend WithEvents btnCheckForUpdates As System.Windows.Forms.Button
     Friend WithEvents btnCancelEditTask As System.Windows.Forms.Button
-    Friend WithEvents btnEditTask As System.Windows.Forms.Button
-    Friend WithEvents btnDeleteTasks As System.Windows.Forms.Button
     Friend WithEvents btnCreateTask As System.Windows.Forms.Button
     Friend WithEvents txtDescription As System.Windows.Forms.TextBox
     Friend WithEvents Label6 As System.Windows.Forms.Label
@@ -642,11 +532,8 @@ Partial Class Form1
     Friend WithEvents listTasks As System.Windows.Forms.ListBox
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents ToolTip As System.Windows.Forms.ToolTip
-    Friend WithEvents btnExportTask As System.Windows.Forms.Button
     Friend WithEvents saveTask As System.Windows.Forms.SaveFileDialog
-    Friend WithEvents btnImportTask As System.Windows.Forms.Button
     Friend WithEvents importTask As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents btnGetTaskStatus As System.Windows.Forms.Button
     Friend WithEvents chkEnabled As System.Windows.Forms.CheckBox
     Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents DeleteTaskToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -664,7 +551,6 @@ Partial Class Form1
     Friend WithEvents chkUseSSL As CheckBox
     Friend WithEvents btnAbout As Button
     Friend WithEvents imgLock As PictureBox
-    Friend WithEvents btnStopStartTask As Button
     Friend WithEvents linkWhatIsAParameter As LinkLabel
     Friend WithEvents btnImportCollectionOfTasks As Button
     Friend WithEvents btnExportAllTasks As Button

@@ -84,13 +84,6 @@ Public Class Form1
     End Sub
 
     Sub disableButtons()
-        btnDeleteTasks.Enabled = False
-        btnEditTask.Enabled = False
-        btnCreateShortcutOnDesktop.Enabled = False
-        btnExportTask.Enabled = False
-        btnStopStartTask.Enabled = False
-        btnGetTaskStatus.Enabled = False
-
         DeleteTaskToolStripMenuItem.Enabled = False
         EditTaskToolStripMenuItem.Enabled = False
         StopStartTaskToolStripMenuItem.Enabled = False
@@ -101,13 +94,6 @@ Public Class Form1
     End Sub
 
     Sub enableButtons()
-        btnDeleteTasks.Enabled = True
-        btnEditTask.Enabled = True
-        btnCreateShortcutOnDesktop.Enabled = True
-        btnExportTask.Enabled = True
-        btnStopStartTask.Enabled = True
-        btnGetTaskStatus.Enabled = True
-
         DeleteTaskToolStripMenuItem.Enabled = True
         EditTaskToolStripMenuItem.Enabled = True
         StopStartTaskToolStripMenuItem.Enabled = True
@@ -129,14 +115,10 @@ Public Class Form1
                     lastRunTime = Nothing
 
                     If taskObject.State = TaskState.Running Then
-                        btnStopStartTask.Text = "Stop Task"
                         StopStartTaskToolStripMenuItem.Text = "&Stop Task"
-                        btnStopStartTask.Image = My.Resources.stop_sign
                         StopStartTaskToolStripMenuItem.Image = My.Resources.stop_sign
                     Else
-                        btnStopStartTask.Text = "Start Task"
                         StopStartTaskToolStripMenuItem.Text = "&Start Task"
-                        btnStopStartTask.Image = My.Resources.start
                         StopStartTaskToolStripMenuItem.Image = My.Resources.start
                     End If
                 End If
@@ -249,7 +231,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub btnEditTask_Click(sender As Object, e As EventArgs) Handles btnEditTask.Click
+    Private Sub EditTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditTaskToolStripMenuItem.Click
         Using taskService As New TaskService
             Dim actions As ActionCollection
             Dim execAction As ExecAction
@@ -334,7 +316,7 @@ Public Class Form1
         disableButtons()
     End Sub
 
-    Private Sub btnDeleteTasks_Click(sender As Object, e As EventArgs) Handles btnDeleteTasks.Click
+    Private Sub DeleteTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteTaskToolStripMenuItem.Click
         deleteTask(listTasks.Text)
         refreshTasks()
         MsgBox("Task Deleted.", MsgBoxStyle.Information, Me.Text)
@@ -372,7 +354,7 @@ Public Class Form1
         Return isThisAValidExecutableTask(listTasks.Text, exePath)
     End Function
 
-    Private Sub btnCreateShortcutOnDesktop_Click(sender As Object, e As EventArgs) Handles btnCreateShortcutOnDesktop.Click
+    Private Sub CreateShortcutToTaskOnDesktopToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateShortcutToTaskOnDesktopToolStripMenuItem.Click
         Dim exePath As String = Nothing
         If Not isThisAValidExecutableTask(exePath) Then
             MsgBox("Something went wrong.", MsgBoxStyle.Critical, Me.Text)
@@ -393,7 +375,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub btnExportTask_Click(sender As Object, e As EventArgs) Handles btnExportTask.Click
+    Private Sub ExportTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportTaskToolStripMenuItem.Click
         saveTask.Title = "Save as Task File"
         saveTask.Filter = "Task File|*.task"
         saveTask.FileName = listTasks.Text & ".task"
@@ -461,7 +443,7 @@ Public Class Form1
         Return False
     End Function
 
-    Private Sub btnImportTask_Click(sender As Object, e As EventArgs) Handles btnImportTask.Click
+    Private Sub ImportTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ImportTaskToolStripMenuItem.Click
         importTask.Title = "Import Task from Task File"
         importTask.FileName = Nothing
         importTask.Filter = "Task File|*.task"
@@ -545,7 +527,7 @@ Public Class Form1
         End Using
     End Sub
 
-    Private Sub btnGetTaskStatus_Click(sender As Object, e As EventArgs) Handles btnGetTaskStatus.Click
+    Private Sub GetStatusOfTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GetStatusOfTaskToolStripMenuItem.Click
         If boolIsTaskRunning(listTasks.Text) Then
             MsgBox("The task is running.", MsgBoxStyle.Information, Me.Text)
         Else
@@ -553,40 +535,12 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub DeleteTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteTaskToolStripMenuItem.Click
-        btnDeleteTasks.PerformClick()
-    End Sub
-
-    Private Sub EditTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditTaskToolStripMenuItem.Click
-        btnEditTask.PerformClick()
-    End Sub
-
-    Private Sub GetStatusOfTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GetStatusOfTaskToolStripMenuItem.Click
-        btnGetTaskStatus.PerformClick()
-    End Sub
-
-    Private Sub StopStartTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles StopStartTaskToolStripMenuItem.Click
-        btnStopStartTask.PerformClick()
-    End Sub
-
-    Private Sub CreateShortcutToTaskOnDesktopToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateShortcutToTaskOnDesktopToolStripMenuItem.Click
-        btnCreateShortcutOnDesktop.PerformClick()
-    End Sub
-
-    Private Sub ExportTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportTaskToolStripMenuItem.Click
-        btnExportTask.PerformClick()
-    End Sub
-
-    Private Sub ImportTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ImportTaskToolStripMenuItem.Click
-        btnImportTask.Enabled = True
-    End Sub
-
     Private Sub chkUseSSL_CheckedChanged(sender As Object, e As EventArgs) Handles chkUseSSL.CheckedChanged
         imgLock.Image = If(chkUseSSL.Checked, My.Resources.locked, My.Resources.unlocked)
         My.Settings.boolUseSSL = chkUseSSL.Checked
     End Sub
 
-    Private Sub btnStopStartTask_Click(sender As Object, e As EventArgs) Handles btnStopStartTask.Click
+    Private Sub StopStartTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles StopStartTaskToolStripMenuItem.Click
         Using taskService As New TaskService
             Dim taskObject As Task = Nothing
             Dim boolIsItRunning As Boolean = False
@@ -596,10 +550,8 @@ Public Class Form1
             If taskObject IsNot Nothing Then
                 If boolIsItRunning Then
                     taskObject.Stop()
-                    btnStopStartTask.Image = My.Resources.start
                 Else
                     taskObject.Run()
-                    btnStopStartTask.Image = My.Resources.stop_sign
                 End If
 
                 taskObject.Dispose()
