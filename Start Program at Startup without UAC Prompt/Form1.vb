@@ -79,7 +79,7 @@ Public Class Form1
             Next
         End Using
 
-        btnExportAllTasks.Enabled = If(listTasks.Items.Count = 0, False, True)
+        btnExportAllTasks.Enabled = listTasks.Items.Count <> 0
         disableButtons()
     End Sub
 
@@ -232,7 +232,7 @@ Public Class Form1
     Private Function getTaskObject(ByRef taskServiceObject As TaskService, ByVal nameOfTask As String, ByRef taskObject As Task) As Boolean
         Try
             taskObject = taskServiceObject.GetTask(strTaskFolderName & "\" & nameOfTask)
-            Return If(taskObject Is Nothing, False, True)
+            Return taskObject IsNot Nothing
         Catch ex As Exception
             Return False
         End Try
@@ -608,7 +608,7 @@ Public Class Form1
     End Sub
 
     Function boolIsTaskRunning(ByVal strTaskName As String, ByRef taskService As TaskService, ByRef taskObject As Task) As Boolean
-        Return If(getTaskObject(taskService, strTaskName, taskObject), If(taskObject.State = TaskState.Running, True, False), False)
+        Return getTaskObject(taskService, strTaskName, taskObject) AndAlso taskObject.State = TaskState.Running
     End Function
 
     Function boolIsTaskRunning(strTaskName As String) As Boolean
@@ -616,7 +616,7 @@ Public Class Form1
             Dim task As Task = Nothing
 
             If getTaskObject(taskService, strTaskName, task) Then
-                Return If(task.State = TaskState.Running, True, False)
+                Return task.State = TaskState.Running
             Else
                 Return False
             End If
@@ -773,7 +773,7 @@ Public Class Form1
     End Sub
 
     Private Sub activateOrDeactivateCreateTaskButton()
-        btnCreateTask.Enabled = If(Not String.IsNullOrEmpty(txtEXEPath.Text.Trim) AndAlso IO.File.Exists(txtEXEPath.Text) AndAlso Not String.IsNullOrEmpty(txtTaskName.Text.Trim) AndAlso Not String.IsNullOrEmpty(txtDescription.Text), True, False)
+        btnCreateTask.Enabled = Not String.IsNullOrEmpty(txtEXEPath.Text.Trim) AndAlso IO.File.Exists(txtEXEPath.Text) AndAlso Not String.IsNullOrEmpty(txtTaskName.Text.Trim) AndAlso Not String.IsNullOrEmpty(txtDescription.Text)
     End Sub
 
     Private Sub txtEXEPath_TextChanged(sender As Object, e As EventArgs) Handles txtEXEPath.TextChanged
