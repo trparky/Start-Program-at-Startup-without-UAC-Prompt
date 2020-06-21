@@ -321,9 +321,11 @@ Public Class Form1
     End Sub
 
     Private Sub DeleteTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteTaskToolStripMenuItem.Click
-        deleteTask(listTasks.Text)
-        refreshTasks()
-        MsgBox("Task Deleted.", MsgBoxStyle.Information, Me.Text)
+        If MsgBox("Are you sure you want to delete the task named """ & listTasks.Text & """?", MsgBoxStyle.Question + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, Me.Text) = MsgBoxResult.Yes Then
+            deleteTask(listTasks.Text)
+            refreshTasks()
+            MsgBox("Task Deleted.", MsgBoxStyle.Information, Me.Text)
+        End If
     End Sub
 
     Private Sub btnCheckForUpdates_Click(sender As Object, e As EventArgs) Handles btnCheckForUpdates.Click
