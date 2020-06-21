@@ -231,7 +231,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub EditTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditTaskToolStripMenuItem.Click
+    Private Sub editTask()
         Using taskService As New TaskService
             Dim actions As ActionCollection
             Dim execAction As ExecAction
@@ -289,6 +289,10 @@ Public Class Form1
             txtTaskName.ReadOnly = True
             ToolTip.SetToolTip(txtTaskName, "Disabled in Edit Mode")
         End Using
+    End Sub
+
+    Private Sub EditTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditTaskToolStripMenuItem.Click
+        editTask()
     End Sub
 
     Private Sub btnCancelEditTask_Click(sender As Object, e As EventArgs) Handles btnCancelEditTask.Click
@@ -746,5 +750,15 @@ Public Class Form1
             Popout_Description.ShowDialog()
             If Popout_Description.userResponse = Popout_Description.userResponseEnum.save Then txtDescription.Text = Popout_Description.txtPopoutDescription.Text
         End Using
+    End Sub
+
+    Private Sub listTasks_KeyUp(sender As Object, e As KeyEventArgs) Handles listTasks.KeyUp
+        If e.KeyCode = Keys.Delete And MsgBox("Are you sure you want to delete the task named """ & listTasks.Text & """?", MsgBoxStyle.Question + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, Me.Text) = MsgBoxResult.Yes Then
+            deleteTask(listTasks.Text)
+            refreshTasks()
+            MsgBox("Task Deleted.", MsgBoxStyle.Information, Me.Text)
+        ElseIf e.KeyCode = Keys.Enter Then
+            editTask()
+        End If
     End Sub
 End Class
