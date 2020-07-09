@@ -755,7 +755,7 @@ Public Class Form1
     End Sub
 
     Private Sub listTasks_KeyUp(sender As Object, e As KeyEventArgs) Handles listTasks.KeyUp
-        If e.KeyCode = Keys.Delete And MsgBox("Are you sure you want to delete the task named """ & listTasks.Text & """?", MsgBoxStyle.Question + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, Me.Text) = MsgBoxResult.Yes Then
+        If e.KeyCode = Keys.Delete AndAlso MsgBox("Are you sure you want to delete the task named """ & listTasks.Text & """?", MsgBoxStyle.Question + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, Me.Text) = MsgBoxResult.Yes Then
             deleteTask(listTasks.Text)
             refreshTasks()
             MsgBox("Task Deleted.", MsgBoxStyle.Information, Me.Text)
