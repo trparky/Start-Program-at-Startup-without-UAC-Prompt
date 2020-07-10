@@ -247,6 +247,12 @@ Public Class Form1
                 txtDelayMinutes.Visible = False
                 txtDelayMinutes.Text = Nothing
 
+                chkRunAsSpecificUser.Enabled = False
+                chkRunAsSpecificUser.Checked = False
+                btnChooseUser.Enabled = False
+                txtRunAsUser.Enabled = False
+                txtRunAsUser.Text = Nothing
+
                 For Each trigger As Trigger In task.Definition.Triggers
                     If trigger.Enabled And trigger.TriggerType = TaskTriggerType.Logon Then
                         chkEnabled.Checked = True
@@ -262,6 +268,7 @@ Public Class Form1
                         End If
 
                         If Not String.IsNullOrEmpty(logonTriggerObject.UserId) Then
+                            chkRunAsSpecificUser.Enabled = True
                             chkRunAsSpecificUser.Checked = True
                             btnChooseUser.Enabled = True
                             txtRunAsUser.Enabled = True
@@ -703,6 +710,7 @@ Public Class Form1
 
     Private Sub chkEnabled_Click(sender As Object, e As EventArgs) Handles chkEnabled.Click
         chkDelayExecution.Enabled = chkEnabled.Checked
+        chkRunAsSpecificUser.Enabled = chkEnabled.Checked
 
         If Not chkEnabled.Checked Then
             chkDelayExecution.Checked = False
