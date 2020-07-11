@@ -69,12 +69,28 @@ Public Class Form1
         End Try
     End Sub
 
+    Private Function getActionEXEPath(ByRef task As Task) As String
+        For Each action As Action In task.Definition.Actions
+            If action.ActionType = TaskActionType.Execute Then
+                Return DirectCast(action, ExecAction).Path.Replace("""", "")
+            End If
+        Next
+        Return Nothing
+    End Function
+
     Sub refreshTasks()
         listTasks.Items.Clear()
 
         Using taskService As New TaskService
+            Dim strEXEPath As String
             For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
                 checkTaskPrioritySettings(task)
+                strEXEPath = getActionEXEPath(task)
+
+                If Not String.IsNullOrWhiteSpace(strEXEPath) AndAlso Not IO.File.Exists(strEXEPath) Then
+                    MsgBox("WARNING! The task named """ & task.Name & """ has an invalid executable path. Please fix this.", MsgBoxStyle.Critical, Me.Text)
+                End If
+
                 listTasks.Items.Add(task.Name)
             Next
         End Using
