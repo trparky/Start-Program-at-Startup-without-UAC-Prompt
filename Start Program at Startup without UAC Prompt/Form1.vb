@@ -755,7 +755,7 @@ Public Class Form1
     End Sub
 
     Private Sub activateOrDeactivateCreateTaskButton()
-        btnCreateTask.Enabled = Not String.IsNullOrEmpty(txtEXEPath.Text.Trim) AndAlso IO.File.Exists(txtEXEPath.Text) AndAlso Not String.IsNullOrEmpty(txtTaskName.Text.Trim) AndAlso Not String.IsNullOrEmpty(txtDescription.Text)
+        btnCreateTask.Enabled = Not String.IsNullOrEmpty(txtEXEPath.Text.Trim) AndAlso IO.File.Exists(txtEXEPath.Text) AndAlso Not String.IsNullOrEmpty(txtTaskName.Text.Trim)
     End Sub
 
     Private Sub txtEXEPath_TextChanged(sender As Object, e As EventArgs) Handles txtEXEPath.TextChanged
