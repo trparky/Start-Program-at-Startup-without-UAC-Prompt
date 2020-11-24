@@ -218,11 +218,7 @@ Class Check_for_Update_Stuff
         End Try
     End Function
 
-    Private Shared Function canIWriteToTheCurrentDirectory() As Boolean
-        Return checkByFolderACLs(New FileInfo(Application.ExecutablePath).DirectoryName)
-    End Function
-
-    Private Shared Function checkByFolderACLs(folderPath As String) As Boolean
+    Private Shared Function checkFolderPermissionsByACLs(folderPath As String) As Boolean
         Try
             Dim directoryACLs As DirectorySecurity = Directory.GetAccessControl(folderPath)
             Dim directoryAccessRights As FileSystemAccessRule
@@ -243,18 +239,18 @@ Class Check_for_Update_Stuff
         End Try
     End Function
 
-    Private Shared Function createNewHTTPHelperObject() As httpHelper
-        Dim httpHelper As New httpHelper With {
-            .setUserAgent = createHTTPUserAgentHeaderString(),
-            .useHTTPCompression = True,
-            .setProxyMode = True
+    Private Shared Function createNewHTTPHelperObject() As HttpHelper
+        Dim httpHelper As New HttpHelper With {
+            .SetUserAgent = createHTTPUserAgentHeaderString(),
+            .UseHTTPCompression = True,
+            .SetProxyMode = True
         }
-        httpHelper.addHTTPHeader("PROGRAM_NAME", strProgramName)
-        httpHelper.addHTTPHeader("PROGRAM_VERSION", versionString)
-        httpHelper.addHTTPHeader("OPERATING_SYSTEM", getFullOSVersionString())
-        If File.Exists("tom") Then httpHelper.addHTTPCookie("dontcount", "True", "www.toms-world.org", False)
+        httpHelper.AddHTTPHeader("PROGRAM_NAME", strProgramName)
+        httpHelper.AddHTTPHeader("PROGRAM_VERSION", versionString)
+        httpHelper.AddHTTPHeader("OPERATING_SYSTEM", getFullOSVersionString())
+        If File.Exists("tom") Then httpHelper.AddHTTPCookie("dontcount", "True", "www.toms-world.org", False)
 
-        httpHelper.setURLPreProcessor = Function(ByVal strURLInput As String) As String
+        httpHelper.SetURLPreProcessor = Function(ByVal strURLInput As String) As String
                                             Try
                                                 If Not strURLInput.Trim.ToLower.StartsWith("http") Then
                                                     Return If(My.Settings.boolUseSSL, "https://", "http://") & strURLInput
@@ -275,12 +271,12 @@ Class Check_for_Update_Stuff
         End Using
     End Function
 
-    Private Function verifyChecksum(urlOfChecksumFile As String, ByRef memStream As MemoryStream, ByRef httpHelper As httpHelper, boolGiveUserAnErrorMessage As Boolean) As Boolean
+    Private Function verifyChecksum(urlOfChecksumFile As String, ByRef memStream As MemoryStream, ByRef httpHelper As HttpHelper, boolGiveUserAnErrorMessage As Boolean) As Boolean
         Dim checksumFromWeb As String = Nothing
         memStream.Position = 0
 
         Try
-            If httpHelper.getWebData(urlOfChecksumFile, checksumFromWeb) Then
+            If httpHelper.GetWebData(urlOfChecksumFile, checksumFromWeb) Then
                 Dim regexObject As New Regex("([a-zA-Z0-9]{64})")
 
                 ' Checks to see if we have a valid SHA256 file.
@@ -325,10 +321,10 @@ Class Check_for_Update_Stuff
 
     Private Sub downloadAndPerformUpdate()
         Dim newExecutableName As String = New FileInfo(Application.ExecutablePath).Name & ".new.exe"
-        Dim httpHelper As httpHelper = createNewHTTPHelperObject()
+        Dim httpHelper As HttpHelper = createNewHTTPHelperObject()
 
         Using memoryStream As New MemoryStream()
-            If Not httpHelper.downloadFile(programZipFileURL, memoryStream, False) Then
+            If Not httpHelper.DownloadFile(programZipFileURL, memoryStream, False) Then
                 windowObject.Invoke(Sub() MsgBox("There was an error while downloading required files.", MsgBoxStyle.Critical, strMessageBoxTitleText))
                 Exit Sub
             End If
@@ -352,7 +348,7 @@ Class Check_for_Update_Stuff
             .FileName = newExecutableName,
             .Arguments = "-update"
         }
-        If Not canIWriteToTheCurrentDirectory() Then startInfo.Verb = "runas"
+        If Not checkFolderPermissionsByACLs(New FileInfo(Application.ExecutablePath).DirectoryName) Then startInfo.Verb = "runas"
         Process.Start(startInfo)
 
         Process.GetCurrentProcess.Kill()
