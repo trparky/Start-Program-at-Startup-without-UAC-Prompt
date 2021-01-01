@@ -86,18 +86,50 @@ Module Module1
         Threading.Thread.Sleep(250) ' We're going to sleep (again) to give the system some time to kill the process.
     End Sub
 
-    Public Sub searchForProcessAndKillIt(strFileName As String, boolFullFilePathPassed As Boolean)
-        Dim fullFileName As String = If(boolFullFilePathPassed, strFileName, New IO.FileInfo(strFileName).FullName)
-        Dim wmiQuery As String = String.Format("Select ExecutablePath, ProcessId FROM Win32_Process WHERE ExecutablePath = '{0}'", fullFileName.addSlashes())
+    Private Function GetProcessExecutablePath(processID As Integer) As String
+        Dim memoryBuffer As New Text.StringBuilder(1024)
+        Dim processHandle As IntPtr = NativeMethod.NativeMethods.OpenProcess(NativeMethod.ProcessAccessFlags.PROCESS_QUERY_LIMITED_INFORMATION, False, processID)
 
-        Try
-            Using searcher As New Management.ManagementObjectSearcher("root\CIMV2", wmiQuery)
-                For Each queryObj As Management.ManagementObject In searcher.Get()
-                    killProcess(Integer.Parse(queryObj("ProcessId").ToString))
-                Next
-            End Using
-        Catch err As Exception
-        End Try
+        If processHandle <> IntPtr.Zero Then
+            Try
+                Dim memoryBufferSize As Integer = memoryBuffer.Capacity
+
+                If NativeMethod.NativeMethods.QueryFullProcessImageName(processHandle, 0, memoryBuffer, memoryBufferSize) Then
+                    Return memoryBuffer.ToString()
+                End If
+            Finally
+                NativeMethod.NativeMethods.CloseHandle(processHandle)
+            End Try
+        End If
+
+        NativeMethod.NativeMethods.CloseHandle(processHandle)
+        Return Nothing
+    End Function
+
+    Public Sub SearchForProcessAndKillIt(strFileName As String, boolFullFilePathPassed As Boolean)
+        Dim processExecutablePath As String
+        Dim processExecutablePathFileInfo As IO.FileInfo
+
+        For Each process As Process In Process.GetProcesses()
+            processExecutablePath = getProcessExecutablePath(process.Id)
+
+            If processExecutablePath IsNot Nothing Then
+                Try
+                    processExecutablePathFileInfo = New IO.FileInfo(processExecutablePath)
+
+                    If boolFullFilePathPassed Then
+                        If strFileName.Equals(processExecutablePathFileInfo.FullName, StringComparison.OrdinalIgnoreCase) Then
+                            KillProcess(process.Id)
+                        End If
+                    Else
+                        If strFileName.Equals(processExecutablePathFileInfo.Name, StringComparison.OrdinalIgnoreCase) Then
+                            KillProcess(process.Id)
+                        End If
+                    End If
+                Catch ex As ArgumentException
+                End Try
+            End If
+        Next
     End Sub
 
     Public Function areWeAnAdministrator() As Boolean
