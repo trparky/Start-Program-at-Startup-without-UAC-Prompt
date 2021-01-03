@@ -6,9 +6,7 @@ Module Globals
     Public Const strOK As String = "OK"
     Public Const strNo As String = "No"
     Public Const strYes As String = "Yes"
-End Module
 
-Module Module1
     ' PHP like addSlashes and stripSlashes. Call using String.addSlashes() and String.stripSlashes().
     <Extension()>
     Public Function addSlashes(unsafeString As String) As String
@@ -67,7 +65,7 @@ Module Module1
         Dim processObject As Process = Nothing
 
         ' First we are going to check if the Process ID exists.
-        If doesProcessIDExist(processID, processObject) Then
+        If DoesProcessIDExist(processID, processObject) Then
             Try
                 processObject.Kill() ' Yes, it does so let's kill it.
             Catch ex As Exception
@@ -79,7 +77,7 @@ Module Module1
         Threading.Thread.Sleep(250) ' We're going to sleep to give the system some time to kill the process.
 
         '' Now we are going to check again if the Process ID exists and if it does, we're going to attempt to kill it again.
-        If doesProcessIDExist(processID, processObject) Then
+        If DoesProcessIDExist(processID, processObject) Then
             Try
                 processObject.Kill()
             Catch ex As Exception
@@ -116,7 +114,7 @@ Module Module1
         Dim processExecutablePathFileInfo As IO.FileInfo
 
         For Each process As Process In Process.GetProcesses()
-            processExecutablePath = getProcessExecutablePath(process.Id)
+            processExecutablePath = GetProcessExecutablePath(process.Id)
 
             If processExecutablePath IsNot Nothing Then
                 Try
