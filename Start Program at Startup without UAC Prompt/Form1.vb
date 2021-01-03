@@ -88,7 +88,7 @@ Public Class Form1
                 strEXEPath = getActionEXEPath(task)
 
                 If Not String.IsNullOrWhiteSpace(strEXEPath) AndAlso Not IO.File.Exists(strEXEPath) Then
-                    MsgBox("WARNING! The task named """ & task.Name & """ has an invalid executable path. Please fix this.", MsgBoxStyle.Critical, Me.Text)
+                    WPFCustomMessageBox.CustomMessageBox.ShowOK("WARNING! The task named """ & task.Name & """ has an invalid executable path. Please fix this.", Me.Text, strOK, Windows.MessageBoxImage.Error)
                 End If
 
                 listTasks.Items.Add(task.Name)
@@ -151,19 +151,19 @@ Public Class Form1
 
     Private Sub btnCreateTask_Click(sender As Object, e As EventArgs) Handles btnCreateTask.Click
         If String.IsNullOrEmpty(txtTaskName.Text.Trim) Then
-            MsgBox("You must provide a name for this task.", MsgBoxStyle.Critical, Me.Text)
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("You must provide a name for this task.", Me.Text, strOK, Windows.MessageBoxImage.Error)
             Exit Sub
         End If
         If String.IsNullOrEmpty(txtEXEPath.Text.Trim) Then
-            MsgBox("You must provide a path to an executable for this task.", MsgBoxStyle.Critical, Me.Text)
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("You must provide a path to an executable for this task.", Me.Text, strOK, Windows.MessageBoxImage.Error)
             Exit Sub
         End If
         If Not IO.File.Exists(txtEXEPath.Text) Then
-            MsgBox("Executable Path Not Found.", MsgBoxStyle.Critical, Me.Text)
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("Executable Path Not Found.", Me.Text, strOK, Windows.MessageBoxImage.Error)
             Exit Sub
         End If
         If chkRunAsSpecificUser.Checked And String.IsNullOrWhiteSpace(txtRunAsUser.Text) Then
-            MsgBox("You have your task setup to run as a specific user but you didn't select one yet, please do so now.", MsgBoxStyle.Critical, Me.Text)
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("You have your task setup to run as a specific user but you didn't select one yet, please do so now.", Me.Text, strOK, Windows.MessageBoxImage.Error)
             Exit Sub
         End If
 
@@ -182,21 +182,21 @@ Public Class Form1
         Dim strPathToAutoShortcut As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Start " & txtTaskName.Text & ".lnk")
 
         If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then
-            If chkEnabled.Checked Then : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
+            If chkEnabled.Checked Then : WPFCustomMessageBox.CustomMessageBox.ShowOK("Task changes saved.", Me.Text, strOK, Windows.MessageBoxImage.Information)
             Else
                 If Not IO.File.Exists(strPathToAutoShortcut) Then
                     autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
-                    MsgBox("Task changes saved." & vbCrLf & vbCrLf & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
-                Else : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
+                    WPFCustomMessageBox.CustomMessageBox.ShowOK("Task changes saved." & vbCrLf & vbCrLf & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", Me.Text, strOK, Windows.MessageBoxImage.Information)
+                Else : WPFCustomMessageBox.CustomMessageBox.ShowOK("Task changes saved.", Me.Text, strOK, Windows.MessageBoxImage.Information)
                 End If
             End If
 
             btnCreateTask.Text = "Create Task"
         ElseIf btnCreateTask.Text.Equals("Create Task", StringComparison.OrdinalIgnoreCase) Then
-            If chkEnabled.Checked Then : MsgBox("New task saved.", MsgBoxStyle.Information, Me.Text)
+            If chkEnabled.Checked Then : WPFCustomMessageBox.CustomMessageBox.ShowOK("New task saved.", Me.Text, strOK, Windows.MessageBoxImage.Information)
             Else
                 autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
-                MsgBox("New task saved." & vbCrLf & vbCrLf & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
+                WPFCustomMessageBox.CustomMessageBox.ShowOK("New task saved." & vbCrLf & vbCrLf & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", Me.Text, strOK, Windows.MessageBoxImage.Information)
             End If
         End If
 
@@ -344,10 +344,10 @@ Public Class Form1
     End Sub
 
     Private Sub DeleteTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteTaskToolStripMenuItem.Click
-        If MsgBox("Are you sure you want to delete the task named """ & listTasks.Text & """?", MsgBoxStyle.Question + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, Me.Text) = MsgBoxResult.Yes Then
+        If WPFCustomMessageBox.CustomMessageBox.ShowYesNo("Are you sure you want to delete the task named """ & listTasks.Text & """?", Me.Text, strYes, strNo, Windows.MessageBoxImage.Question) = Windows.MessageBoxResult.Yes Then
             deleteTask(listTasks.Text)
             refreshTasks()
-            MsgBox("Task Deleted.", MsgBoxStyle.Information, Me.Text)
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("Task Deleted.", Me.Text, strOK, Windows.MessageBoxImage.Information)
         End If
     End Sub
 
@@ -386,7 +386,7 @@ Public Class Form1
     Private Sub CreateShortcutToTaskOnDesktopToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateShortcutToTaskOnDesktopToolStripMenuItem.Click
         Dim exePath As String = Nothing
         If Not isThisAValidExecutableTask(exePath) Then
-            MsgBox("Something went wrong.", MsgBoxStyle.Critical, Me.Text)
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("Something went wrong.", Me.Text, strOK, Windows.MessageBoxImage.Error)
             Exit Sub
         End If
 
@@ -400,7 +400,7 @@ Public Class Form1
 
             createShortcut(locationOfShortcut, "schtasks", exePath, listTasks.Text, String.Format("/run /TN {0}\{2}\{1}{0}", Chr(34), listTasks.Text, strTaskFolderName))
 
-            MsgBox("Shortcut Created Successfully.", MsgBoxStyle.Information, "Create Shortcut to Task")
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("Shortcut Created Successfully.", "Create Shortcut to Task", strOK, Windows.MessageBoxImage.Information)
         End If
     End Sub
 
@@ -456,7 +456,7 @@ Public Class Form1
                         xmlSerializerObject.Serialize(streamWriter, savedTask)
                     End Using
 
-                    MsgBox("Task exported.", MsgBoxStyle.Information, Me.Text)
+                    WPFCustomMessageBox.CustomMessageBox.ShowOK("Task exported.", Me.Text, strOK, Windows.MessageBoxImage.Information)
                 End If
             End Using
         End If
@@ -490,7 +490,7 @@ Public Class Form1
 
             refreshTasks()
 
-            MsgBox("Task imported successfully.", MsgBoxStyle.Information, Me.Text)
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("Task imported successfully.", Me.Text, strOK, Windows.MessageBoxImage.Information)
         End If
     End Sub
 
@@ -506,9 +506,9 @@ Public Class Form1
 
         If Not IO.File.Exists(strExecutablePath) Then
             If strExecutablePath.EndsWith(".bat", StringComparison.OrdinalIgnoreCase) Then
-                MsgBox("Task batch file path not found.", MsgBoxStyle.Critical, Me.Text)
+                WPFCustomMessageBox.CustomMessageBox.ShowOK("Task batch file path not found.", Me.Text, strOK, Windows.MessageBoxImage.Error)
             Else
-                MsgBox("Executable path not found.", MsgBoxStyle.Critical, Me.Text)
+                WPFCustomMessageBox.CustomMessageBox.ShowOK("Executable path not found.", Me.Text, strOK, Windows.MessageBoxImage.Error)
             End If
             Exit Sub
         End If
@@ -558,9 +558,9 @@ Public Class Form1
 
     Private Sub GetStatusOfTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GetStatusOfTaskToolStripMenuItem.Click
         If boolIsTaskRunning(listTasks.Text) Then
-            MsgBox("The task is running.", MsgBoxStyle.Information, Me.Text)
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("The task is running.", Me.Text, strOK, Windows.MessageBoxImage.Information)
         Else
-            MsgBox("The task is NOT running.", MsgBoxStyle.Information, Me.Text)
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("The task is NOT running.", Me.Text, strOK, Windows.MessageBoxImage.Information)
         End If
     End Sub
 
@@ -610,7 +610,7 @@ Public Class Form1
         stringBuilder.AppendLine("Version " & strFullVersionString)
         stringBuilder.AppendLine("Written by Tom Parkison.")
 
-        MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, "About " & strProgramName)
+        WPFCustomMessageBox.CustomMessageBox.ShowOK(stringBuilder.ToString.Trim, "About " & strProgramName, strOK, Windows.MessageBoxImage.Information)
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -623,7 +623,7 @@ Public Class Form1
         stringBuilder.AppendLine()
         stringBuilder.AppendLine("For instance, some programs may accept ""/minimize"" or ""-hide"". You'll have to consult the documentation for the program you're working with.")
 
-        MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, Me.Text)
+        WPFCustomMessageBox.CustomMessageBox.ShowOK(stringBuilder.ToString.Trim, Me.Text, strOK, Windows.MessageBoxImage.Information)
     End Sub
 
     Private Sub btnExportAllTasks_Click(sender As Object, e As EventArgs) Handles btnExportAllTasks.Click
@@ -685,7 +685,7 @@ Public Class Form1
                 xmlSerializerObject.Serialize(streamWriter, collectionOfTasks)
             End Using
 
-            MsgBox("Tasks exported.", MsgBoxStyle.Information, Me.Text)
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("Tasks exported.", Me.Text, strOK, Windows.MessageBoxImage.Information)
         End If
     End Sub
 
@@ -703,7 +703,7 @@ Public Class Form1
                     collectionOfTasks = xmlSerializerObject.Deserialize(streamReader)
                 End Using
             Catch ex As Exception
-                MsgBox("There was an error attempting to import the chosen task collection file, task import has been halted.", MsgBoxStyle.Critical, Me.Text)
+                WPFCustomMessageBox.CustomMessageBox.ShowOK("There was an error attempting to import the chosen task collection file, task import has been halted.", Me.Text, strOK, Windows.MessageBoxImage.Error)
                 Exit Sub
             End Try
 
@@ -715,7 +715,7 @@ Public Class Form1
             collectionOfTasks.Clear()
             refreshTasks()
 
-            MsgBox("Tasks imported successfully.", MsgBoxStyle.Information, Me.Text)
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("Tasks imported successfully.", Me.Text, strOK, Windows.MessageBoxImage.Information)
         End If
     End Sub
 
@@ -779,10 +779,10 @@ Public Class Form1
     End Sub
 
     Private Sub listTasks_KeyUp(sender As Object, e As KeyEventArgs) Handles listTasks.KeyUp
-        If e.KeyCode = Keys.Delete AndAlso MsgBox("Are you sure you want to delete the task named """ & listTasks.Text & """?", MsgBoxStyle.Question + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, Me.Text) = MsgBoxResult.Yes Then
+        If e.KeyCode = Keys.Delete AndAlso WPFCustomMessageBox.CustomMessageBox.ShowYesNo("Are you sure you want to delete the task named """ & listTasks.Text & """?", Me.Text, strYes, strNo, Windows.MessageBoxImage.Question) = Windows.MessageBoxResult.Yes Then
             deleteTask(listTasks.Text)
             refreshTasks()
-            MsgBox("Task Deleted.", MsgBoxStyle.Information, Me.Text)
+            WPFCustomMessageBox.CustomMessageBox.ShowOK("Task Deleted.", Me.Text, strOK, Windows.MessageBoxImage.Information)
         ElseIf e.KeyCode = Keys.Enter Then
             editTask()
         End If
