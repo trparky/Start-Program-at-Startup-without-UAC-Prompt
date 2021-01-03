@@ -3,6 +3,12 @@ Imports System.Security.AccessControl
 Imports System.Security.Principal
 Imports System.Text.RegularExpressions
 
+Module Globals
+    Public Const strOK As String = "OK"
+    Public Const strNo As String = "No"
+    Public Const strYes As String = "Yes"
+End Module
+
 Module Module1
     ' PHP like addSlashes and stripSlashes. Call using String.addSlashes() and String.stripSlashes().
     <Extension()>
