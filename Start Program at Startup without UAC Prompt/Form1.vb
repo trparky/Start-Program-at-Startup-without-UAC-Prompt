@@ -19,8 +19,6 @@ Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lblLastRanOn.Text = Nothing
         Me.Location = verifyWindowLocation(My.Settings.mainWindowPosition)
-        chkUseSSL.Checked = My.Settings.boolUseSSL
-        imgLock.Image = If(chkUseSSL.Checked, My.Resources.locked, My.Resources.unlocked)
 
         If IO.File.Exists(Application.ExecutablePath & ".new.exe") Then Threading.ThreadPool.QueueUserWorkItem(AddressOf newFileDeleterThreadSub)
 
@@ -562,11 +560,6 @@ Public Class Form1
         Else
             WPFCustomMessageBox.CustomMessageBox.ShowOK("The task is NOT running.", Me.Text, strOK, Windows.MessageBoxImage.Information)
         End If
-    End Sub
-
-    Private Sub chkUseSSL_CheckedChanged(sender As Object, e As EventArgs) Handles chkUseSSL.CheckedChanged
-        imgLock.Image = If(chkUseSSL.Checked, My.Resources.locked, My.Resources.unlocked)
-        My.Settings.boolUseSSL = chkUseSSL.Checked
     End Sub
 
     Private Sub StopStartTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles StopStartTaskToolStripMenuItem.Click
