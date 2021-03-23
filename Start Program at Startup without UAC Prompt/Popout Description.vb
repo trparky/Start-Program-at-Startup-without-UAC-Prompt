@@ -29,7 +29,7 @@
 
     Private Sub Popout_Description_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         If userResponse = userResponseEnum.null And boolTextChanged Then
-            If WPFCustomMessageBox.CustomMessageBox.ShowYesNo("Do you want to save your changes?", "Save Changes?", strYes, strNo, Windows.MessageBoxImage.Question) = Windows.MessageBoxResult.Yes Then
+            If MsgBox("Do you want to save your changes?", MsgBoxStyle.Question + MsgBoxStyle.YesNo, "Save Changes?") = MsgBoxResult.Yes Then
                 userResponse = userResponseEnum.save
             Else
                 userResponse = userResponseEnum.dontSave

@@ -11,7 +11,7 @@
                 Next
             End Using
         Catch ex As Exception
-            WPFCustomMessageBox.CustomMessageBox.ShowOK("Unable to enumerate users on current system.", "Choose User...", strOK, Windows.MessageBoxImage.Error)
+            MsgBox("Unable to enumerate users on current system.", MsgBoxStyle.Critical, "Choose User...")
             Me.Close()
         End Try
     End Sub
