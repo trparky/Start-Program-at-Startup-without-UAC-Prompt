@@ -9,7 +9,7 @@ Module checkForUpdateModules
     Public Const strProgramName As String = "Start Program at Startup without UAC Prompt"
     Private Const strZipFileName As String = "Start Program at Startup without UAC Prompt.zip"
 
-    Private versionInfo As String() = Application.ProductVersion.Split(".")
+    Private ReadOnly versionInfo As String() = Application.ProductVersion.Split(".")
     Public strFullVersionString As String = String.Format("{0}.{1} Build {2}", versionInfo(versionPieces.major), versionInfo(versionPieces.minor), versionInfo(versionPieces.build))
 
     Public Sub doUpdateAtStartup()
@@ -40,9 +40,9 @@ Class Check_for_Update_Stuff
 
     Public windowObject As Form1
     Public Shared versionInfo As String() = Application.ProductVersion.Split(".")
-    Private shortBuild As Short = Short.Parse(versionInfo(versionPieces.build).Trim)
+    Private ReadOnly shortBuild As Short = Short.Parse(versionInfo(versionPieces.build).Trim)
     Public Shared versionString As String = String.Format("{0}.{1} Build {2}", versionInfo(0), versionInfo(1), versionInfo(2))
-    Private versionStringWithoutBuild As String = String.Format("{0}.{1}", versionInfo(versionPieces.major), versionInfo(versionPieces.minor))
+    Private ReadOnly versionStringWithoutBuild As String = String.Format("{0}.{1}", versionInfo(versionPieces.major), versionInfo(versionPieces.minor))
 
     Public Sub New(inputWindowObject As Form1)
         windowObject = inputWindowObject
