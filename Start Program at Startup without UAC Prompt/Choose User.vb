@@ -17,7 +17,7 @@
     End Sub
 
     Private Sub listUsers_SelectedIndexChanged(sender As Object, e As EventArgs) Handles listUsers.SelectedIndexChanged
-        btnChooseUser.Enabled = If(listUsers.SelectedItems.Count = 0, False, True)
+        btnChooseUser.Enabled = listUsers.SelectedItems.Count <> 0
     End Sub
 
     Private Sub btnChooseUser_Click(sender As Object, e As EventArgs) Handles btnChooseUser.Click
