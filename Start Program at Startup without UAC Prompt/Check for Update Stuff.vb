@@ -42,7 +42,7 @@ Class Check_for_Update_Stuff
     Public Shared versionInfo As String() = Application.ProductVersion.Split(".")
     Private ReadOnly shortBuild As Short = Short.Parse(versionInfo(versionPieces.build).Trim)
     Public Shared versionString As String = String.Format("{0}.{1} Build {2}", versionInfo(0), versionInfo(1), versionInfo(2))
-    Private ReadOnly versionStringWithoutBuild As String = String.Format("{0}.{1}", versionInfo(versionPieces.major), versionInfo(versionPieces.minor))
+    Private ReadOnly versionStringWithoutBuild As Double = Double.Parse(String.Format("{0}.{1}", versionInfo(versionPieces.major), versionInfo(versionPieces.minor)))
 
     Public Sub New(inputWindowObject As Form1)
         windowObject = inputWindowObject
