@@ -103,7 +103,7 @@ Module Globals
         For Each process As Process In Process.GetProcesses()
             processExecutablePath = GetProcessExecutablePath(process.Id)
 
-            If processExecutablePath IsNot Nothing Then
+            If Not String.IsNullOrWhiteSpace(processExecutablePath) Then
                 Try
                     processExecutablePathFileInfo = New IO.FileInfo(processExecutablePath)
 
