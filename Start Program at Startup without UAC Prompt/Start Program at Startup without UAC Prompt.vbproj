@@ -147,6 +147,7 @@
     <Compile Include="Popout Description.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Search for Process and Kill it.vb" />
     <Compile Include="Task.vb" />
   </ItemGroup>
   <ItemGroup>
