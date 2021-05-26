@@ -184,7 +184,7 @@ Public Class Form1
             Else
                 If Not IO.File.Exists(strPathToAutoShortcut) Then
                     autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
-                    MsgBox("Task changes saved." & vbCrLf & vbCrLf & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
+                    MsgBox("Task changes saved." & DoubleCRLF & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
                 Else : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
                 End If
             End If
@@ -194,7 +194,7 @@ Public Class Form1
             If chkEnabled.Checked Then : MsgBox("New task saved.", MsgBoxStyle.Information, Me.Text)
             Else
                 autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
-                MsgBox("New task saved." & vbCrLf & vbCrLf & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
+                MsgBox("New task saved." & DoubleCRLF & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
             End If
         End If
 

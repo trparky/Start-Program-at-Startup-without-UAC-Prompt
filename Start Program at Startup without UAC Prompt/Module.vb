@@ -3,6 +3,8 @@ Imports System.Security.Principal
 Imports System.Text.RegularExpressions
 
 Module Globals
+    Public Const DoubleCRLF As String = vbCrLf & vbCrLf
+
     ' PHP like addSlashes and stripSlashes. Call using String.addSlashes() and String.stripSlashes().
     <Extension()>
     Public Function addSlashes(unsafeString As String) As String
