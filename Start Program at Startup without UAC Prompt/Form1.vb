@@ -238,7 +238,7 @@ Public Class Form1
     ''' <param name="taskName">The task name to be deleted.</param>
     Private Sub deleteTask(taskName As String)
         Try
-            Using taskServiceObject As TaskService = New TaskService()
+            Using taskServiceObject As New TaskService()
                 taskServiceObject.RootFolder.SubFolders(strTaskFolderName).DeleteTask(taskName, False)
             End Using
         Catch ex As Exception
@@ -511,7 +511,7 @@ Public Class Form1
             Exit Sub
         End If
 
-        Using taskService As TaskService = New TaskService()
+        Using taskService As New TaskService()
             Dim newTask As TaskDefinition = taskService.NewTask
 
             newTask.RegistrationInfo.Description = strTaskDescription

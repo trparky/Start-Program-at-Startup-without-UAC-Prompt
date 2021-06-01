@@ -48,7 +48,7 @@ Module Globals
 
     Public Function areWeAnAdministrator() As Boolean
         Try
-            Dim principal As WindowsPrincipal = New WindowsPrincipal(WindowsIdentity.GetCurrent())
+            Dim principal As New WindowsPrincipal(WindowsIdentity.GetCurrent())
             Return principal.IsInRole(WindowsBuiltInRole.Administrator)
         Catch ex As Exception
             Return False
