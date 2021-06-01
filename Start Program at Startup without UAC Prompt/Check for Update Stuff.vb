@@ -32,7 +32,7 @@ Module checkForUpdateModules
     End Sub
 End Module
 
-Class Check_for_Update_Stuff
+Class CheckForUpdatesClass
     Private Const programZipFileURL = "www.toms-world.org/download/Start Program at Startup without UAC Prompt.zip"
     Private Const programZipFileSHA256URL = "www.toms-world.org/download/Start Program at Startup without UAC Prompt.zip.sha2"
     Private Const programFileNameInZIP As String = "Start Program at Startup without UAC Prompt.exe"
