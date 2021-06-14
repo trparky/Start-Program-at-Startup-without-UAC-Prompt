@@ -468,7 +468,7 @@ Public Class Form1
     Private Function doesUserExistOnThisSystem(strUserName As String) As Boolean
         Using usersSearcher As New Management.ManagementObjectSearcher("SELECT Caption FROM Win32_UserAccount")
             For Each user As Management.ManagementObject In usersSearcher.Get()
-                If strUserName.Equals(user("Caption").ToString) Then Return True
+                If strUserName.Equals(user("Caption").ToString, StringComparison.OrdinalIgnoreCase) Then Return True
             Next
         End Using
 
@@ -483,12 +483,13 @@ Public Class Form1
         If importTask.ShowDialog() = DialogResult.OK Then
             Dim savedTask As New classTask()
             Dim strDataFromFile As String
+            Dim strFileExtension As String = New FileInfo(importTask.FileName).Extension
 
             Using streamReader As New StreamReader(importTask.FileName)
                 strDataFromFile = streamReader.ReadToEnd.Trim
             End Using
 
-            If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Then
+            If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Or strFileExtension.Equals(".ctaskx", StringComparison.OrdinalIgnoreCase) Then
                 Using memoryStream As New MemoryStream(Encoding.UTF8.GetBytes(strDataFromFile))
                     Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
                     savedTask = xmlSerializerObject.Deserialize(memoryStream)
@@ -689,7 +690,7 @@ Public Class Form1
             End Using
 
             Using streamWriter As New StreamWriter(saveTask.FileName)
-                If New FileInfo(saveTask.FileName).Extension.Equals(".ctaskx") Then
+                If New FileInfo(saveTask.FileName).Extension.Equals(".ctaskx", StringComparison.OrdinalIgnoreCase) Then
                     Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
                     xmlSerializerObject.Serialize(streamWriter, collectionOfTasks)
                 Else
@@ -710,13 +711,14 @@ Public Class Form1
         If importTask.ShowDialog() = DialogResult.OK Then
             Dim collectionOfTasks As New List(Of classTask)
             Dim strDataFromFile As String
+            Dim strFileExtension As String = New FileInfo(importTask.FileName).Extension
 
             Using streamReader As New StreamReader(importTask.FileName)
                 strDataFromFile = streamReader.ReadToEnd.Trim
             End Using
 
             Try
-                If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Then
+                If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Or strFileExtension.Equals(".ctaskx", StringComparison.OrdinalIgnoreCase) Then
                     Using memoryStream As New MemoryStream(Encoding.UTF8.GetBytes(strDataFromFile))
                         Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
                         collectionOfTasks = xmlSerializerObject.Deserialize(memoryStream)
