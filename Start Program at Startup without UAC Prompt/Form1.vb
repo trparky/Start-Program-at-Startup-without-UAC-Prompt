@@ -473,21 +473,24 @@ Public Class Form1
     Private Sub ImportTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ImportTaskToolStripMenuItem.Click
         importTask.Title = "Import Task from Task File"
         importTask.FileName = Nothing
-        importTask.Filter = "Task File|*.task"
+        importTask.Filter = "Task File|*.task;*.taskx"
 
         If importTask.ShowDialog() = DialogResult.OK Then
             Dim savedTask As New classTask()
+            Dim strDataFromFile As String
 
-            If New StreamReader(importTask.FileName).ReadToEnd.caseInsensitiveContains("<?xml") Then
-                Using streamReader As New StreamReader(importTask.FileName)
+            Using streamReader As New StreamReader(importTask.FileName)
+                strDataFromFile = streamReader.ReadToEnd.Trim
+            End Using
+
+            If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Then
+                Using memoryStream As New MemoryStream(Encoding.UTF8.GetBytes(strDataFromFile))
                     Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
-                    savedTask = xmlSerializerObject.Deserialize(streamReader)
+                    savedTask = xmlSerializerObject.Deserialize(memoryStream)
                 End Using
             Else
                 Dim json As New Web.Script.Serialization.JavaScriptSerializer()
-                Using streamReader As New StreamReader(importTask.FileName)
-                    savedTask = json.Deserialize(Of classTask)(streamReader.ReadToEnd.Trim)
-                End Using
+                savedTask = json.Deserialize(Of classTask)(strDataFromFile)
             End If
 
             If Not doesUserExistOnThisSystem(savedTask.userName) Then savedTask.userName = Nothing
@@ -692,22 +695,25 @@ Public Class Form1
     Private Sub btnImportCollectionOfTasks_Click(sender As Object, e As EventArgs) Handles btnImportCollectionOfTasks.Click
         importTask.Title = "Import Tasks from Task Collection File"
         importTask.FileName = Nothing
-        importTask.Filter = "Task Collection File|*.ctask"
+        importTask.Filter = "Task Collection File|*.ctask;*.ctaskx"
 
         If importTask.ShowDialog() = DialogResult.OK Then
             Dim collectionOfTasks As New List(Of classTask)
+            Dim strDataFromFile As String
+
+            Using streamReader As New StreamReader(importTask.FileName)
+                strDataFromFile = streamReader.ReadToEnd.Trim
+            End Using
 
             Try
-                If New StreamReader(importTask.FileName).ReadToEnd.caseInsensitiveContains("<?xml") Then
-                    Using streamReader As New StreamReader(importTask.FileName)
+                If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Then
+                    Using memoryStream As New MemoryStream(Encoding.UTF8.GetBytes(strDataFromFile))
                         Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
-                        collectionOfTasks = xmlSerializerObject.Deserialize(streamReader)
+                        collectionOfTasks = xmlSerializerObject.Deserialize(memoryStream)
                     End Using
                 Else
-                    Using streamReader As New StreamReader(importTask.FileName)
-                        Dim json As New Web.Script.Serialization.JavaScriptSerializer()
-                        collectionOfTasks = json.Deserialize(Of List(Of classTask))(streamReader.ReadToEnd.Trim)
-                    End Using
+                    Dim json As New Web.Script.Serialization.JavaScriptSerializer()
+                    collectionOfTasks = json.Deserialize(Of List(Of classTask))(strDataFromFile)
                 End If
             Catch ex As Exception
                 MsgBox("There was an error attempting to import the chosen task collection file, task import has been halted.", MsgBoxStyle.Critical, Me.Text)
