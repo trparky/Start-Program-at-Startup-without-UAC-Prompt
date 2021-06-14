@@ -1,7 +1,6 @@
 ﻿Imports Microsoft.Win32.TaskScheduler
 Imports System.Text
 Imports IWshRuntimeLibrary
-Imports System.Xml.Serialization
 
 Public Class Form1
     Private Const strTaskFolderName As String = "Run at User Logon with Administrator Privileges"
@@ -450,7 +449,7 @@ Public Class Form1
 
                     Using streamWriter As New IO.StreamWriter(saveTask.FileName)
                         If New IO.FileInfo(saveTask.FileName).Extension.Equals(".taskx") Then
-                            Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
+                            Dim xmlSerializerObject As New Xml.Serialization.XmlSerializer(savedTask.GetType)
                             xmlSerializerObject.Serialize(streamWriter, savedTask)
                         Else
                             Dim json As New Web.Script.Serialization.JavaScriptSerializer()
@@ -490,7 +489,7 @@ Public Class Form1
 
             If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Or strFileExtension.Equals(".ctaskx", StringComparison.OrdinalIgnoreCase) Then
                 Using memoryStream As New IO.MemoryStream(Encoding.UTF8.GetBytes(strDataFromFile))
-                    Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
+                    Dim xmlSerializerObject As New Xml.Serialization.XmlSerializer(savedTask.GetType)
                     savedTask = xmlSerializerObject.Deserialize(memoryStream)
                 End Using
             Else
@@ -690,7 +689,7 @@ Public Class Form1
 
             Using streamWriter As New IO.StreamWriter(saveTask.FileName)
                 If New IO.FileInfo(saveTask.FileName).Extension.Equals(".ctaskx", StringComparison.OrdinalIgnoreCase) Then
-                    Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
+                    Dim xmlSerializerObject As New Xml.Serialization.XmlSerializer(collectionOfTasks.GetType)
                     xmlSerializerObject.Serialize(streamWriter, collectionOfTasks)
                 Else
                     Dim json As New Web.Script.Serialization.JavaScriptSerializer()
@@ -719,7 +718,7 @@ Public Class Form1
             Try
                 If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Or strFileExtension.Equals(".ctaskx", StringComparison.OrdinalIgnoreCase) Then
                     Using memoryStream As New IO.MemoryStream(Encoding.UTF8.GetBytes(strDataFromFile))
-                        Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
+                        Dim xmlSerializerObject As New Xml.Serialization.XmlSerializer(collectionOfTasks.GetType)
                         collectionOfTasks = xmlSerializerObject.Deserialize(memoryStream)
                     End Using
                 Else
