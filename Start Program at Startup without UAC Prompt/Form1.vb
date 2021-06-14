@@ -404,7 +404,7 @@ Public Class Form1
 
     Private Sub ExportTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportTaskToolStripMenuItem.Click
         saveTask.Title = "Save as Task File"
-        saveTask.Filter = "Task File|*.task"
+        saveTask.Filter = "Task File|*.task|XML Task File|*.taskx"
         saveTask.FileName = listTasks.Text & ".task"
 
         If saveTask.ShowDialog() = DialogResult.OK Then
@@ -449,9 +449,14 @@ Public Class Form1
                     actions.Dispose()
                     actions = Nothing
 
-                    Using streamWriter As New IO.StreamWriter(saveTask.FileName)
-                        Dim json As New Web.Script.Serialization.JavaScriptSerializer()
-                        streamWriter.Write(json.Serialize(savedTask))
+                    Using streamWriter As New StreamWriter(saveTask.FileName)
+                        If New FileInfo(saveTask.FileName).Extension.Equals(".taskx") Then
+                            Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
+                            xmlSerializerObject.Serialize(streamWriter, savedTask)
+                        Else
+                            Dim json As New Web.Script.Serialization.JavaScriptSerializer()
+                            streamWriter.Write(json.Serialize(savedTask))
+                        End If
                     End Using
 
                     MsgBox("Task exported.", MsgBoxStyle.Information, Me.Text)
@@ -632,7 +637,7 @@ Public Class Form1
     Private Sub btnExportAllTasks_Click(sender As Object, e As EventArgs) Handles btnExportAllTasks.Click
         saveTask.FileName = Nothing
         saveTask.Title = "Save as Task Collection File"
-        saveTask.Filter = "Task Collection File|*.ctask"
+        saveTask.Filter = "Task Collection File|*.ctask|XML Task Collection File|*.ctaskx"
 
         If saveTask.ShowDialog() = DialogResult.OK Then
             Dim collectionOfTasks As New List(Of classTask)
@@ -683,9 +688,14 @@ Public Class Form1
                 Next
             End Using
 
-            Using streamWriter As New IO.StreamWriter(saveTask.FileName)
-                Dim json As New Web.Script.Serialization.JavaScriptSerializer()
-                streamWriter.Write(json.Serialize(collectionOfTasks))
+            Using streamWriter As New StreamWriter(saveTask.FileName)
+                If New FileInfo(saveTask.FileName).Extension.Equals(".ctaskx") Then
+                    Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
+                    xmlSerializerObject.Serialize(streamWriter, collectionOfTasks)
+                Else
+                    Dim json As New Web.Script.Serialization.JavaScriptSerializer()
+                    streamWriter.Write(json.Serialize(collectionOfTasks))
+                End If
             End Using
 
             MsgBox("Tasks exported.", MsgBoxStyle.Information, Me.Text)
