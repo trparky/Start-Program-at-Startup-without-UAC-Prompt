@@ -1,7 +1,6 @@
 ﻿Imports Microsoft.Win32.TaskScheduler
 Imports System.Text
 Imports IWshRuntimeLibrary
-Imports System.IO
 Imports System.Xml.Serialization
 
 Public Class Form1
@@ -177,7 +176,7 @@ Public Class Form1
 
         addTask(txtTaskName.Text, txtDescription.Text, txtEXEPath.Text, txtParameters.Text, chkEnabled.Checked, intDelayedMinutes, strUserName)
 
-        Dim strPathToAutoShortcut As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Start " & txtTaskName.Text & ".lnk")
+        Dim strPathToAutoShortcut As String = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Start " & txtTaskName.Text & ".lnk")
 
         If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then
             If chkEnabled.Checked Then : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
@@ -393,8 +392,8 @@ Public Class Form1
         SaveFileDialog1.Filter = "Shortcut|*.lnk"
 
         If SaveFileDialog1.ShowDialog() = DialogResult.OK Then
-            Dim fileInfo As New FileInfo(SaveFileDialog1.FileName)
-            Dim locationOfShortcut As String = Path.Combine(fileInfo.DirectoryName, listTasks.Text & ".lnk")
+            Dim fileInfo As New IO.FileInfo(SaveFileDialog1.FileName)
+            Dim locationOfShortcut As String = IO.Path.Combine(fileInfo.DirectoryName, listTasks.Text & ".lnk")
 
             createShortcut(locationOfShortcut, "schtasks", exePath, listTasks.Text, String.Format("/run /TN {0}\{2}\{1}{0}", Chr(34), listTasks.Text, strTaskFolderName))
 
@@ -449,8 +448,8 @@ Public Class Form1
                     actions.Dispose()
                     actions = Nothing
 
-                    Using streamWriter As New StreamWriter(saveTask.FileName)
-                        If New FileInfo(saveTask.FileName).Extension.Equals(".taskx") Then
+                    Using streamWriter As New IO.StreamWriter(saveTask.FileName)
+                        If New IO.FileInfo(saveTask.FileName).Extension.Equals(".taskx") Then
                             Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
                             xmlSerializerObject.Serialize(streamWriter, savedTask)
                         Else
@@ -483,14 +482,14 @@ Public Class Form1
         If importTask.ShowDialog() = DialogResult.OK Then
             Dim savedTask As New classTask()
             Dim strDataFromFile As String
-            Dim strFileExtension As String = New FileInfo(importTask.FileName).Extension
+            Dim strFileExtension As String = New IO.FileInfo(importTask.FileName).Extension
 
-            Using streamReader As New StreamReader(importTask.FileName)
+            Using streamReader As New IO.StreamReader(importTask.FileName)
                 strDataFromFile = streamReader.ReadToEnd.Trim
             End Using
 
             If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Or strFileExtension.Equals(".ctaskx", StringComparison.OrdinalIgnoreCase) Then
-                Using memoryStream As New MemoryStream(Encoding.UTF8.GetBytes(strDataFromFile))
+                Using memoryStream As New IO.MemoryStream(Encoding.UTF8.GetBytes(strDataFromFile))
                     Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
                     savedTask = xmlSerializerObject.Deserialize(memoryStream)
                 End Using
@@ -539,7 +538,7 @@ Public Class Form1
                 newTask.Triggers.Add(logonTriggerObject)
             End If
 
-            Dim exeFileInfo As New FileInfo(strExecutablePath)
+            Dim exeFileInfo As New IO.FileInfo(strExecutablePath)
 
             With newTask
                 If String.IsNullOrEmpty(strCommandLineParameters) Then
@@ -689,8 +688,8 @@ Public Class Form1
                 Next
             End Using
 
-            Using streamWriter As New StreamWriter(saveTask.FileName)
-                If New FileInfo(saveTask.FileName).Extension.Equals(".ctaskx", StringComparison.OrdinalIgnoreCase) Then
+            Using streamWriter As New IO.StreamWriter(saveTask.FileName)
+                If New IO.FileInfo(saveTask.FileName).Extension.Equals(".ctaskx", StringComparison.OrdinalIgnoreCase) Then
                     Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
                     xmlSerializerObject.Serialize(streamWriter, collectionOfTasks)
                 Else
@@ -711,15 +710,15 @@ Public Class Form1
         If importTask.ShowDialog() = DialogResult.OK Then
             Dim collectionOfTasks As New List(Of classTask)
             Dim strDataFromFile As String
-            Dim strFileExtension As String = New FileInfo(importTask.FileName).Extension
+            Dim strFileExtension As String = New IO.FileInfo(importTask.FileName).Extension
 
-            Using streamReader As New StreamReader(importTask.FileName)
+            Using streamReader As New IO.StreamReader(importTask.FileName)
                 strDataFromFile = streamReader.ReadToEnd.Trim
             End Using
 
             Try
                 If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Or strFileExtension.Equals(".ctaskx", StringComparison.OrdinalIgnoreCase) Then
-                    Using memoryStream As New MemoryStream(Encoding.UTF8.GetBytes(strDataFromFile))
+                    Using memoryStream As New IO.MemoryStream(Encoding.UTF8.GetBytes(strDataFromFile))
                         Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
                         collectionOfTasks = xmlSerializerObject.Deserialize(memoryStream)
                     End Using
