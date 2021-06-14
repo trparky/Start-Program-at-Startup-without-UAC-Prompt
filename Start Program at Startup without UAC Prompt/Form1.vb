@@ -449,9 +449,9 @@ Public Class Form1
                     actions.Dispose()
                     actions = Nothing
 
-                    Using streamWriter As New StreamWriter(saveTask.FileName)
-                        Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
-                        xmlSerializerObject.Serialize(streamWriter, savedTask)
+                    Using streamWriter As New IO.StreamWriter(saveTask.FileName)
+                        Dim json As New Web.Script.Serialization.JavaScriptSerializer()
+                        streamWriter.Write(json.Serialize(savedTask))
                     End Using
 
                     MsgBox("Task exported.", MsgBoxStyle.Information, Me.Text)
@@ -478,10 +478,17 @@ Public Class Form1
         If importTask.ShowDialog() = DialogResult.OK Then
             Dim savedTask As New classTask()
 
-            Using streamReader As New StreamReader(importTask.FileName)
-                Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
-                savedTask = xmlSerializerObject.Deserialize(streamReader)
-            End Using
+            If New StreamReader(importTask.FileName).ReadToEnd.caseInsensitiveContains("<?xml") Then
+                Using streamReader As New StreamReader(importTask.FileName)
+                    Dim xmlSerializerObject As New XmlSerializer(savedTask.GetType)
+                    savedTask = xmlSerializerObject.Deserialize(streamReader)
+                End Using
+            Else
+                Dim json As New Web.Script.Serialization.JavaScriptSerializer()
+                Using streamReader As New StreamReader(importTask.FileName)
+                    savedTask = json.Deserialize(Of classTask)(streamReader.ReadToEnd.Trim)
+                End Using
+            End If
 
             If Not doesUserExistOnThisSystem(savedTask.userName) Then savedTask.userName = Nothing
             addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes, savedTask.userName)
@@ -673,9 +680,9 @@ Public Class Form1
                 Next
             End Using
 
-            Using streamWriter As New StreamWriter(saveTask.FileName)
-                Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
-                xmlSerializerObject.Serialize(streamWriter, collectionOfTasks)
+            Using streamWriter As New IO.StreamWriter(saveTask.FileName)
+                Dim json As New Web.Script.Serialization.JavaScriptSerializer()
+                streamWriter.Write(json.Serialize(collectionOfTasks))
             End Using
 
             MsgBox("Tasks exported.", MsgBoxStyle.Information, Me.Text)
@@ -691,10 +698,17 @@ Public Class Form1
             Dim collectionOfTasks As New List(Of classTask)
 
             Try
-                Using streamReader As New StreamReader(importTask.FileName)
-                    Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
-                    collectionOfTasks = xmlSerializerObject.Deserialize(streamReader)
-                End Using
+                If New StreamReader(importTask.FileName).ReadToEnd.caseInsensitiveContains("<?xml") Then
+                    Using streamReader As New StreamReader(importTask.FileName)
+                        Dim xmlSerializerObject As New XmlSerializer(collectionOfTasks.GetType)
+                        collectionOfTasks = xmlSerializerObject.Deserialize(streamReader)
+                    End Using
+                Else
+                    Using streamReader As New StreamReader(importTask.FileName)
+                        Dim json As New Web.Script.Serialization.JavaScriptSerializer()
+                        collectionOfTasks = json.Deserialize(Of List(Of classTask))(streamReader.ReadToEnd.Trim)
+                    End Using
+                End If
             Catch ex As Exception
                 MsgBox("There was an error attempting to import the chosen task collection file, task import has been halted.", MsgBoxStyle.Critical, Me.Text)
                 Exit Sub
