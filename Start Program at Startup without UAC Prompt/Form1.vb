@@ -436,15 +436,11 @@ Public Class Form1
                             action.Dispose()
                             execAction.Dispose()
 
-                            execAction = Nothing
-                            action = Nothing
-
                             Exit For
                         End If
                     Next
 
                     actions.Dispose()
-                    actions = Nothing
 
                     Using streamWriter As New IO.StreamWriter(saveTask.FileName)
                         If New IO.FileInfo(saveTask.FileName).Extension.Equals(".taskx") Then
@@ -563,7 +559,6 @@ Public Class Form1
             taskService.RootFolder.SubFolders(strTaskFolderName).RegisterTaskDefinition(strTaskName, newTask)
 
             newTask.Dispose()
-            newTask = Nothing
         End Using
     End Sub
 
@@ -672,15 +667,11 @@ Public Class Form1
                             action.Dispose()
                             execAction.Dispose()
 
-                            execAction = Nothing
-                            action = Nothing
-
                             Exit For
                         End If
                     Next
 
                     actions.Dispose()
-                    actions = Nothing
 
                     collectionOfTasks.Add(savedTask)
                 Next
