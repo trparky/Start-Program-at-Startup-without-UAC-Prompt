@@ -401,7 +401,7 @@ Public Class Form1
 
     Private Sub ExportTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportTaskToolStripMenuItem.Click
         saveTask.Title = "Save as Task File"
-        saveTask.Filter = "Task File|*.task|XML Task File|*.taskx"
+        saveTask.Filter = "JSON Task File|*.task|Legacy XML Task File|*.taskx"
         saveTask.FileName = listTasks.Text & ".task"
 
         If saveTask.ShowDialog() = DialogResult.OK Then
@@ -630,7 +630,7 @@ Public Class Form1
     Private Sub btnExportAllTasks_Click(sender As Object, e As EventArgs) Handles btnExportAllTasks.Click
         saveTask.FileName = Nothing
         saveTask.Title = "Save as Task Collection File"
-        saveTask.Filter = "Task Collection File|*.ctask|XML Task Collection File|*.ctaskx"
+        saveTask.Filter = "JSON Task Collection File|*.ctask|Legacy XML Task Collection File|*.ctaskx"
 
         If saveTask.ShowDialog() = DialogResult.OK Then
             Dim collectionOfTasks As New List(Of classTask)
