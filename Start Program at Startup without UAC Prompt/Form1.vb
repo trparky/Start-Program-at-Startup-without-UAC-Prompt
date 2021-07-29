@@ -482,7 +482,7 @@ Public Class Form1
                 strDataFromFile = streamReader.ReadToEnd.Trim
             End Using
 
-            If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Or strFileExtension.Equals(".ctaskx", StringComparison.OrdinalIgnoreCase) Then
+            If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Or strFileExtension.Equals(".taskx", StringComparison.OrdinalIgnoreCase) Then
                 Using memoryStream As New IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(strDataFromFile))
                     Dim xmlSerializerObject As New Xml.Serialization.XmlSerializer(savedTask.GetType)
                     savedTask = xmlSerializerObject.Deserialize(memoryStream)
