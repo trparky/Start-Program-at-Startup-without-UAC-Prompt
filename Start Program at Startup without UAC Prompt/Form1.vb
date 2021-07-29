@@ -487,6 +487,14 @@ Public Class Form1
                     Dim xmlSerializerObject As New Xml.Serialization.XmlSerializer(savedTask.GetType)
                     savedTask = xmlSerializerObject.Deserialize(memoryStream)
                 End Using
+
+                ' Rewrites the file as a JSON file if the file being loaded is a ctask file.
+                If strFileExtension.Equals(".task", StringComparison.OrdinalIgnoreCase) Then
+                    Using streamWriter As New IO.StreamWriter(importTask.FileName)
+                        Dim json As New Web.Script.Serialization.JavaScriptSerializer()
+                        streamWriter.Write(json.Serialize(savedTask))
+                    End Using
+                End If
             Else
                 Dim json As New Web.Script.Serialization.JavaScriptSerializer()
                 savedTask = json.Deserialize(Of classTask)(strDataFromFile)
@@ -711,6 +719,14 @@ Public Class Form1
                         Dim xmlSerializerObject As New Xml.Serialization.XmlSerializer(collectionOfTasks.GetType)
                         collectionOfTasks = xmlSerializerObject.Deserialize(memoryStream)
                     End Using
+
+                    ' Rewrites the file as a JSON file if the file being loaded is a ctask file.
+                    If strFileExtension.Equals(".ctask", StringComparison.OrdinalIgnoreCase) Then
+                        Using streamWriter As New IO.StreamWriter(importTask.FileName)
+                            Dim json As New Web.Script.Serialization.JavaScriptSerializer()
+                            streamWriter.Write(json.Serialize(collectionOfTasks))
+                        End Using
+                    End If
                 Else
                     Dim json As New Web.Script.Serialization.JavaScriptSerializer()
                     collectionOfTasks = json.Deserialize(Of List(Of classTask))(strDataFromFile)
