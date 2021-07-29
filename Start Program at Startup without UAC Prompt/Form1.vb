@@ -459,6 +459,8 @@ Public Class Form1
     End Sub
 
     Private Function doesUserExistOnThisSystem(strUserName As String) As Boolean
+        If String.IsNullOrWhiteSpace(strUserName) Then Return False
+
         Using usersSearcher As New Management.ManagementObjectSearcher("SELECT Caption FROM Win32_UserAccount")
             For Each user As Management.ManagementObject In usersSearcher.Get()
                 If strUserName.Equals(user("Caption").ToString, StringComparison.OrdinalIgnoreCase) Then Return True
