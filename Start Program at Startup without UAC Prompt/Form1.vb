@@ -172,27 +172,29 @@ Public Class Form1
         Dim strUserName As String = Nothing
         If chkRunAsSpecificUser.Checked Then strUserName = txtRunAsUser.Text
 
-        addTask(txtTaskName.Text, txtDescription.Text, txtEXEPath.Text, txtParameters.Text, chkEnabled.Checked, intDelayedMinutes, strUserName)
+        If addTask(txtTaskName.Text, txtDescription.Text, txtEXEPath.Text, txtParameters.Text, chkEnabled.Checked, intDelayedMinutes, strUserName) Then
+            Dim strPathToAutoShortcut As String = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Start " & txtTaskName.Text & ".lnk")
 
-        Dim strPathToAutoShortcut As String = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Start " & txtTaskName.Text & ".lnk")
+            If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then
+                If chkEnabled.Checked Then : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
+                Else
+                    If Not IO.File.Exists(strPathToAutoShortcut) Then
+                        autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
+                        MsgBox("Task changes saved." & DoubleCRLF & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
+                    Else : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
+                    End If
+                End If
 
-        If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then
-            If chkEnabled.Checked Then : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
-            Else
-                If Not IO.File.Exists(strPathToAutoShortcut) Then
+                btnCreateTask.Text = "Create Task"
+            ElseIf btnCreateTask.Text.Equals("Create Task", StringComparison.OrdinalIgnoreCase) Then
+                If chkEnabled.Checked Then : MsgBox("New task saved.", MsgBoxStyle.Information, Me.Text)
+                Else
                     autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
-                    MsgBox("Task changes saved." & DoubleCRLF & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
-                Else : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
+                    MsgBox("New task saved." & DoubleCRLF & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
                 End If
             End If
 
-            btnCreateTask.Text = "Create Task"
-        ElseIf btnCreateTask.Text.Equals("Create Task", StringComparison.OrdinalIgnoreCase) Then
-            If chkEnabled.Checked Then : MsgBox("New task saved.", MsgBoxStyle.Information, Me.Text)
-            Else
-                autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
-                MsgBox("New task saved." & DoubleCRLF & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
-            End If
+            refreshTasks()
         End If
 
         txtTaskName.Text = Nothing
@@ -211,7 +213,6 @@ Public Class Form1
         txtRunAsUser.Enabled = False
         txtRunAsUser.Text = Nothing
         chkRunAsSpecificUser.Checked = False
-        refreshTasks()
     End Sub
 
     Private Sub autoCreateDesktopShortcut(strTaskName As String, strPathToAutoShortcut As String)
@@ -503,15 +504,15 @@ Public Class Form1
             End If
 
             If Not doesUserExistOnThisSystem(savedTask.userName) Then savedTask.userName = Nothing
-            addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes, savedTask.userName)
 
-            refreshTasks()
-
-            MsgBox("Task imported successfully.", MsgBoxStyle.Information, Me.Text)
+            If addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes, savedTask.userName) Then
+                refreshTasks()
+                MsgBox("Task imported successfully.", MsgBoxStyle.Information, Me.Text)
+            End If
         End If
     End Sub
 
-    Sub addTask(strTaskName As String, strTaskDescription As String, strExecutablePath As String, strCommandLineParameters As String, boolStartup As Boolean, intDelayedMinutes As Integer, strUserName As String)
+    Function addTask(strTaskName As String, strTaskDescription As String, strExecutablePath As String, strCommandLineParameters As String, boolStartup As Boolean, intDelayedMinutes As Integer, strUserName As String) As Boolean
         ' We trim the variable values here.
         strTaskName = strTaskName.Trim
         strTaskDescription = strTaskDescription.Trim
@@ -527,7 +528,7 @@ Public Class Form1
             Else
                 MsgBox("Executable path not found.", MsgBoxStyle.Critical, Me.Text)
             End If
-            Exit Sub
+            Return False
         End If
 
         Using taskService As New TaskService()
@@ -569,8 +570,9 @@ Public Class Form1
             taskService.RootFolder.SubFolders(strTaskFolderName).RegisterTaskDefinition(strTaskName, newTask)
 
             newTask.Dispose()
+            Return True
         End Using
-    End Sub
+    End Function
 
     Private Sub GetStatusOfTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GetStatusOfTaskToolStripMenuItem.Click
         If boolIsTaskRunning(listTasks.Text) Then
