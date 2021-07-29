@@ -491,7 +491,7 @@ Public Class Form1
                     savedTask = xmlSerializerObject.Deserialize(memoryStream)
                 End Using
 
-                ' Rewrites the file as a JSON file if the file being loaded is a ctask file.
+                ' Rewrites the file as a JSON file if the file being loaded is a task file.
                 If strFileExtension.Equals(".task", StringComparison.OrdinalIgnoreCase) Then
                     Using streamWriter As New IO.StreamWriter(importTask.FileName)
                         Dim json As New Web.Script.Serialization.JavaScriptSerializer()
