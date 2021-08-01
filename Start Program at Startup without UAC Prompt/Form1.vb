@@ -5,7 +5,7 @@ Public Class Form1
     Private Const strTaskFolderName As String = "Run at User Logon with Administrator Privileges"
 
     Private Sub newFileDeleterThreadSub()
-        searchForProcessAndKillIt(Application.ExecutablePath & ".new.exe", False)
+        SearchForProcessAndKillIt(Application.ExecutablePath & ".new.exe", False)
         IO.File.Delete(Application.ExecutablePath & ".new.exe")
     End Sub
 
