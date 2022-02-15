@@ -172,7 +172,7 @@ Public Class Form1
         Dim strUserName As String = Nothing
         If chkRunAsSpecificUser.Checked Then strUserName = txtRunAsUser.Text
 
-        If addTask(txtTaskName.Text, txtDescription.Text, txtEXEPath.Text, txtParameters.Text, chkEnabled.Checked, intDelayedMinutes, strUserName) Then
+        If addTask(txtTaskName.Text, txtDescription.Text, txtEXEPath.Text, txtParameters.Text, chkEnabled.Checked, intDelayedMinutes, strUserName, ChkRequireElevation.Checked) Then
             Dim strPathToAutoShortcut As String = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Start " & txtTaskName.Text & ".lnk")
 
             If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then
@@ -250,6 +250,7 @@ Public Class Form1
             Dim task As Task = Nothing
 
             If getTaskObject(taskService, listTasks.Text, task) Then
+                ChkRequireElevation.Checked = task.Definition.Principal.RunLevel = TaskRunLevel.Highest
                 actions = task.Definition.Actions
                 txtTaskName.Text = task.Name
                 txtDescription.Text = task.Definition.RegistrationInfo.Description
@@ -414,6 +415,8 @@ Public Class Form1
                     Dim actions As ActionCollection = task.Definition.Actions
                     Dim execAction As ExecAction
 
+                    savedTask.requireElevation = task.Definition.Principal.RunLevel = TaskRunLevel.Highest
+
                     If task.Definition.Triggers.Count <> 0 Then
                         If task.Definition.Triggers(0).TriggerType = TaskTriggerType.Logon Then
                             Dim logonTriggerObject As LogonTrigger = DirectCast(task.Definition.Triggers(0), LogonTrigger)
@@ -505,14 +508,14 @@ Public Class Form1
 
             If Not doesUserExistOnThisSystem(savedTask.userName) Then savedTask.userName = Nothing
 
-            If addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes, savedTask.userName) Then
+            If addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes, savedTask.userName, ChkRequireElevation.Checked) Then
                 refreshTasks()
                 MsgBox("Task imported successfully.", MsgBoxStyle.Information, Me.Text)
             End If
         End If
     End Sub
 
-    Function addTask(strTaskName As String, strTaskDescription As String, strExecutablePath As String, strCommandLineParameters As String, boolStartup As Boolean, intDelayedMinutes As Integer, strUserName As String) As Boolean
+    Function addTask(strTaskName As String, strTaskDescription As String, strExecutablePath As String, strCommandLineParameters As String, boolStartup As Boolean, intDelayedMinutes As Integer, strUserName As String, boolRequireElevation As Boolean) As Boolean
         ' We trim the variable values here.
         strTaskName = strTaskName.Trim
         strTaskDescription = strTaskDescription.Trim
@@ -554,7 +557,7 @@ Public Class Form1
                     .Actions.Add(New ExecAction(Chr(34) & strExecutablePath & Chr(34), strCommandLineParameters, exeFileInfo.DirectoryName))
                 End If
 
-                .Principal.RunLevel = TaskRunLevel.Highest
+                If boolRequireElevation Then .Principal.RunLevel = TaskRunLevel.Highest
                 .Settings.Compatibility = TaskCompatibility.V2
                 .Settings.AllowDemandStart = True
                 .Settings.DisallowStartIfOnBatteries = False
@@ -656,6 +659,8 @@ Public Class Form1
                     savedTask = New classTask With {.startup = False, .delayedMinutes = 0}
                     actions = task.Definition.Actions
 
+                    savedTask.requireElevation = task.Definition.Principal.RunLevel = TaskRunLevel.Highest
+
                     If task.Definition.Triggers.Count <> 0 Then
                         If task.Definition.Triggers(0).TriggerType = TaskTriggerType.Logon Then
                             logonTriggerObject = DirectCast(task.Definition.Triggers(0), LogonTrigger)
@@ -742,7 +747,7 @@ Public Class Form1
 
             For Each savedTask As classTask In collectionOfTasks
                 If Not doesUserExistOnThisSystem(savedTask.userName) Then savedTask.userName = Nothing
-                addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes, savedTask.userName)
+                addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes, savedTask.userName, savedTask.requireElevation)
             Next
 
             collectionOfTasks.Clear()
