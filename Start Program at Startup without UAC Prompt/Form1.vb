@@ -260,7 +260,6 @@ Public Class Form1
                 txtDelayMinutes.Visible = False
                 txtDelayMinutes.Text = Nothing
 
-                chkRunAsSpecificUser.Enabled = False
                 chkRunAsSpecificUser.Checked = False
                 btnChooseUser.Enabled = False
                 txtRunAsUser.Enabled = False
@@ -281,7 +280,6 @@ Public Class Form1
                         End If
 
                         If Not String.IsNullOrEmpty(logonTriggerObject.UserId) Then
-                            chkRunAsSpecificUser.Enabled = True
                             chkRunAsSpecificUser.Checked = True
                             btnChooseUser.Enabled = True
                             txtRunAsUser.Enabled = True
