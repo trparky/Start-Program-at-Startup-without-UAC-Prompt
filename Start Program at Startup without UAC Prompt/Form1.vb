@@ -341,6 +341,7 @@ Public Class Form1
     Private Sub DeleteTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteTaskToolStripMenuItem.Click
         If MsgBox("Are you sure you want to delete the task named """ & listTasks.Text & """?", MsgBoxStyle.Question + MsgBoxStyle.YesNo, Me.Text) = MsgBoxResult.Yes Then
             deleteTask(listTasks.Text)
+            btnCancelEditTask.PerformClick()
             refreshTasks()
             MsgBox("Task Deleted.", MsgBoxStyle.Information, Me.Text)
         End If
