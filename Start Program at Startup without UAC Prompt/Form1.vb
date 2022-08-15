@@ -31,7 +31,7 @@ Public Class Form1
         refreshTasks()
     End Sub
 
-    Private Sub createShortcut(ByVal locationOfShortcut As String, pathToExecutable As String, iconPath As String, ByVal Title As String, Optional arguments As String = Nothing)
+    Private Sub createShortcut(locationOfShortcut As String, pathToExecutable As String, iconPath As String, Title As String, Optional arguments As String = Nothing)
         Try
             Dim WshShell As New WshShell
             ' short cut files have a .lnk extension
@@ -223,7 +223,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Function getTaskObject(ByRef taskServiceObject As TaskService, ByVal nameOfTask As String, ByRef taskObject As Task) As Boolean
+    Private Function getTaskObject(ByRef taskServiceObject As TaskService, nameOfTask As String, ByRef taskObject As Task) As Boolean
         Try
             taskObject = taskServiceObject.GetTask(strTaskFolderName & "\" & nameOfTask)
             Return taskObject IsNot Nothing
@@ -355,7 +355,7 @@ Public Class Form1
         btnCheckForUpdates.Enabled = False
     End Sub
 
-    Function isThisAValidExecutableTask(ByVal strTaskName As String, ByRef exePath As String) As Boolean
+    Function isThisAValidExecutableTask(strTaskName As String, ByRef exePath As String) As Boolean
         Using taskService As New TaskService
             Dim task As Task = Nothing
 
@@ -603,7 +603,7 @@ Public Class Form1
         End Using
     End Sub
 
-    Function boolIsTaskRunning(ByVal strTaskName As String, ByRef taskService As TaskService, ByRef taskObject As Task) As Boolean
+    Function boolIsTaskRunning(strTaskName As String, ByRef taskService As TaskService, ByRef taskObject As Task) As Boolean
         Return getTaskObject(taskService, strTaskName, taskObject) AndAlso taskObject.State = TaskState.Running
     End Function
 
