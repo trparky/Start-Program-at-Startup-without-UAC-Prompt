@@ -764,7 +764,6 @@ Public Class Form1
 
     Private Sub chkEnabled_Click(sender As Object, e As EventArgs) Handles chkEnabled.Click
         chkDelayExecution.Enabled = chkEnabled.Checked
-        chkRunAsSpecificUser.Enabled = chkEnabled.Checked
 
         If Not chkEnabled.Checked Then
             chkDelayExecution.Checked = False
