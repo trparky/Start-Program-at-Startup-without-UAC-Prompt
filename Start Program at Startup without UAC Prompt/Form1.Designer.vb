@@ -70,13 +70,15 @@ Partial Class Form1
         Me.btnBrowseForExecutable = New System.Windows.Forms.Button()
         Me.btnPopout = New System.Windows.Forms.Button()
         Me.ChkRequireElevation = New System.Windows.Forms.CheckBox()
+        Me.Line2 = New System.Windows.Forms.Label()
+        Me.Line1 = New System.Windows.Forms.Label()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'txtDescription
         '
-        Me.txtDescription.Location = New System.Drawing.Point(79, 179)
+        Me.txtDescription.Location = New System.Drawing.Point(79, 165)
         Me.txtDescription.Multiline = True
         Me.txtDescription.Name = "txtDescription"
         Me.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
@@ -86,7 +88,7 @@ Partial Class Form1
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(10, 182)
+        Me.Label6.Location = New System.Drawing.Point(10, 168)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(63, 13)
         Me.Label6.TabIndex = 47
@@ -94,7 +96,7 @@ Partial Class Form1
         '
         'txtTaskName
         '
-        Me.txtTaskName.Location = New System.Drawing.Point(93, 154)
+        Me.txtTaskName.Location = New System.Drawing.Point(93, 139)
         Me.txtTaskName.Name = "txtTaskName"
         Me.txtTaskName.Size = New System.Drawing.Size(569, 20)
         Me.txtTaskName.TabIndex = 46
@@ -111,7 +113,7 @@ Partial Class Form1
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(10, 157)
+        Me.Label4.Location = New System.Drawing.Point(10, 142)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(77, 13)
         Me.Label4.TabIndex = 44
@@ -119,7 +121,7 @@ Partial Class Form1
         '
         'txtParameters
         '
-        Me.txtParameters.Location = New System.Drawing.Point(168, 123)
+        Me.txtParameters.Location = New System.Drawing.Point(168, 113)
         Me.txtParameters.Name = "txtParameters"
         Me.txtParameters.Size = New System.Drawing.Size(428, 20)
         Me.txtParameters.TabIndex = 43
@@ -127,7 +129,7 @@ Partial Class Form1
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(10, 117)
+        Me.Label3.Location = New System.Drawing.Point(10, 107)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(152, 26)
         Me.Label3.TabIndex = 42
@@ -153,7 +155,7 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(15, 383)
+        Me.Label1.Location = New System.Drawing.Point(12, 357)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(122, 13)
         Me.Label1.TabIndex = 38
@@ -163,7 +165,7 @@ Partial Class Form1
         '
         Me.listTasks.ContextMenuStrip = Me.ContextMenuStrip1
         Me.listTasks.FormattingEnabled = True
-        Me.listTasks.Location = New System.Drawing.Point(15, 399)
+        Me.listTasks.Location = New System.Drawing.Point(12, 373)
         Me.listTasks.Name = "listTasks"
         Me.listTasks.Size = New System.Drawing.Size(650, 121)
         Me.listTasks.TabIndex = 37
@@ -244,7 +246,7 @@ Partial Class Form1
         'chkEnabled
         '
         Me.chkEnabled.AutoSize = True
-        Me.chkEnabled.Location = New System.Drawing.Point(526, 181)
+        Me.chkEnabled.Location = New System.Drawing.Point(526, 167)
         Me.chkEnabled.Name = "chkEnabled"
         Me.chkEnabled.Size = New System.Drawing.Size(136, 17)
         Me.chkEnabled.TabIndex = 59
@@ -265,7 +267,7 @@ Partial Class Form1
         Me.TableLayoutPanel1.Controls.Add(Me.btnCheckForUpdates, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.btnImportCollectionOfTasks, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.btnExportAllTasks, 0, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(15, 531)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(12, 505)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -276,7 +278,7 @@ Partial Class Form1
         'linkWhatIsAParameter
         '
         Me.linkWhatIsAParameter.AutoSize = True
-        Me.linkWhatIsAParameter.Location = New System.Drawing.Point(602, 126)
+        Me.linkWhatIsAParameter.Location = New System.Drawing.Point(602, 116)
         Me.linkWhatIsAParameter.Name = "linkWhatIsAParameter"
         Me.linkWhatIsAParameter.Size = New System.Drawing.Size(68, 13)
         Me.linkWhatIsAParameter.TabIndex = 65
@@ -287,7 +289,7 @@ Partial Class Form1
         '
         Me.chkDelayExecution.AutoSize = True
         Me.chkDelayExecution.Enabled = False
-        Me.chkDelayExecution.Location = New System.Drawing.Point(15, 285)
+        Me.chkDelayExecution.Location = New System.Drawing.Point(15, 267)
         Me.chkDelayExecution.Name = "chkDelayExecution"
         Me.chkDelayExecution.Size = New System.Drawing.Size(146, 17)
         Me.chkDelayExecution.TabIndex = 66
@@ -297,7 +299,7 @@ Partial Class Form1
         'lblHowManyMinutes
         '
         Me.lblHowManyMinutes.AutoSize = True
-        Me.lblHowManyMinutes.Location = New System.Drawing.Point(169, 286)
+        Me.lblHowManyMinutes.Location = New System.Drawing.Point(169, 268)
         Me.lblHowManyMinutes.Name = "lblHowManyMinutes"
         Me.lblHowManyMinutes.Size = New System.Drawing.Size(115, 13)
         Me.lblHowManyMinutes.TabIndex = 67
@@ -306,7 +308,7 @@ Partial Class Form1
         '
         'txtDelayMinutes
         '
-        Me.txtDelayMinutes.Location = New System.Drawing.Point(290, 283)
+        Me.txtDelayMinutes.Location = New System.Drawing.Point(290, 265)
         Me.txtDelayMinutes.Name = "txtDelayMinutes"
         Me.txtDelayMinutes.Size = New System.Drawing.Size(37, 20)
         Me.txtDelayMinutes.TabIndex = 68
@@ -315,7 +317,7 @@ Partial Class Form1
         'lblLastRanOn
         '
         Me.lblLastRanOn.AutoSize = True
-        Me.lblLastRanOn.Location = New System.Drawing.Point(333, 286)
+        Me.lblLastRanOn.Location = New System.Drawing.Point(333, 268)
         Me.lblLastRanOn.Name = "lblLastRanOn"
         Me.lblLastRanOn.Size = New System.Drawing.Size(66, 13)
         Me.lblLastRanOn.TabIndex = 70
@@ -324,7 +326,7 @@ Partial Class Form1
         'chkRunAsSpecificUser
         '
         Me.chkRunAsSpecificUser.AutoSize = True
-        Me.chkRunAsSpecificUser.Location = New System.Drawing.Point(15, 256)
+        Me.chkRunAsSpecificUser.Location = New System.Drawing.Point(15, 242)
         Me.chkRunAsSpecificUser.Name = "chkRunAsSpecificUser"
         Me.chkRunAsSpecificUser.Size = New System.Drawing.Size(126, 17)
         Me.chkRunAsSpecificUser.TabIndex = 71
@@ -334,7 +336,7 @@ Partial Class Form1
         'btnChooseUser
         '
         Me.btnChooseUser.Enabled = False
-        Me.btnChooseUser.Location = New System.Drawing.Point(147, 252)
+        Me.btnChooseUser.Location = New System.Drawing.Point(147, 238)
         Me.btnChooseUser.Name = "btnChooseUser"
         Me.btnChooseUser.Size = New System.Drawing.Size(100, 23)
         Me.btnChooseUser.TabIndex = 72
@@ -344,7 +346,7 @@ Partial Class Form1
         'txtRunAsUser
         '
         Me.txtRunAsUser.Enabled = False
-        Me.txtRunAsUser.Location = New System.Drawing.Point(253, 253)
+        Me.txtRunAsUser.Location = New System.Drawing.Point(253, 239)
         Me.txtRunAsUser.Name = "txtRunAsUser"
         Me.txtRunAsUser.ReadOnly = True
         Me.txtRunAsUser.Size = New System.Drawing.Size(177, 20)
@@ -411,7 +413,7 @@ Partial Class Form1
         Me.btnCancelEditTask.Enabled = False
         Me.btnCancelEditTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.removeSmall
         Me.btnCancelEditTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCancelEditTask.Location = New System.Drawing.Point(340, 331)
+        Me.btnCancelEditTask.Location = New System.Drawing.Point(339, 314)
         Me.btnCancelEditTask.Name = "btnCancelEditTask"
         Me.btnCancelEditTask.Size = New System.Drawing.Size(324, 23)
         Me.btnCancelEditTask.TabIndex = 52
@@ -423,7 +425,7 @@ Partial Class Form1
         Me.btnCreateTask.Enabled = False
         Me.btnCreateTask.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
         Me.btnCreateTask.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCreateTask.Location = New System.Drawing.Point(13, 331)
+        Me.btnCreateTask.Location = New System.Drawing.Point(12, 314)
         Me.btnCreateTask.Name = "btnCreateTask"
         Me.btnCreateTask.Size = New System.Drawing.Size(321, 23)
         Me.btnCreateTask.TabIndex = 49
@@ -445,7 +447,7 @@ Partial Class Form1
         'btnPopout
         '
         Me.btnPopout.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.popout
-        Me.btnPopout.Location = New System.Drawing.Point(522, 227)
+        Me.btnPopout.Location = New System.Drawing.Point(522, 213)
         Me.btnPopout.Name = "btnPopout"
         Me.btnPopout.Size = New System.Drawing.Size(26, 23)
         Me.btnPopout.TabIndex = 74
@@ -457,7 +459,7 @@ Partial Class Form1
         Me.ChkRequireElevation.AutoSize = True
         Me.ChkRequireElevation.Checked = True
         Me.ChkRequireElevation.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.ChkRequireElevation.Location = New System.Drawing.Point(15, 308)
+        Me.ChkRequireElevation.Location = New System.Drawing.Point(15, 291)
         Me.ChkRequireElevation.Name = "ChkRequireElevation"
         Me.ChkRequireElevation.Size = New System.Drawing.Size(629, 17)
         Me.ChkRequireElevation.TabIndex = 75
@@ -465,11 +467,27 @@ Partial Class Form1
     "up item that doesn't need full administrator rights)"
         Me.ChkRequireElevation.UseVisualStyleBackColor = True
         '
+        'Line2
+        '
+        Me.Line2.BackColor = System.Drawing.Color.Black
+        Me.Line2.Location = New System.Drawing.Point(0, 345)
+        Me.Line2.Name = "Line2"
+        Me.Line2.Size = New System.Drawing.Size(676, 1)
+        Me.Line2.TabIndex = 76
+        '
+        'Line1
+        '
+        Me.Line1.BackColor = System.Drawing.Color.Black
+        Me.Line1.Location = New System.Drawing.Point(0, 70)
+        Me.Line1.Name = "Line1"
+        Me.Line1.Size = New System.Drawing.Size(676, 1)
+        Me.Line1.TabIndex = 77
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(675, 597)
+        Me.ClientSize = New System.Drawing.Size(675, 570)
         Me.Controls.Add(Me.lblLastRanOn)
         Me.Controls.Add(Me.txtDelayMinutes)
         Me.Controls.Add(Me.lblHowManyMinutes)
@@ -496,6 +514,8 @@ Partial Class Form1
         Me.Controls.Add(Me.chkRunAsSpecificUser)
         Me.Controls.Add(Me.btnPopout)
         Me.Controls.Add(Me.ChkRequireElevation)
+        Me.Controls.Add(Me.Line1)
+        Me.Controls.Add(Me.Line2)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "Form1"
         Me.Text = "Start Program at Startup with Admin Privileges without UAC Prompt"
@@ -551,4 +571,6 @@ Partial Class Form1
     Friend WithEvents txtRunAsUser As TextBox
     Friend WithEvents btnPopout As Button
     Friend WithEvents ChkRequireElevation As CheckBox
+    Friend WithEvents Line2 As Label
+    Friend WithEvents Line1 As Label
 End Class
