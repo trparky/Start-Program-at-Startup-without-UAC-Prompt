@@ -109,7 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
-    <Compile Include="Check for Update Stuff.vb" />
+    <Compile Include="Program Modules\Check for Update Stuff.vb" />
     <Compile Include="Choose User.Designer.vb">
       <DependentUpon>Choose User.vb</DependentUpon>
     </Compile>
@@ -123,9 +123,9 @@
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GlobalSuppressions.vb" />
-    <Compile Include="HTTPHelper.vb" />
-    <Compile Include="Module.vb" />
+    <Compile Include="Program Modules\GlobalSuppressions.vb" />
+    <Compile Include="Program Modules\HTTPHelper.vb" />
+    <Compile Include="Program Modules\Module.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -142,15 +142,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="NativeMethod.vb" />
+    <Compile Include="Program Modules\NativeMethod.vb" />
     <Compile Include="Popout Description.Designer.vb">
       <DependentUpon>Popout Description.vb</DependentUpon>
     </Compile>
     <Compile Include="Popout Description.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Search for Process and Kill it.vb" />
-    <Compile Include="Task.vb" />
+    <Compile Include="Program Modules\Search for Process and Kill it.vb" />
+    <Compile Include="Program Modules\Task.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Choose User.resx">
