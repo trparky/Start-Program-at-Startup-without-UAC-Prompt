@@ -85,7 +85,7 @@ Class CheckForUpdatesClass
                 ' This checks to see if current version and the current build matches that of the remote values in the XML document.
                 If remoteVersion.Equals(versionStringWithoutBuild) And remoteBuild.Equals(shortBuild.ToString) Then
                     ' Both the remoteVersion and the remoteBuild equals that of the current version,
-                    ' therefore we return a sameVersion value indicating no update is required.
+                    ' therefore we return a noUpdateNeeded value indicating no update is required.
                     Return processUpdateXMLResponse.noUpdateNeeded
                 Else
                     ' First we do a check of the version, if it's not equal we simply return a newVersion value.
@@ -105,7 +105,7 @@ Class CheckForUpdatesClass
                                 ' We return a newVersion value indicating that there is a new version to download and install.
                                 Return processUpdateXMLResponse.newVersion
                             ElseIf shortRemoteBuild.Equals(shortBuild) Then
-                                ' The build numbers match, therefore therefore we return a sameVersion value.
+                                ' The build numbers match, therefore therefore we return a noUpdateNeeded value.
                                 Return processUpdateXMLResponse.noUpdateNeeded
                             End If
                         Else
@@ -118,11 +118,11 @@ Class CheckForUpdatesClass
                     End If
                 End If
             Else
-                ' Something went wrong so we return a exceptionError value.
+                ' Something went wrong so we return an exceptionError value.
                 Return processUpdateXMLResponse.exceptionError
             End If
         Catch ex As Exception
-            ' Something went wrong so we return a exceptionError value.
+            ' Something went wrong so we return an exceptionError value.
             Return processUpdateXMLResponse.exceptionError
         End Try
 
