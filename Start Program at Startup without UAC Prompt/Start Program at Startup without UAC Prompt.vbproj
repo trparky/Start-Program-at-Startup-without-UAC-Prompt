@@ -150,6 +150,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program Modules\Search for Process and Kill it.vb" />
+    <Compile Include="Program Modules\StringExtensions.vb" />
     <Compile Include="Program Modules\Task.vb" />
   </ItemGroup>
   <ItemGroup>
