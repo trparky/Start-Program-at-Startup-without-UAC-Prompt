@@ -1,4 +1,5 @@
-﻿Imports System.Text.RegularExpressions
+﻿Imports System.Security.Principal
+Imports System.Text.RegularExpressions
 
 Namespace My
 
@@ -16,5 +17,14 @@ Namespace My
                 If commandLineArgument.Trim.Equals("-update", StringComparison.OrdinalIgnoreCase) Then doUpdateAtStartup()
             End If
         End Sub
+
+        Private Function areWeAnAdministrator() As Boolean
+            Try
+                Dim principal As New WindowsPrincipal(WindowsIdentity.GetCurrent())
+                Return principal.IsInRole(WindowsBuiltInRole.Administrator)
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
     End Class
 End Namespace
