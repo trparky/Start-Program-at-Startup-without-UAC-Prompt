@@ -3,6 +3,7 @@ Imports IWshRuntimeLibrary
 
 Public Class Form1
     Private Const strTaskFolderName As String = "Run at User Logon with Administrator Privileges"
+    Private Const DoubleCRLF As String = vbCrLf & vbCrLf
 
     Private Sub newFileDeleterThreadSub()
         SearchForProcessAndKillIt(Application.ExecutablePath & ".new.exe", False)

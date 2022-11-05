@@ -1,10 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
-Imports System.Security.Principal
 Imports System.Text.RegularExpressions
 
-Module Globals
-    Public Const DoubleCRLF As String = vbCrLf & vbCrLf
-
+Module StringExtensions
     ' PHP like addSlashes and stripSlashes. Call using String.addSlashes() and String.stripSlashes().
     <Extension()>
     Public Function addSlashes(unsafeString As String) As String
@@ -41,15 +38,6 @@ Module Globals
         Try
             If boolDoEscaping Then needle = Regex.Escape(needle)
             Return Regex.IsMatch(haystack, needle, RegexOptions.IgnoreCase)
-        Catch ex As Exception
-            Return False
-        End Try
-    End Function
-
-    Public Function areWeAnAdministrator() As Boolean
-        Try
-            Dim principal As New WindowsPrincipal(WindowsIdentity.GetCurrent())
-            Return principal.IsInRole(WindowsBuiltInRole.Administrator)
         Catch ex As Exception
             Return False
         End Try
