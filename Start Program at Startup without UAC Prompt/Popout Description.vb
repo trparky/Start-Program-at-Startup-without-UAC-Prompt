@@ -10,11 +10,11 @@
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         userResponse = userResponseEnum.save
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub Popout_Description_ResizeEnd(sender As Object, e As EventArgs) Handles Me.ResizeEnd
-        My.Settings.popoutDescriptionSize = Me.Size
+        My.Settings.popoutDescriptionSize = Size
     End Sub
 
     Private Sub Popout_Description_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -24,7 +24,7 @@
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
         userResponse = userResponseEnum.dontSave
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub Popout_Description_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
