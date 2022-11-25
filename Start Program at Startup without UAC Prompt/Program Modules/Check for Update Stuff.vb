@@ -10,7 +10,7 @@ Module checkForUpdateModules
     Private Const strZipFileName As String = "Start Program at Startup without UAC Prompt.zip"
 
     Private ReadOnly versionInfo As String() = Application.ProductVersion.Split(".")
-    Public strFullVersionString As String = String.Format("{0}.{1} Build {2}", versionInfo(versionPieces.major), versionInfo(versionPieces.minor), versionInfo(versionPieces.build))
+    Public strFullVersionString As String = $"{versionInfo(versionPieces.major)}.{versionInfo(versionPieces.minor)} Build {versionInfo(versionPieces.build)}"
 
     Public Sub doUpdateAtStartup()
         If File.Exists(strZipFileName) Then File.Delete(strZipFileName)
@@ -41,8 +41,8 @@ Class CheckForUpdatesClass
     Public windowObject As Form1
     Public Shared versionInfo As String() = Application.ProductVersion.Split(".")
     Private ReadOnly shortBuild As Short = Short.Parse(versionInfo(versionPieces.build).Trim)
-    Public Shared versionString As String = String.Format("{0}.{1} Build {2}", versionInfo(0), versionInfo(1), versionInfo(2))
-    Private ReadOnly versionStringWithoutBuild As Double = Double.Parse(String.Format("{0}.{1}", versionInfo(versionPieces.major), versionInfo(versionPieces.minor)))
+    Public Shared versionString As String = $"{versionInfo(0)}.{versionInfo(1)} Build {versionInfo(2)}"
+    Private ReadOnly versionStringWithoutBuild As Double = Double.Parse($"{versionInfo(versionPieces.major)}.{versionInfo(versionPieces.minor)}")
 
     Public Sub New(inputWindowObject As Form1)
         windowObject = inputWindowObject
@@ -165,7 +165,7 @@ Class CheckForUpdatesClass
         httpHelper.SetURLPreProcessor = Function(strURLInput As String) As String
                                             Try
                                                 If Not strURLInput.Trim.StartsWith("http", StringComparison.OrdinalIgnoreCase) Then
-                                                    Return "https://" & strURLInput
+                                                    Return $"https://{strURLInput}"
                                                 Else
                                                     Return strURLInput
                                                 End If
@@ -232,7 +232,7 @@ Class CheckForUpdatesClass
     End Function
 
     Private Sub downloadAndPerformUpdate()
-        Dim newExecutableName As String = New FileInfo(Application.ExecutablePath).Name & ".new.exe"
+        Dim newExecutableName As String = $"{New FileInfo(Application.ExecutablePath).Name}.new.exe"
         Dim httpHelper As HttpHelper = createNewHTTPHelperObject()
 
         Using memoryStream As New MemoryStream()
@@ -270,15 +270,15 @@ Class CheckForUpdatesClass
     ''' <returns>String type.</returns>
     Private Shared Function createHTTPUserAgentHeaderString() As String
         Dim versionInfo As String() = Application.ProductVersion.Split(".")
-        Dim versionString As String = String.Format("{0}.{1} Build {2}", versionInfo(0), versionInfo(1), versionInfo(2))
-        Return String.Format("{2} version {0} on {1}", versionString, getFullOSVersionString(), strProgramName)
+        Dim versionString As String = $"{versionInfo(0)}.{versionInfo(1)} Build {versionInfo(2)}"
+        Return $"{strProgramName} version {versionString} on {getFullOSVersionString()}"
     End Function
 
     Private Shared Function getFullOSVersionString() As String
         Try
             Dim intOSMajorVersion As Integer = Environment.OSVersion.Version.Major
             Dim intOSMinorVersion As Integer = Environment.OSVersion.Version.Minor
-            Dim dblDOTNETVersion As Double = Double.Parse(Environment.Version.Major & "." & Environment.Version.Minor)
+            Dim dblDOTNETVersion As Double = Double.Parse($"{Environment.Version.Major}.{Environment.Version.Minor}")
             Dim strOSName As String
 
             If intOSMajorVersion = 5 And intOSMinorVersion = 0 Then
@@ -301,10 +301,10 @@ Class CheckForUpdatesClass
                 strOSName = String.Format("Windows NT {0}.{1}", intOSMajorVersion, intOSMinorVersion)
             End If
 
-            Return String.Format("{0} {2}-bit (Microsoft .NET {1})", strOSName, dblDOTNETVersion, If(Environment.Is64BitOperatingSystem, "64", "32"))
+            Return $"{strOSName} {If(Environment.Is64BitOperatingSystem, "64", "32")}-bit (Microsoft .NET {dblDOTNETVersion})"
         Catch ex As Exception
             Try
-                Return "Unknown Windows Operating System (" & Environment.OSVersion.VersionString & ")"
+                Return $"Unknown Windows Operating System ({Environment.OSVersion.VersionString})"
             Catch ex2 As Exception
                 Return "Unknown Windows Operating System"
             End Try
@@ -337,7 +337,7 @@ Class CheckForUpdatesClass
                     Dim response As processUpdateXMLResponse = processUpdateXMLData(xmlData, remoteVersion, remoteBuild)
 
                     If response = processUpdateXMLResponse.newVersion Then
-                        If BackgroundThreadMessageBox(String.Format("An update to Hasher (version {0} Build {1}) is available to be downloaded, do you want to download and update to this new version?", remoteVersion, remoteBuild), MsgBoxStyle.Question + MsgBoxStyle.YesNo, strMessageBoxTitleText) = MsgBoxResult.Yes Then
+                        If BackgroundThreadMessageBox($"An update to Hasher (version {remoteVersion} Build {remoteBuild}) is available to be downloaded, do you want to download and update to this new version?", MsgBoxStyle.Question + MsgBoxStyle.YesNo, strMessageBoxTitleText) = MsgBoxResult.Yes Then
                             downloadAndPerformUpdate()
                         Else
                             windowObject.Invoke(Sub() MsgBox("The update will not be downloaded.", MsgBoxStyle.Information, strMessageBoxTitleText))

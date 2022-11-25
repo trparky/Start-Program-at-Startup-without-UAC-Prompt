@@ -6,8 +6,8 @@ Public Class Form1
     Private Const DoubleCRLF As String = vbCrLf & vbCrLf
 
     Private Sub newFileDeleterThreadSub()
-        SearchForProcessAndKillIt(Application.ExecutablePath & ".new.exe", False)
-        IO.File.Delete(Application.ExecutablePath & ".new.exe")
+        SearchForProcessAndKillIt($"{Application.ExecutablePath}.new.exe", False)
+        IO.File.Delete($"{Application.ExecutablePath}.new.exe")
     End Sub
 
     Private Function verifyWindowLocation(point As Point) As Point
@@ -18,7 +18,7 @@ Public Class Form1
         lblLastRanOn.Text = Nothing
         Me.Location = verifyWindowLocation(My.Settings.mainWindowPosition)
 
-        If IO.File.Exists(Application.ExecutablePath & ".new.exe") Then Threading.ThreadPool.QueueUserWorkItem(AddressOf newFileDeleterThreadSub)
+        If IO.File.Exists($"{Application.ExecutablePath}.new.exe") Then Threading.ThreadPool.QueueUserWorkItem(AddressOf newFileDeleterThreadSub)
 
         Try
             Using taskService As New TaskService
@@ -46,7 +46,7 @@ Public Class Form1
 
                 .WindowStyle = 1I
                 .Description = Title
-                .IconLocation = iconPath & ", 0"
+                .IconLocation = $"{iconPath}, 0"
                 .WindowStyle = 7
                 .Save() ' save the shortcut file
             End With
@@ -84,7 +84,7 @@ Public Class Form1
                 strEXEPath = getActionEXEPath(task)
 
                 If Not String.IsNullOrWhiteSpace(strEXEPath) AndAlso Not IO.File.Exists(strEXEPath) Then
-                    MsgBox("WARNING! The task named """ & task.Name & """ has an invalid executable path. Please fix this.", MsgBoxStyle.Critical, Me.Text)
+                    MsgBox($"WARNING! The task named ""{task.Name}"" has an invalid executable path. Please fix this.", MsgBoxStyle.Critical, Me.Text)
                 End If
 
                 listTasks.Items.Add(task.Name)
@@ -174,14 +174,14 @@ Public Class Form1
         If chkRunAsSpecificUser.Checked Then strUserName = txtRunAsUser.Text
 
         If addTask(txtTaskName.Text, txtDescription.Text, txtEXEPath.Text, txtParameters.Text, chkEnabled.Checked, intDelayedMinutes, strUserName, ChkRequireElevation.Checked) Then
-            Dim strPathToAutoShortcut As String = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Start " & txtTaskName.Text & ".lnk")
+            Dim strPathToAutoShortcut As String = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"Start {txtTaskName.Text}.lnk")
 
             If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then
                 If chkEnabled.Checked Then : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
                 Else
                     If Not IO.File.Exists(strPathToAutoShortcut) Then
                         autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
-                        MsgBox("Task changes saved." & DoubleCRLF & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
+                        MsgBox($"Task changes saved.{DoubleCRLF}User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
                     Else : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
                     End If
                 End If
@@ -191,7 +191,7 @@ Public Class Form1
                 If chkEnabled.Checked Then : MsgBox("New task saved.", MsgBoxStyle.Information, Me.Text)
                 Else
                     autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
-                    MsgBox("New task saved." & DoubleCRLF & "User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
+                    MsgBox($"New task saved.{DoubleCRLF}User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
                 End If
             End If
 
@@ -226,7 +226,7 @@ Public Class Form1
 
     Private Function getTaskObject(ByRef taskServiceObject As TaskService, nameOfTask As String, ByRef taskObject As Task) As Boolean
         Try
-            taskObject = taskServiceObject.GetTask(strTaskFolderName & "\" & nameOfTask)
+            taskObject = taskServiceObject.GetTask($"{strTaskFolderName}\{nameOfTask}")
             Return taskObject IsNot Nothing
         Catch ex As Exception
             Return False
@@ -340,7 +340,7 @@ Public Class Form1
     End Sub
 
     Private Sub DeleteTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteTaskToolStripMenuItem.Click
-        If MsgBox("Are you sure you want to delete the task named """ & listTasks.Text & """?", MsgBoxStyle.Question + MsgBoxStyle.YesNo, Me.Text) = MsgBoxResult.Yes Then
+        If MsgBox($"Are you sure you want to delete the task named ""{listTasks.Text}""?", MsgBoxStyle.Question + MsgBoxStyle.YesNo, Me.Text) = MsgBoxResult.Yes Then
             deleteTask(listTasks.Text)
             btnCancelEditTask.PerformClick()
             refreshTasks()
@@ -388,12 +388,12 @@ Public Class Form1
         End If
 
         SaveFileDialog1.Title = "Save Shortcut To..."
-        SaveFileDialog1.FileName = listTasks.Text & ".lnk"
+        SaveFileDialog1.FileName = $"{listTasks.Text}.lnk"
         SaveFileDialog1.Filter = "Shortcut|*.lnk"
 
         If SaveFileDialog1.ShowDialog() = DialogResult.OK Then
             Dim fileInfo As New IO.FileInfo(SaveFileDialog1.FileName)
-            Dim locationOfShortcut As String = IO.Path.Combine(fileInfo.DirectoryName, listTasks.Text & ".lnk")
+            Dim locationOfShortcut As String = IO.Path.Combine(fileInfo.DirectoryName, $"{listTasks.Text}.lnk")
 
             createShortcut(locationOfShortcut, "schtasks", exePath, listTasks.Text, String.Format("/run /TN {0}\{2}\{1}{0}", Chr(34), listTasks.Text, strTaskFolderName))
 
@@ -404,7 +404,7 @@ Public Class Form1
     Private Sub ExportTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportTaskToolStripMenuItem.Click
         saveTask.Title = "Save as Task File"
         saveTask.Filter = "JSON Task File|*.task|Legacy XML Task File|*.taskx"
-        saveTask.FileName = listTasks.Text & ".task"
+        saveTask.FileName = $"{listTasks.Text}.task"
 
         If saveTask.ShowDialog() = DialogResult.OK Then
             Using taskService As New TaskService
@@ -551,10 +551,10 @@ Public Class Form1
             With newTask
                 If String.IsNullOrEmpty(strCommandLineParameters) Then
                     ' If strCommandLineParameters is Null then we make sure we pass a Null value to the following function call. 
-                    .Actions.Add(New ExecAction(Chr(34) & strExecutablePath & Chr(34), Nothing, exeFileInfo.DirectoryName))
+                    .Actions.Add(New ExecAction($"""{strExecutablePath}""", Nothing, exeFileInfo.DirectoryName))
                 Else
                     ' In this case, strCommandLineParameters isn't Null so we pass it to the following function call.
-                    .Actions.Add(New ExecAction(Chr(34) & strExecutablePath & Chr(34), strCommandLineParameters, exeFileInfo.DirectoryName))
+                    .Actions.Add(New ExecAction($"""{strExecutablePath}""", strCommandLineParameters, exeFileInfo.DirectoryName))
                 End If
 
                 If boolRequireElevation Then .Principal.RunLevel = TaskRunLevel.Highest
@@ -623,11 +623,11 @@ Public Class Form1
     Private Sub btnAbout_Click(sender As Object, e As EventArgs) Handles btnAbout.Click
         Dim stringBuilder As New Text.StringBuilder
         stringBuilder.AppendLine(strProgramName)
-        stringBuilder.AppendLine("Version " & strFullVersionString)
+        stringBuilder.AppendLine($"Version {strFullVersionString}")
         stringBuilder.AppendLine("Written by Tom Parkison.")
         stringBuilder.AppendLine("Copyright Thomas Parkison 2015-2023.")
 
-        MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, "About " & strProgramName)
+        MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, $"About {strProgramName}")
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -817,7 +817,7 @@ Public Class Form1
     End Sub
 
     Private Sub listTasks_KeyUp(sender As Object, e As KeyEventArgs) Handles listTasks.KeyUp
-        If e.KeyCode = Keys.Delete AndAlso MsgBox("Are you sure you want to delete the task named """ & listTasks.Text & """?", MsgBoxStyle.Question + MsgBoxStyle.YesNo, Me.Text) = MsgBoxResult.Yes Then
+        If e.KeyCode = Keys.Delete AndAlso MsgBox($"Are you sure you want to delete the task named ""{listTasks.Text}""?", MsgBoxStyle.Question + MsgBoxStyle.YesNo, Me.Text) = MsgBoxResult.Yes Then
             deleteTask(listTasks.Text)
             refreshTasks()
             MsgBox("Task Deleted.", MsgBoxStyle.Information, Me.Text)
