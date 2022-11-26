@@ -298,7 +298,7 @@ Class CheckForUpdatesClass
             ElseIf intOSMajorVersion = 11 Then
                 strOSName = "Windows 11"
             Else
-                strOSName = String.Format("Windows NT {0}.{1}", intOSMajorVersion, intOSMinorVersion)
+                strOSName = $"Windows NT {intOSMajorVersion}.{intOSMinorVersion}"
             End If
 
             Return $"{strOSName} {If(Environment.Is64BitOperatingSystem, "64", "32")}-bit (Microsoft .NET {dblDOTNETVersion})"

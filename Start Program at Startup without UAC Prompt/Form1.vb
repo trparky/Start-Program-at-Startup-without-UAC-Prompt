@@ -123,7 +123,7 @@ Public Class Form1
             Using taskService As New TaskService
                 If getTaskObject(taskService, listTasks.Text, taskObject) Then
                     Dim lastRunTime As Date = taskObject.LastRunTime.ToUniversalTime.ToLocalTime
-                    lblLastRanOn.Text = String.Format("Task Last Ran At: {0} on {1}", lastRunTime.ToLongTimeString, lastRunTime.ToLongDateString)
+                    lblLastRanOn.Text = $"Task Last Ran At: {lastRunTime.ToLongTimeString} on {lastRunTime.ToLongDateString}"
                     lastRunTime = Nothing
 
                     If taskObject.State = TaskState.Running Then
@@ -220,7 +220,7 @@ Public Class Form1
         Dim exePath As String = Nothing
         If Not isThisAValidExecutableTask(strTaskName, exePath) Then Exit Sub
         If Not IO.File.Exists(strPathToAutoShortcut) Then
-            createShortcut(strPathToAutoShortcut, "schtasks", exePath, strTaskName, String.Format("/run /TN {0}\{2}\{1}{0}", Chr(34), strTaskName, strTaskFolderName))
+            createShortcut(strPathToAutoShortcut, "schtasks", exePath, strTaskName, $"/run /TN ""\{strTaskFolderName}\{strTaskName}""")
         End If
     End Sub
 
@@ -395,7 +395,7 @@ Public Class Form1
             Dim fileInfo As New IO.FileInfo(SaveFileDialog1.FileName)
             Dim locationOfShortcut As String = IO.Path.Combine(fileInfo.DirectoryName, $"{listTasks.Text}.lnk")
 
-            createShortcut(locationOfShortcut, "schtasks", exePath, listTasks.Text, String.Format("/run /TN {0}\{2}\{1}{0}", Chr(34), listTasks.Text, strTaskFolderName))
+            createShortcut(locationOfShortcut, "schtasks", exePath, listTasks.Text, $"/run /TN ""\{strTaskFolderName}\{listTasks.Text}""")
 
             MsgBox("Shortcut Created Successfully.", MsgBoxStyle.Information, "Create Shortcut to Task")
         End If
