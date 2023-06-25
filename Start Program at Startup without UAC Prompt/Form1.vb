@@ -625,7 +625,7 @@ Public Class Form1
         stringBuilder.AppendLine(strProgramName)
         stringBuilder.AppendLine($"Version {strFullVersionString}")
         stringBuilder.AppendLine("Written by Tom Parkison.")
-        stringBuilder.AppendLine("Copyright Thomas Parkison 2015-2023.")
+        stringBuilder.AppendLine("Copyright Thomas Parkison 2015-2024.")
 
         MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, $"About {strProgramName}")
     End Sub
