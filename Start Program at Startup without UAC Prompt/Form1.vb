@@ -350,7 +350,7 @@ Public Class Form1
 
     Private Sub btnCheckForUpdates_Click(sender As Object, e As EventArgs) Handles btnCheckForUpdates.Click
         Threading.ThreadPool.QueueUserWorkItem(Sub()
-                                                   Dim checkForUpdatesObject As New CheckForUpdatesClass(Me)
+                                                   Dim checkForUpdatesObject As New checkForUpdates.CheckForUpdatesClass(Me)
                                                    checkForUpdatesObject.checkForUpdates(True)
                                                End Sub)
         btnCheckForUpdates.Enabled = False
@@ -622,12 +622,12 @@ Public Class Form1
 
     Private Sub btnAbout_Click(sender As Object, e As EventArgs) Handles btnAbout.Click
         Dim stringBuilder As New Text.StringBuilder
-        stringBuilder.AppendLine(strProgramName)
-        stringBuilder.AppendLine($"Version {strFullVersionString}")
+        stringBuilder.AppendLine(checkForUpdates.strProgramName)
+        stringBuilder.AppendLine($"Version {checkForUpdates.strFullVersionString}")
         stringBuilder.AppendLine("Written by Tom Parkison.")
         stringBuilder.AppendLine("Copyright Thomas Parkison 2015-2024.")
 
-        MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, $"About {strProgramName}")
+        MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, $"About {checkForUpdates.strProgramName}")
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
