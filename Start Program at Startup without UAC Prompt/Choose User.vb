@@ -12,7 +12,7 @@
             End Using
         Catch ex As Exception
             MsgBox("Unable to enumerate users on current system.", MsgBoxStyle.Critical, "Choose User...")
-            Me.Close()
+            Close()
         End Try
     End Sub
 
@@ -22,7 +22,7 @@
 
     Private Sub btnChooseUser_Click(sender As Object, e As EventArgs) Handles btnChooseUser.Click
         strSelectedUser = listUsers.SelectedItems(0).Text
-        Me.Close()
+        Close()
     End Sub
 
     Private Sub listUsers_KeyUp(sender As Object, e As KeyEventArgs) Handles listUsers.KeyUp

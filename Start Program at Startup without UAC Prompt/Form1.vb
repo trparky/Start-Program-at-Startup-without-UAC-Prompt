@@ -16,7 +16,7 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lblLastRanOn.Text = Nothing
-        Me.Location = verifyWindowLocation(My.Settings.mainWindowPosition)
+        Location = verifyWindowLocation(My.Settings.mainWindowPosition)
 
         If IO.File.Exists($"{Application.ExecutablePath}.new.exe") Then Threading.ThreadPool.QueueUserWorkItem(AddressOf newFileDeleterThreadSub)
 
@@ -84,7 +84,7 @@ Public Class Form1
                 strEXEPath = getActionEXEPath(task)
 
                 If Not String.IsNullOrWhiteSpace(strEXEPath) AndAlso Not IO.File.Exists(strEXEPath) Then
-                    MsgBox($"WARNING! The task named ""{task.Name}"" has an invalid executable path. Please fix this.", MsgBoxStyle.Critical, Me.Text)
+                    MsgBox($"WARNING! The task named ""{task.Name}"" has an invalid executable path. Please fix this.", MsgBoxStyle.Critical, Text)
                 End If
 
                 listTasks.Items.Add(task.Name)
@@ -147,19 +147,19 @@ Public Class Form1
 
     Private Sub btnCreateTask_Click(sender As Object, e As EventArgs) Handles btnCreateTask.Click
         If String.IsNullOrEmpty(txtTaskName.Text.Trim) Then
-            MsgBox("You must provide a name for this task.", MsgBoxStyle.Critical, Me.Text)
+            MsgBox("You must provide a name for this task.", MsgBoxStyle.Critical, Text)
             Exit Sub
         End If
         If String.IsNullOrEmpty(txtEXEPath.Text.Trim) Then
-            MsgBox("You must provide a path to an executable for this task.", MsgBoxStyle.Critical, Me.Text)
+            MsgBox("You must provide a path to an executable for this task.", MsgBoxStyle.Critical, Text)
             Exit Sub
         End If
         If Not IO.File.Exists(txtEXEPath.Text) Then
-            MsgBox("Executable Path Not Found.", MsgBoxStyle.Critical, Me.Text)
+            MsgBox("Executable Path Not Found.", MsgBoxStyle.Critical, Text)
             Exit Sub
         End If
         If chkRunAsSpecificUser.Checked And String.IsNullOrWhiteSpace(txtRunAsUser.Text) Then
-            MsgBox("You have your task setup to run as a specific user but you didn't select one yet, please do so now.", MsgBoxStyle.Critical, Me.Text)
+            MsgBox("You have your task setup to run as a specific user but you didn't select one yet, please do so now.", MsgBoxStyle.Critical, Text)
             Exit Sub
         End If
 
@@ -177,21 +177,21 @@ Public Class Form1
             Dim strPathToAutoShortcut As String = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"Start {txtTaskName.Text}.lnk")
 
             If btnCreateTask.Text.Equals("Save Changes to Task", StringComparison.OrdinalIgnoreCase) Then
-                If chkEnabled.Checked Then : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
+                If chkEnabled.Checked Then : MsgBox("Task changes saved.", MsgBoxStyle.Information, Text)
                 Else
                     If Not IO.File.Exists(strPathToAutoShortcut) Then
                         autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
-                        MsgBox($"Task changes saved.{DoubleCRLF}User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
-                    Else : MsgBox("Task changes saved.", MsgBoxStyle.Information, Me.Text)
+                        MsgBox($"Task changes saved.{DoubleCRLF}User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Text)
+                    Else : MsgBox("Task changes saved.", MsgBoxStyle.Information, Text)
                     End If
                 End If
 
                 btnCreateTask.Text = "Create Task"
             ElseIf btnCreateTask.Text.Equals("Create Task", StringComparison.OrdinalIgnoreCase) Then
-                If chkEnabled.Checked Then : MsgBox("New task saved.", MsgBoxStyle.Information, Me.Text)
+                If chkEnabled.Checked Then : MsgBox("New task saved.", MsgBoxStyle.Information, Text)
                 Else
                     autoCreateDesktopShortcut(txtTaskName.Text, strPathToAutoShortcut)
-                    MsgBox($"New task saved.{DoubleCRLF}User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Me.Text)
+                    MsgBox($"New task saved.{DoubleCRLF}User Logon Startup is disabled so a shortcut to run it has been created on your desktop.", MsgBoxStyle.Information, Text)
                 End If
             End If
 
@@ -340,11 +340,11 @@ Public Class Form1
     End Sub
 
     Private Sub DeleteTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteTaskToolStripMenuItem.Click
-        If MsgBox($"Are you sure you want to delete the task named ""{listTasks.Text}""?", MsgBoxStyle.Question + MsgBoxStyle.YesNo, Me.Text) = MsgBoxResult.Yes Then
+        If MsgBox($"Are you sure you want to delete the task named ""{listTasks.Text}""?", MsgBoxStyle.Question + MsgBoxStyle.YesNo, Text) = MsgBoxResult.Yes Then
             deleteTask(listTasks.Text)
             btnCancelEditTask.PerformClick()
             refreshTasks()
-            MsgBox("Task Deleted.", MsgBoxStyle.Information, Me.Text)
+            MsgBox("Task Deleted.", MsgBoxStyle.Information, Text)
         End If
     End Sub
 
@@ -383,7 +383,7 @@ Public Class Form1
     Private Sub CreateShortcutToTaskOnDesktopToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateShortcutToTaskOnDesktopToolStripMenuItem.Click
         Dim exePath As String = Nothing
         If Not isThisAValidExecutableTask(exePath) Then
-            MsgBox("Something went wrong.", MsgBoxStyle.Critical, Me.Text)
+            MsgBox("Something went wrong.", MsgBoxStyle.Critical, Text)
             Exit Sub
         End If
 
@@ -456,7 +456,7 @@ Public Class Form1
                         End If
                     End Using
 
-                    MsgBox("Task exported.", MsgBoxStyle.Information, Me.Text)
+                    MsgBox("Task exported.", MsgBoxStyle.Information, Text)
                 End If
             End Using
         End If
@@ -510,7 +510,7 @@ Public Class Form1
 
             If addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes, savedTask.userName, ChkRequireElevation.Checked) Then
                 refreshTasks()
-                MsgBox("Task imported successfully.", MsgBoxStyle.Information, Me.Text)
+                MsgBox("Task imported successfully.", MsgBoxStyle.Information, Text)
             End If
         End If
     End Sub
@@ -527,9 +527,9 @@ Public Class Form1
 
         If Not IO.File.Exists(strExecutablePath) Then
             If strExecutablePath.EndsWith(".bat", StringComparison.OrdinalIgnoreCase) Then
-                MsgBox("Task batch file path not found.", MsgBoxStyle.Critical, Me.Text)
+                MsgBox("Task batch file path not found.", MsgBoxStyle.Critical, Text)
             Else
-                MsgBox("Executable path not found.", MsgBoxStyle.Critical, Me.Text)
+                MsgBox("Executable path not found.", MsgBoxStyle.Critical, Text)
             End If
             Return False
         End If
@@ -579,9 +579,9 @@ Public Class Form1
 
     Private Sub GetStatusOfTaskToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GetStatusOfTaskToolStripMenuItem.Click
         If boolIsTaskRunning(listTasks.Text) Then
-            MsgBox("The task is running.", MsgBoxStyle.Information, Me.Text)
+            MsgBox("The task is running.", MsgBoxStyle.Information, Text)
         Else
-            MsgBox("The task is NOT running.", MsgBoxStyle.Information, Me.Text)
+            MsgBox("The task is NOT running.", MsgBoxStyle.Information, Text)
         End If
     End Sub
 
@@ -631,7 +631,7 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        My.Settings.mainWindowPosition = Me.Location
+        My.Settings.mainWindowPosition = Location
     End Sub
 
     Private Sub linkWhatIsAParameter_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkWhatIsAParameter.LinkClicked
@@ -640,7 +640,7 @@ Public Class Form1
         stringBuilder.AppendLine()
         stringBuilder.AppendLine("For instance, some programs may accept ""/minimize"" or ""-hide"". You'll have to consult the documentation for the program you're working with.")
 
-        MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, Me.Text)
+        MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, Text)
     End Sub
 
     Private Sub btnExportAllTasks_Click(sender As Object, e As EventArgs) Handles btnExportAllTasks.Click
@@ -705,7 +705,7 @@ Public Class Form1
                 End If
             End Using
 
-            MsgBox("Tasks exported.", MsgBoxStyle.Information, Me.Text)
+            MsgBox("Tasks exported.", MsgBoxStyle.Information, Text)
         End If
     End Sub
 
@@ -742,7 +742,7 @@ Public Class Form1
                     collectionOfTasks = json.Deserialize(Of List(Of classTask))(strDataFromFile)
                 End If
             Catch ex As Exception
-                MsgBox("There was an error attempting to import the chosen task collection file, task import has been halted.", MsgBoxStyle.Critical, Me.Text)
+                MsgBox("There was an error attempting to import the chosen task collection file, task import has been halted.", MsgBoxStyle.Critical, Text)
                 Exit Sub
             End Try
 
@@ -754,7 +754,7 @@ Public Class Form1
             collectionOfTasks.Clear()
             refreshTasks()
 
-            MsgBox("Tasks imported successfully.", MsgBoxStyle.Information, Me.Text)
+            MsgBox("Tasks imported successfully.", MsgBoxStyle.Information, Text)
         End If
     End Sub
 
@@ -817,10 +817,10 @@ Public Class Form1
     End Sub
 
     Private Sub listTasks_KeyUp(sender As Object, e As KeyEventArgs) Handles listTasks.KeyUp
-        If e.KeyCode = Keys.Delete AndAlso MsgBox($"Are you sure you want to delete the task named ""{listTasks.Text}""?", MsgBoxStyle.Question + MsgBoxStyle.YesNo, Me.Text) = MsgBoxResult.Yes Then
+        If e.KeyCode = Keys.Delete AndAlso MsgBox($"Are you sure you want to delete the task named ""{listTasks.Text}""?", MsgBoxStyle.Question + MsgBoxStyle.YesNo, Text) = MsgBoxResult.Yes Then
             deleteTask(listTasks.Text)
             refreshTasks()
-            MsgBox("Task Deleted.", MsgBoxStyle.Information, Me.Text)
+            MsgBox("Task Deleted.", MsgBoxStyle.Information, Text)
         ElseIf e.KeyCode = Keys.Enter Then
             editTask()
         End If
