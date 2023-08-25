@@ -623,7 +623,7 @@ Public Class Form1
     Private Sub btnAbout_Click(sender As Object, e As EventArgs) Handles btnAbout.Click
         Dim stringBuilder As New Text.StringBuilder
         stringBuilder.AppendLine(checkForUpdates.strProgramName)
-        stringBuilder.AppendLine($"Version {checkForUpdates.strFullVersionString}")
+        stringBuilder.AppendLine($"Version {checkForUpdates.strDisplayVersionString}")
         stringBuilder.AppendLine("Written by Tom Parkison.")
         stringBuilder.AppendLine("Copyright Thomas Parkison 2015-2024.")
 
