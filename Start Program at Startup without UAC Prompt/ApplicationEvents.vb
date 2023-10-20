@@ -12,19 +12,7 @@ Namespace My
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
     Partial Friend Class MyApplication
         Private Sub MyApplication_Startup(sender As Object, e As ApplicationServices.StartupEventArgs) Handles Me.Startup
-            If areWeAnAdministrator() And Application.CommandLineArgs.Count = 1 Then
-                Dim commandLineArgument As String = Application.CommandLineArgs(0).ToLower.Trim
-                If commandLineArgument.Trim.Equals("-update", StringComparison.OrdinalIgnoreCase) Then checkForUpdates.DoUpdateAtStartup()
-            End If
+            If IO.File.Exists("updater.exe") Then IO.File.Delete("updater.exe")
         End Sub
-
-        Private Function areWeAnAdministrator() As Boolean
-            Try
-                Dim principal As New WindowsPrincipal(WindowsIdentity.GetCurrent())
-                Return principal.IsInRole(WindowsBuiltInRole.Administrator)
-            Catch ex As Exception
-                Return False
-            End Try
-        End Function
     End Class
 End Namespace
