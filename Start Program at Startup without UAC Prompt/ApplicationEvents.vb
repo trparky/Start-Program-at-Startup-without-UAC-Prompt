@@ -1,7 +1,4 @@
-﻿Imports System.Security.Principal
-Imports System.Text.RegularExpressions
-
-Namespace My
+﻿Namespace My
 
     ' The following events are available for MyApplication:
     ' 

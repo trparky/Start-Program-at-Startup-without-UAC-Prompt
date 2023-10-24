@@ -5,11 +5,6 @@ Public Class Form1
     Private Const strTaskFolderName As String = "Run at User Logon with Administrator Privileges"
     Private Const DoubleCRLF As String = vbCrLf & vbCrLf
 
-    Private Sub newFileDeleterThreadSub()
-        SearchForProcessAndKillIt($"{Application.ExecutablePath}.new.exe", False)
-        IO.File.Delete($"{Application.ExecutablePath}.new.exe")
-    End Sub
-
     Private Function verifyWindowLocation(point As Point) As Point
         Return If(point.X < 0 Or point.Y < 0, New Point(0, 0), point)
     End Function
@@ -17,8 +12,6 @@ Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lblLastRanOn.Text = Nothing
         Location = verifyWindowLocation(My.Settings.mainWindowPosition)
-
-        If IO.File.Exists($"{Application.ExecutablePath}.new.exe") Then Threading.ThreadPool.QueueUserWorkItem(AddressOf newFileDeleterThreadSub)
 
         Try
             Using taskService As New TaskService
