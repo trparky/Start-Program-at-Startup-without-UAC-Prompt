@@ -444,8 +444,7 @@ Public Class Form1
                             Dim xmlSerializerObject As New Xml.Serialization.XmlSerializer(savedTask.GetType)
                             xmlSerializerObject.Serialize(streamWriter, savedTask)
                         Else
-                            Dim json As New Web.Script.Serialization.JavaScriptSerializer()
-                            streamWriter.Write(json.Serialize(savedTask))
+                            streamWriter.Write(Newtonsoft.Json.JsonConvert.SerializeObject(savedTask))
                         End If
                     End Using
 
@@ -490,13 +489,11 @@ Public Class Form1
                 ' Rewrites the file as a JSON file if the file being loaded is a task file.
                 If strFileExtension.Equals(".task", StringComparison.OrdinalIgnoreCase) Then
                     Using streamWriter As New IO.StreamWriter(importTask.FileName)
-                        Dim json As New Web.Script.Serialization.JavaScriptSerializer()
-                        streamWriter.Write(json.Serialize(savedTask))
+                        streamWriter.Write(Newtonsoft.Json.JsonConvert.SerializeObject(savedTask))
                     End Using
                 End If
             Else
-                Dim json As New Web.Script.Serialization.JavaScriptSerializer()
-                savedTask = json.Deserialize(Of classTask)(strDataFromFile)
+                savedTask = Newtonsoft.Json.JsonConvert.DeserializeObject(Of classTask)(strDataFromFile)
             End If
 
             If Not doesUserExistOnThisSystem(savedTask.userName) Then savedTask.userName = Nothing
@@ -693,8 +690,7 @@ Public Class Form1
                     Dim xmlSerializerObject As New Xml.Serialization.XmlSerializer(collectionOfTasks.GetType)
                     xmlSerializerObject.Serialize(streamWriter, collectionOfTasks)
                 Else
-                    Dim json As New Web.Script.Serialization.JavaScriptSerializer()
-                    streamWriter.Write(json.Serialize(collectionOfTasks))
+                    streamWriter.Write(Newtonsoft.Json.JsonConvert.SerializeObject(collectionOfTasks))
                 End If
             End Using
 
@@ -726,13 +722,11 @@ Public Class Form1
                     ' Rewrites the file as a JSON file if the file being loaded is a ctask file.
                     If strFileExtension.Equals(".ctask", StringComparison.OrdinalIgnoreCase) Then
                         Using streamWriter As New IO.StreamWriter(importTask.FileName)
-                            Dim json As New Web.Script.Serialization.JavaScriptSerializer()
-                            streamWriter.Write(json.Serialize(collectionOfTasks))
+                            streamWriter.Write(Newtonsoft.Json.JsonConvert.SerializeObject(collectionOfTasks))
                         End Using
                     End If
                 Else
-                    Dim json As New Web.Script.Serialization.JavaScriptSerializer()
-                    collectionOfTasks = json.Deserialize(Of List(Of classTask))(strDataFromFile)
+                    collectionOfTasks = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of classTask))(strDataFromFile)
                 End If
             Catch ex As Exception
                 MsgBox("There was an error attempting to import the chosen task collection file, task import has been halted.", MsgBoxStyle.Critical, Text)
