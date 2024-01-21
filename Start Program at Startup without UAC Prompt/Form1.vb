@@ -480,28 +480,32 @@ Public Class Form1
                 strDataFromFile = streamReader.ReadToEnd.Trim
             End Using
 
-            If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Or strFileExtension.Equals(".taskx", StringComparison.OrdinalIgnoreCase) Then
-                Using memoryStream As New IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(strDataFromFile))
-                    Dim xmlSerializerObject As New Xml.Serialization.XmlSerializer(savedTask.GetType)
-                    savedTask = xmlSerializerObject.Deserialize(memoryStream)
-                End Using
-
-                ' Rewrites the file as a JSON file if the file being loaded is a task file.
-                If strFileExtension.Equals(".task", StringComparison.OrdinalIgnoreCase) Then
-                    Using streamWriter As New IO.StreamWriter(importTask.FileName)
-                        streamWriter.Write(Newtonsoft.Json.JsonConvert.SerializeObject(savedTask))
+            Try
+                If strDataFromFile.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) Or strFileExtension.Equals(".taskx", StringComparison.OrdinalIgnoreCase) Then
+                    Using memoryStream As New IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(strDataFromFile))
+                        Dim xmlSerializerObject As New Xml.Serialization.XmlSerializer(savedTask.GetType)
+                        savedTask = xmlSerializerObject.Deserialize(memoryStream)
                     End Using
+
+                    ' Rewrites the file as a JSON file if the file being loaded is a task file.
+                    If strFileExtension.Equals(".task", StringComparison.OrdinalIgnoreCase) Then
+                        Using streamWriter As New IO.StreamWriter(importTask.FileName)
+                            streamWriter.Write(Newtonsoft.Json.JsonConvert.SerializeObject(savedTask))
+                        End Using
+                    End If
+                Else
+                    savedTask = Newtonsoft.Json.JsonConvert.DeserializeObject(Of classTask)(strDataFromFile)
                 End If
-            Else
-                savedTask = Newtonsoft.Json.JsonConvert.DeserializeObject(Of classTask)(strDataFromFile)
-            End If
 
-            If Not doesUserExistOnThisSystem(savedTask.userName) Then savedTask.userName = Nothing
+                If Not doesUserExistOnThisSystem(savedTask.userName) Then savedTask.userName = Nothing
 
-            If addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes, savedTask.userName, ChkRequireElevation.Checked) Then
-                refreshTasks()
-                MsgBox("Task imported successfully.", MsgBoxStyle.Information, Text)
-            End If
+                If addTask(savedTask.taskName, savedTask.taskDescription, savedTask.taskEXE, savedTask.taskParameters, savedTask.startup, savedTask.delayedMinutes, savedTask.userName, ChkRequireElevation.Checked) Then
+                    refreshTasks()
+                    MsgBox("Task imported successfully.", MsgBoxStyle.Information, Text)
+                End If
+            Catch ex As Exception
+                MsgBox("There was an error attempting to import the chosen task collection file, task import has been halted.", MsgBoxStyle.Critical, Text)
+            End Try
         End If
     End Sub
 
