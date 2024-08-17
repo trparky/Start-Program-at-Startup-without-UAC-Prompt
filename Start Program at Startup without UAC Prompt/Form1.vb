@@ -47,6 +47,17 @@ Public Class Form1
         End Try
     End Sub
 
+    Sub checkTaskIdleSettings(ByRef task As Task)
+        Try
+            If task.Definition.Settings.IdleSettings.StopOnIdleEnd Then
+                task.Definition.Settings.IdleSettings.StopOnIdleEnd = False
+                task.RegisterChanges()
+            End If
+        Catch ex As Exception
+            ' We don't care if we crash here but we need to do it silently.
+        End Try
+    End Sub
+
     Sub checkTaskPrioritySettings(ByRef task As Task)
         Try
             If task.Definition.Settings.Priority <> ProcessPriorityClass.Normal Then
@@ -74,6 +85,7 @@ Public Class Form1
             Dim strEXEPath As String
             For Each task As Task In taskService.RootFolder.SubFolders(strTaskFolderName).Tasks
                 checkTaskPrioritySettings(task)
+                checkTaskIdleSettings(task)
                 strEXEPath = getActionEXEPath(task)
 
                 If Not String.IsNullOrWhiteSpace(strEXEPath) AndAlso Not IO.File.Exists(strEXEPath) Then
@@ -561,6 +573,7 @@ Public Class Form1
                 .Settings.UseUnifiedSchedulingEngine = True
                 .Settings.ExecutionTimeLimit = Nothing
                 .Settings.Priority = ProcessPriorityClass.Normal
+                .Settings.IdleSettings.StopOnIdleEnd = False
                 .Principal.LogonType = TaskLogonType.InteractiveToken
             End With
 
