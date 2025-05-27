@@ -1,3 +1,5 @@
+<img src="https://img.shields.io/badge/license-GPL-green">
+
 ## License Change Notice
 As of October 24th, 2024, this project is now licensed under the GPL License. 
 Please refer to the LICENSE file for the updated terms. Previous versions were licensed under the MIT License.
