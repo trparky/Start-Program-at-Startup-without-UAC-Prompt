@@ -362,8 +362,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-/Compile, package, and upload this thing!.bat
-/start_program_at_startup_without_uac_prompt.xml - Shortcut.lnk
-/start_program_at_startup_without_uac_prompt.xml.lnk
-/AssemblyInfo.vb.lnk
-/Do GIT GC.ps1
+# Begin my stuff
+*.bat
+*.lnk
+*.ps1
+*.txt
