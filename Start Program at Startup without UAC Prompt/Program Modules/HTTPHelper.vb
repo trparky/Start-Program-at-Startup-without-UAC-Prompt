@@ -1,6 +1,5 @@
 ﻿Imports System.IO
 Imports System.Security.Cryptography
-Imports System.Runtime.CompilerServices
 
 Public Class FormFile
 
@@ -200,9 +199,13 @@ Class Credentials
     Public Property StrPasswordInput As String
 End Class
 
+' Strongly typed delegates
+Public Delegate Sub DownloadStatusUpdaterDelegate(downloadStatusDetails As DownloadStatusDetails)
+Public Delegate Sub CustomErrorHandlerDelegate(ex As Exception, thisInstance As HttpHelper)
+
 ''' <summary>Allows you to easily POST and upload files to a remote HTTP server without you, the programmer, knowing anything about how it all works. This class does it all for you. It handles adding a User Agent String, additional HTTP Request Headers, string data to your HTTP POST data, and files to be uploaded in the HTTP POST data.</summary>
 Public Class HttpHelper
-    Private Const classVersion As String = "1.343"
+    Private Const classVersion As String = "1.348"
 
     Private strUserAgentString As String = Nothing
     Private boolUseProxy As Boolean = False
@@ -220,20 +223,20 @@ Public Class HttpHelper
     Private _intDownloadThreadSleepTime As Integer = 1000
     Private intDownloadBufferSize As Integer = 8191 ' The default is 8192 bytes or 8 KBs.
 
-    Private ReadOnly additionalHTTPHeaders As New Dictionary(Of String, String)
-    Private ReadOnly httpCookies As New Dictionary(Of String, CookieDetails)
-    Private ReadOnly postData As New Dictionary(Of String, Object)
-    Private ReadOnly getData As New Dictionary(Of String, String)
+    Private ReadOnly additionalHTTPHeaders As New Dictionary(Of String, String)(StringComparison.OrdinalIgnoreCase)
+    Private ReadOnly httpCookies As New Dictionary(Of String, CookieDetails)(StringComparison.OrdinalIgnoreCase)
+    Private ReadOnly postData As New Dictionary(Of String, Object)(StringComparison.OrdinalIgnoreCase)
+    Private ReadOnly getData As New Dictionary(Of String, String)(StringComparison.OrdinalIgnoreCase)
     Private downloadStatusDetails As DownloadStatusDetails
     Private credentials As Credentials
 
     Private sslCertificate As X509Certificates.X509Certificate2
     Private urlPreProcessor As Func(Of String, String)
-    Private customErrorHandler As [Delegate]
 
     Private Const strCRLF As String = vbCrLf
 
-    Private downloadStatusUpdater As [Delegate]
+    Private downloadStatusUpdater As DownloadStatusUpdaterDelegate
+    Private customErrorHandler As CustomErrorHandlerDelegate
 
     Public Structure RemoteFileStats
         Public contentLength As Long
@@ -265,8 +268,8 @@ Public Class HttpHelper
     ''' OR A C# Example...
     ''' httpHelper.setCustomErrorHandler((Exception ex, httpHelper classInstance) => { }
     ''' </example>
-    Public WriteOnly Property SetCustomErrorHandler As [Delegate]
-        Set(value As [Delegate])
+    Public WriteOnly Property SetCustomErrorHandler As CustomErrorHandlerDelegate
+        Set(value As CustomErrorHandlerDelegate)
             customErrorHandler = value
         End Set
     End Property
@@ -354,8 +357,8 @@ Public Class HttpHelper
     ''' OR A C# Example...
     ''' httpHelper.setDownloadStatusUpdateRoutine((downloadStatusDetails downloadStatusDetails) => { })
     ''' </example>
-    Public WriteOnly Property SetDownloadStatusUpdateRoutine As [Delegate]
-        Set(value As [Delegate])
+    Public WriteOnly Property SetDownloadStatusUpdateRoutine As DownloadStatusUpdaterDelegate
+        Set(value As DownloadStatusUpdaterDelegate)
             downloadStatusUpdater = value
         End Set
     End Property
@@ -566,7 +569,7 @@ Public Class HttpHelper
             Throw lastException
         End If
 
-        If postData.MyContainsKey(strName) And throwExceptionIfDataAlreadyExists Then
+        If postData.ContainsKey(strName) And throwExceptionIfDataAlreadyExists Then
             lastException = New DataAlreadyExistsException($"The POST data key named ""{strName}"" already exists in the POST data.")
             Throw lastException
         Else
@@ -585,7 +588,7 @@ Public Class HttpHelper
             Throw lastException
         End If
 
-        If getData.MyContainsKey(strName) And throwExceptionIfDataAlreadyExists Then
+        If getData.ContainsKey(strName) And throwExceptionIfDataAlreadyExists Then
             lastException = New DataAlreadyExistsException($"The GET data key named ""{strName}"" already exists in the GET data.")
             Throw lastException
         Else
@@ -654,28 +657,28 @@ Public Class HttpHelper
     ''' <param name="strName">The name of the GET data variable you are checking the existance of.</param>
     ''' <returns></returns>
     Public Function DoesGETDataExist(strName As String) As Boolean
-        Return getData.MyContainsKey(strName)
+        Return getData.ContainsKey(strName)
     End Function
 
     ''' <summary>Checks to see if the POST data key exists in this POST data.</summary>
     ''' <param name="strName">The name of the POST data variable you are checking the existance of.</param>
     ''' <returns></returns>
     Public Function DoesPOSTDataExist(strName As String) As Boolean
-        Return postData.MyContainsKey(strName)
+        Return postData.ContainsKey(strName)
     End Function
 
     ''' <summary>Checks to see if an additional HTTP Request Header has been added to the Class.</summary>
     ''' <param name="strHeaderName">The name of the HTTP Request Header to check the existance of.</param>
     ''' <returns>Boolean value; True if found, False if not found.</returns>
     Public Function DoesAdditionalHeaderExist(strHeaderName As String) As Boolean
-        Return additionalHTTPHeaders.MyContainsKey(strHeaderName.ToLower)
+        Return additionalHTTPHeaders.ContainsKey(strHeaderName.ToLower)
     End Function
 
     ''' <summary>Checks to see if a cookie has been added to the Class.</summary>
     ''' <param name="strCookieName">The name of the cookie to check the existance of.</param>
     ''' <returns>Boolean value; True if found, False if not found.</returns>
     Public Function DoesCookieExist(strCookieName As String) As Boolean
-        Return httpCookies.MyContainsKey(strCookieName.ToLower)
+        Return httpCookies.ContainsKey(strCookieName.ToLower)
     End Function
 
     ''' <summary>This adds a file to be uploaded to your POST data.</summary>
@@ -695,7 +698,7 @@ Public Class HttpHelper
         If Not fileInfo.Exists Then
             lastException = New FileNotFoundException("Local file not found.", strLocalFilePath)
             Throw lastException
-        ElseIf postData.MyContainsKey(strFormName) Then
+        ElseIf postData.ContainsKey(strFormName) Then
             If throwExceptionIfItemAlreadyExists Then
                 lastException = New DataAlreadyExistsException($"The POST data key named ""{strFormName}"" already exists in the POST data.")
                 Throw lastException
@@ -779,7 +782,7 @@ Public Class HttpHelper
     Private Sub DownloadStatusUpdaterThreadSubroutine()
         Try
 beginAgain:
-            downloadStatusUpdater.DynamicInvoke(downloadStatusDetails)
+            downloadStatusUpdater(downloadStatusDetails)
             Threading.Thread.Sleep(_intDownloadThreadSleepTime)
             GoTo beginAgain
         Catch ex As Threading.ThreadAbortException
@@ -807,7 +810,7 @@ beginAgain:
                     downloadStatusUpdaterThread.Start()
                 End If
             Else
-                downloadStatusUpdater.DynamicInvoke(downloadStatusDetails)
+                downloadStatusUpdater(downloadStatusDetails)
             End If
         End If
     End Sub
@@ -858,7 +861,7 @@ beginAgain:
 
             Return False
         Catch ex As Threading.ThreadAbortException
-            If httpWebRequest IsNot Nothing Then httpWebRequest.Abort()
+            httpWebRequest?.Abort()
             Return False
         Catch ex As Exception
             lastException = ex
@@ -866,7 +869,7 @@ beginAgain:
             If Not throwExceptionIfError Then Return False
 
             If customErrorHandler IsNot Nothing Then
-                customErrorHandler.DynamicInvoke(ex, Me)
+                customErrorHandler(ex, Me)
                 ' Since we handled the exception with an injected custom error handler, we can now exit the function with the return of a False value.
                 Return False
             End If
@@ -956,7 +959,7 @@ beginAgain:
             Return True
         Catch ex As Threading.ThreadAbortException
             AbortDownloadStatusUpdaterThread()
-            If httpWebRequest IsNot Nothing Then httpWebRequest.Abort()
+            httpWebRequest?.Abort()
             Return False
         Catch ex As Exception
             AbortDownloadStatusUpdaterThread()
@@ -966,7 +969,7 @@ beginAgain:
             If Not throwExceptionIfError Then Return False
 
             If customErrorHandler IsNot Nothing Then
-                customErrorHandler.DynamicInvoke(ex, Me)
+                customErrorHandler(ex, Me)
                 ' Since we handled the exception with an injected custom error handler, we can now exit the function with the return of a False value.
                 Return False
             End If
@@ -1075,7 +1078,7 @@ beginAgain:
                 If Not throwExceptionIfError Then Return False
 
                 If customErrorHandler IsNot Nothing Then
-                    customErrorHandler.DynamicInvoke(ex, Me)
+                    customErrorHandler(ex, Me)
                     ' Since we handled the exception with an injected custom error handler, we can now exit the function with the return of a False value.
                     Return False
                 End If
@@ -1146,7 +1149,7 @@ beginAgain:
             End Using
         Catch ex As Exception
             If ex.GetType.Equals(GetType(Threading.ThreadAbortException)) Then
-                If httpWebRequest IsNot Nothing Then httpWebRequest.Abort()
+                httpWebRequest?.Abort()
                 Return False
             End If
 
@@ -1154,7 +1157,7 @@ beginAgain:
             If Not throwExceptionIfError Then Return False
 
             If customErrorHandler IsNot Nothing Then
-                customErrorHandler.DynamicInvoke(ex, Me)
+                customErrorHandler(ex, Me)
                 ' Since we handled the exception with an injected custom error handler, we can now exit the function with the return of a False value.
                 Return False
             End If
@@ -1222,7 +1225,7 @@ beginAgain:
             End Using
         Catch ex As Exception
             If ex.GetType.Equals(GetType(Threading.ThreadAbortException)) Then
-                If httpWebRequest IsNot Nothing Then httpWebRequest.Abort()
+                httpWebRequest?.Abort()
                 Return False
             End If
 
@@ -1230,7 +1233,7 @@ beginAgain:
             If Not throwExceptionIfError Then Return False
 
             If customErrorHandler IsNot Nothing Then
-                customErrorHandler.DynamicInvoke(ex, Me)
+                customErrorHandler(ex, Me)
                 ' Since we handled the exception with an injected custom error handler, we can now exit the function with the return of a False value.
                 Return False
             End If
@@ -1348,14 +1351,14 @@ beginAgain:
             End Using
         Catch ex As Exception
             If ex.GetType.Equals(GetType(Threading.ThreadAbortException)) Then
-                If httpWebRequest IsNot Nothing Then httpWebRequest.Abort()
+                httpWebRequest?.Abort()
             End If
 
             lastException = ex
             If Not throwExceptionIfError Then Return False
 
             If customErrorHandler IsNot Nothing Then
-                customErrorHandler.DynamicInvoke(ex, Me)
+                customErrorHandler(ex, Me)
                 ' Since we handled the exception with an injected custom error handler, we can now exit the function with the return of a False value.
                 Return False
             End If
@@ -1384,7 +1387,11 @@ beginAgain:
     End Function
 
     Private Sub CaptureSSLInfo(url As String, ByRef httpWebRequest As Net.HttpWebRequest)
-        sslCertificate = If(url.StartsWith("https://", StringComparison.OrdinalIgnoreCase), New X509Certificates.X509Certificate2(httpWebRequest.ServicePoint.Certificate), Nothing)
+        If httpWebRequest.ServicePoint.Certificate Is Nothing Then
+            sslCertificate = Nothing
+        Else
+            sslCertificate = If(url.StartsWith("https://", StringComparison.OrdinalIgnoreCase), New X509Certificates.X509Certificate2(httpWebRequest.ServicePoint.Certificate), Nothing)
+        End If
     End Sub
 
     Private Sub AddPostDataToWebRequest(ByRef httpWebRequest As Net.HttpWebRequest)
@@ -1525,53 +1532,3 @@ beginAgain:
         Return result
     End Function
 End Class
-
-Module DictionaryExtensions
-    ''' <summary>This function operates a lot like ContainsKey() but is case-InSeNsItIvE.</summary>
-    ''' <param name="haystack">The dictionary that's being searched.</param>
-    ''' <param name="needle">The key that you're looking for.</param>
-    ''' <return>Returns a String value.</return>
-    <Extension()>
-    Function MyContainsKey(haystack As Dictionary(Of String, String), needle As String) As Boolean
-        If String.IsNullOrEmpty(needle) Then
-            Throw New ArgumentException($"'{NameOf(needle)}' cannot be null or empty.", NameOf(needle))
-        End If
-        If haystack Is Nothing Then
-            Throw New ArgumentNullException(NameOf(haystack))
-        End If
-
-        Return haystack.Keys.Any(Function(key As String) key.Trim.Equals(needle, StringComparison.OrdinalIgnoreCase))
-    End Function
-
-    ''' <summary>This function operates a lot like ContainsKey() but is case-InSeNsItIvE.</summary>
-    ''' <param name="haystack">The dictionary that's being searched.</param>
-    ''' <param name="needle">The key that you're looking for.</param>
-    ''' <return>Returns a String value.</return>
-    <Extension()>
-    Function MyContainsKey(haystack As Dictionary(Of String, Object), needle As String) As Boolean
-        If String.IsNullOrEmpty(needle) Then
-            Throw New ArgumentException($"'{NameOf(needle)}' cannot be null or empty.", NameOf(needle))
-        End If
-        If haystack Is Nothing Then
-            Throw New ArgumentNullException(NameOf(haystack))
-        End If
-
-        Return haystack.Keys.Any(Function(key As String) key.Trim.Equals(needle, StringComparison.OrdinalIgnoreCase))
-    End Function
-
-    ''' <summary>This function operates a lot like ContainsKey() but is case-InSeNsItIvE.</summary>
-    ''' <param name="haystack">The dictionary that's being searched.</param>
-    ''' <param name="needle">The key that you're looking for.</param>
-    ''' <return>Returns a String value.</return>
-    <Extension()>
-    Function MyContainsKey(haystack As Dictionary(Of String, CookieDetails), needle As String) As Boolean
-        If String.IsNullOrEmpty(needle) Then
-            Throw New ArgumentException($"'{NameOf(needle)}' cannot be null or empty.", NameOf(needle))
-        End If
-        If haystack Is Nothing Then
-            Throw New ArgumentNullException(NameOf(haystack))
-        End If
-
-        Return haystack.Keys.Any(Function(key As String) key.Trim.Equals(needle, StringComparison.OrdinalIgnoreCase))
-    End Function
-End Module
