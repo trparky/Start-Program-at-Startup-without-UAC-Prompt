@@ -632,7 +632,7 @@ Public Class Form1
         stringBuilder.AppendLine(checkForUpdates.strProgramName)
         stringBuilder.AppendLine($"Version {checkForUpdates.strDisplayVersionString}")
         stringBuilder.AppendLine("Written by Tom Parkison.")
-        stringBuilder.AppendLine("Copyright Thomas Parkison 2015-2024.")
+        stringBuilder.AppendLine("Copyright Thomas Parkison 2015-2030.")
 
         MsgBox(stringBuilder.ToString.Trim, MsgBoxStyle.Information, $"About {checkForUpdates.strProgramName}")
     End Sub
