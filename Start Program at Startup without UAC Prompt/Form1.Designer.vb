@@ -49,9 +49,14 @@ Partial Class Form1
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.chkEnabled = New System.Windows.Forms.CheckBox()
+        Me.btnPopout = New System.Windows.Forms.Button()
         Me.saveTask = New System.Windows.Forms.SaveFileDialog()
         Me.importTask = New System.Windows.Forms.OpenFileDialog()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.btnAbout = New System.Windows.Forms.Button()
+        Me.btnCheckForUpdates = New System.Windows.Forms.Button()
+        Me.btnImportCollectionOfTasks = New System.Windows.Forms.Button()
+        Me.btnExportAllTasks = New System.Windows.Forms.Button()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.linkWhatIsAParameter = New System.Windows.Forms.LinkLabel()
         Me.chkDelayExecution = New System.Windows.Forms.CheckBox()
@@ -61,14 +66,9 @@ Partial Class Form1
         Me.chkRunAsSpecificUser = New System.Windows.Forms.CheckBox()
         Me.btnChooseUser = New System.Windows.Forms.Button()
         Me.txtRunAsUser = New System.Windows.Forms.TextBox()
-        Me.btnAbout = New System.Windows.Forms.Button()
-        Me.btnCheckForUpdates = New System.Windows.Forms.Button()
-        Me.btnImportCollectionOfTasks = New System.Windows.Forms.Button()
-        Me.btnExportAllTasks = New System.Windows.Forms.Button()
         Me.btnCancelEditTask = New System.Windows.Forms.Button()
         Me.btnCreateTask = New System.Windows.Forms.Button()
         Me.btnBrowseForExecutable = New System.Windows.Forms.Button()
-        Me.btnPopout = New System.Windows.Forms.Button()
         Me.ChkRequireElevation = New System.Windows.Forms.CheckBox()
         Me.Line2 = New System.Windows.Forms.Label()
         Me.Line1 = New System.Windows.Forms.Label()
@@ -174,69 +174,69 @@ Partial Class Form1
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeleteTaskToolStripMenuItem, Me.EditTaskToolStripMenuItem, Me.ToolStripMenuItem1, Me.GetStatusOfTaskToolStripMenuItem, Me.StopStartTaskToolStripMenuItem, Me.ToolStripMenuItem2, Me.CreateShortcutToTaskOnDesktopToolStripMenuItem, Me.ToolStripMenuItem3, Me.ExportTaskToolStripMenuItem, Me.ImportTaskToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(195, 176)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(197, 176)
         '
         'DeleteTaskToolStripMenuItem
         '
         Me.DeleteTaskToolStripMenuItem.Enabled = False
         Me.DeleteTaskToolStripMenuItem.Name = "DeleteTaskToolStripMenuItem"
-        Me.DeleteTaskToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.DeleteTaskToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
         Me.DeleteTaskToolStripMenuItem.Text = "&Delete Task"
         '
         'EditTaskToolStripMenuItem
         '
         Me.EditTaskToolStripMenuItem.Enabled = False
         Me.EditTaskToolStripMenuItem.Name = "EditTaskToolStripMenuItem"
-        Me.EditTaskToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.EditTaskToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
         Me.EditTaskToolStripMenuItem.Text = "&Edit Task"
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(191, 6)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(193, 6)
         '
         'GetStatusOfTaskToolStripMenuItem
         '
         Me.GetStatusOfTaskToolStripMenuItem.Enabled = False
         Me.GetStatusOfTaskToolStripMenuItem.Name = "GetStatusOfTaskToolStripMenuItem"
-        Me.GetStatusOfTaskToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.GetStatusOfTaskToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
         Me.GetStatusOfTaskToolStripMenuItem.Text = "&Get Status of Task"
         '
         'StopStartTaskToolStripMenuItem
         '
         Me.StopStartTaskToolStripMenuItem.Enabled = False
         Me.StopStartTaskToolStripMenuItem.Name = "StopStartTaskToolStripMenuItem"
-        Me.StopStartTaskToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.StopStartTaskToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
         Me.StopStartTaskToolStripMenuItem.Text = "Stop/Start Task"
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(191, 6)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(193, 6)
         '
         'CreateShortcutToTaskOnDesktopToolStripMenuItem
         '
         Me.CreateShortcutToTaskOnDesktopToolStripMenuItem.Enabled = False
         Me.CreateShortcutToTaskOnDesktopToolStripMenuItem.Name = "CreateShortcutToTaskOnDesktopToolStripMenuItem"
-        Me.CreateShortcutToTaskOnDesktopToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.CreateShortcutToTaskOnDesktopToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
         Me.CreateShortcutToTaskOnDesktopToolStripMenuItem.Text = "&Create Shortcut to Task"
         '
         'ToolStripMenuItem3
         '
         Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(191, 6)
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(193, 6)
         '
         'ExportTaskToolStripMenuItem
         '
         Me.ExportTaskToolStripMenuItem.Enabled = False
         Me.ExportTaskToolStripMenuItem.Name = "ExportTaskToolStripMenuItem"
-        Me.ExportTaskToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.ExportTaskToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
         Me.ExportTaskToolStripMenuItem.Text = "&Export Task"
         '
         'ImportTaskToolStripMenuItem
         '
         Me.ImportTaskToolStripMenuItem.Name = "ImportTaskToolStripMenuItem"
-        Me.ImportTaskToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.ImportTaskToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
         Me.ImportTaskToolStripMenuItem.Text = "&Import Task"
         '
         'OpenFileDialog1
@@ -253,6 +253,16 @@ Partial Class Form1
         Me.chkEnabled.Text = "At User Logon Enabled"
         Me.ToolTip.SetToolTip(Me.chkEnabled, "Makes it so that this task starts at user logon.")
         Me.chkEnabled.UseVisualStyleBackColor = True
+        '
+        'btnPopout
+        '
+        Me.btnPopout.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.popout
+        Me.btnPopout.Location = New System.Drawing.Point(522, 213)
+        Me.btnPopout.Name = "btnPopout"
+        Me.btnPopout.Size = New System.Drawing.Size(26, 23)
+        Me.btnPopout.TabIndex = 74
+        Me.ToolTip.SetToolTip(Me.btnPopout, "Pops the Description textbox out to a bigger and separate window.")
+        Me.btnPopout.UseVisualStyleBackColor = True
         '
         'importTask
         '
@@ -274,6 +284,62 @@ Partial Class Form1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(652, 56)
         Me.TableLayoutPanel1.TabIndex = 62
+        '
+        'btnAbout
+        '
+        Me.btnAbout.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnAbout.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.info_blue
+        Me.btnAbout.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnAbout.Location = New System.Drawing.Point(329, 31)
+        Me.btnAbout.Name = "btnAbout"
+        Me.btnAbout.Size = New System.Drawing.Size(320, 22)
+        Me.btnAbout.TabIndex = 59
+        Me.btnAbout.Text = "About"
+        Me.btnAbout.UseVisualStyleBackColor = True
+        '
+        'btnCheckForUpdates
+        '
+        Me.btnCheckForUpdates.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnCheckForUpdates.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.refresh
+        Me.btnCheckForUpdates.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnCheckForUpdates.Location = New System.Drawing.Point(3, 31)
+        Me.btnCheckForUpdates.Name = "btnCheckForUpdates"
+        Me.btnCheckForUpdates.Size = New System.Drawing.Size(320, 22)
+        Me.btnCheckForUpdates.TabIndex = 53
+        Me.btnCheckForUpdates.Text = "Check for Updates"
+        Me.btnCheckForUpdates.UseVisualStyleBackColor = True
+        '
+        'btnImportCollectionOfTasks
+        '
+        Me.btnImportCollectionOfTasks.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnImportCollectionOfTasks.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.import1
+        Me.btnImportCollectionOfTasks.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnImportCollectionOfTasks.Location = New System.Drawing.Point(329, 3)
+        Me.btnImportCollectionOfTasks.Name = "btnImportCollectionOfTasks"
+        Me.btnImportCollectionOfTasks.Size = New System.Drawing.Size(320, 22)
+        Me.btnImportCollectionOfTasks.TabIndex = 66
+        Me.btnImportCollectionOfTasks.Text = "Import Task Collection File"
+        Me.btnImportCollectionOfTasks.UseVisualStyleBackColor = True
+        '
+        'btnExportAllTasks
+        '
+        Me.btnExportAllTasks.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnExportAllTasks.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
+        Me.btnExportAllTasks.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnExportAllTasks.Location = New System.Drawing.Point(3, 3)
+        Me.btnExportAllTasks.Name = "btnExportAllTasks"
+        Me.btnExportAllTasks.Size = New System.Drawing.Size(320, 22)
+        Me.btnExportAllTasks.TabIndex = 67
+        Me.btnExportAllTasks.Text = "Export All Tasks to Task Collection File"
+        Me.btnExportAllTasks.UseVisualStyleBackColor = True
         '
         'linkWhatIsAParameter
         '
@@ -352,62 +418,6 @@ Partial Class Form1
         Me.txtRunAsUser.Size = New System.Drawing.Size(177, 20)
         Me.txtRunAsUser.TabIndex = 73
         '
-        'btnAbout
-        '
-        Me.btnAbout.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnAbout.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.info_blue
-        Me.btnAbout.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnAbout.Location = New System.Drawing.Point(329, 31)
-        Me.btnAbout.Name = "btnAbout"
-        Me.btnAbout.Size = New System.Drawing.Size(320, 22)
-        Me.btnAbout.TabIndex = 59
-        Me.btnAbout.Text = "About"
-        Me.btnAbout.UseVisualStyleBackColor = True
-        '
-        'btnCheckForUpdates
-        '
-        Me.btnCheckForUpdates.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnCheckForUpdates.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.refresh
-        Me.btnCheckForUpdates.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnCheckForUpdates.Location = New System.Drawing.Point(3, 31)
-        Me.btnCheckForUpdates.Name = "btnCheckForUpdates"
-        Me.btnCheckForUpdates.Size = New System.Drawing.Size(320, 22)
-        Me.btnCheckForUpdates.TabIndex = 53
-        Me.btnCheckForUpdates.Text = "Check for Updates"
-        Me.btnCheckForUpdates.UseVisualStyleBackColor = True
-        '
-        'btnImportCollectionOfTasks
-        '
-        Me.btnImportCollectionOfTasks.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnImportCollectionOfTasks.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.import1
-        Me.btnImportCollectionOfTasks.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnImportCollectionOfTasks.Location = New System.Drawing.Point(329, 3)
-        Me.btnImportCollectionOfTasks.Name = "btnImportCollectionOfTasks"
-        Me.btnImportCollectionOfTasks.Size = New System.Drawing.Size(320, 22)
-        Me.btnImportCollectionOfTasks.TabIndex = 66
-        Me.btnImportCollectionOfTasks.Text = "Import Task Collection File"
-        Me.btnImportCollectionOfTasks.UseVisualStyleBackColor = True
-        '
-        'btnExportAllTasks
-        '
-        Me.btnExportAllTasks.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnExportAllTasks.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.save
-        Me.btnExportAllTasks.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnExportAllTasks.Location = New System.Drawing.Point(3, 3)
-        Me.btnExportAllTasks.Name = "btnExportAllTasks"
-        Me.btnExportAllTasks.Size = New System.Drawing.Size(320, 22)
-        Me.btnExportAllTasks.TabIndex = 67
-        Me.btnExportAllTasks.Text = "Export All Tasks to Task Collection File"
-        Me.btnExportAllTasks.UseVisualStyleBackColor = True
-        '
         'btnCancelEditTask
         '
         Me.btnCancelEditTask.Enabled = False
@@ -443,16 +453,6 @@ Partial Class Form1
         Me.btnBrowseForExecutable.Text = "Browse for Executable"
         Me.btnBrowseForExecutable.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.btnBrowseForExecutable.UseVisualStyleBackColor = True
-        '
-        'btnPopout
-        '
-        Me.btnPopout.Image = Global.Start_Program_at_Startup_without_UAC_Prompt.My.Resources.Resources.popout
-        Me.btnPopout.Location = New System.Drawing.Point(522, 213)
-        Me.btnPopout.Name = "btnPopout"
-        Me.btnPopout.Size = New System.Drawing.Size(26, 23)
-        Me.btnPopout.TabIndex = 74
-        Me.ToolTip.SetToolTip(Me.btnPopout, "Pops the Description textbox out to a bigger and separate window.")
-        Me.btnPopout.UseVisualStyleBackColor = True
         '
         'ChkRequireElevation
         '
